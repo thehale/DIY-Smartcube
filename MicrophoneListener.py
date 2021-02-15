@@ -81,8 +81,6 @@ try:
                 file.write(q.get())
 except KeyboardInterrupt:
     print('\nRecording finished: ' + repr(args.filename))
-    import os
-    os.system("python Spectrogram.py")
     parser.exit(0)
 except Exception as e:
     parser.exit(type(e).__name__ + ': ' + str(e))
