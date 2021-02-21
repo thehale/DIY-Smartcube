@@ -10,11 +10,11 @@ import numpy as np
 from FaceMapping import AuditorySupercube
 
 SAMPLES_PER_WINDOW = 1024  # Seems to be a good number to balance frequency precision with time precision.
-THRESHOLD = 100  # The minimum value required for a frequency to be detected as present.
+THRESHOLD = 1500  # The minimum value required for a frequency to be detected as present.
 
 
 # Compute the Gabor transform on the affected audio
-audio_path = "./output.wav"
+audio_path = "./tones.wav"
 sample_rate, audio_samples = wavfile.read(audio_path)
 freq, time, Zxx = signal.stft(audio_samples,
                               fs=sample_rate,

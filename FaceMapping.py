@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 class AuditorySupercube:
 
     def __init__(self):
+        self.__mixer = None
         self.state_to_freq = {}
         self.freq_to_state = {}
         file = open("absolute_positioning.txt")
@@ -72,6 +73,14 @@ class AuditorySupercube:
 
     def apply_alg(self, alg: str, tps: float, simulation: bool = False):
         moves = alg.split(" ")
+        if simulation:  # Represent the initial cube state
+            if not self.__mixer:
+                self.__create_mixer()
+            self.__append_state_to_mixer(tps=tps)
+            self.__append_state_to_mixer(tps=tps)
+            self.__append_state_to_mixer(tps=tps)
+            self.__append_state_to_mixer(tps=tps)
+            self.__append_state_to_mixer(tps=tps)
         for move in moves:
             if move == "U":
                 self.U()
@@ -98,16 +107,15 @@ class AuditorySupercube:
             if move == "L'":
                 self.Lprime()
             if simulation:
-                if not self.__mixer:
-                    self.__create_mixer()
                 self.__append_state_to_mixer(tps=tps)
             print(self)
 
-    def play_simulation(self):
+    def play_simulation(self, silent: bool = False):
         # Mix all tracks into a single list of samples and write to .wav file
         if self.__mixer:
             self.__mixer.write_wav('tones.wav')
-            playsound('tones.wav')
+            if not silent:
+                playsound('tones.wav')
         else:
             print("ERROR: No simulation to play")
 
@@ -131,6 +139,7 @@ class AuditorySupercube:
     def extract_alg_from_audio(self, wav_path):
         state_over_time = self.__extract_state_over_time(wav_path)
         alg = self.__extract_alg_from_state_over_time(state_over_time)
+        return alg
 
     def __extract_state_over_time(self, wav_path):
         SAMPLES_PER_WINDOW = 1024  # Seems to be a good number to balance frequency precision with time precision.
@@ -156,17 +165,48 @@ class AuditorySupercube:
         return state_over_time
 
     def get_state_from_freq(self, detected_freqs: List[float]) -> List[str]:
-        detected_states = set()
+        detected_states = {}
         for d_freq in detected_freqs:
             for s_freq in self.freq_to_state.keys():
-                if abs(d_freq - s_freq) < 50:
-                    detected_states.add(self.freq_to_state[s_freq])
-        detected_states = list(detected_states)
-        detected_states.sort()
+                if abs(d_freq - s_freq) < 40:
+                    state = self.freq_to_state[s_freq]
+                    if state[0] in detected_states and detected_states[state[0]] != int(state[1]):
+                        detected_states["ERR"] = "Duplicate States Detected"
+                    else:
+                        detected_states[state[0]] = int(state[1])
         return detected_states
 
     def __extract_alg_from_state_over_time(self, state_over_time):
-        pass
+        useful_states = [x for x in state_over_time if len(x[1]) == 6]
+        current_state = useful_states[0][1]
+        alg = ""
+        for state in useful_states[1:]:
+            """temp string for pausing"""
+            for face in ["U", "D", "F", "B", "R", "L"]:
+                rotation = state[1][face] - current_state[face]
+                if rotation != 0:
+                    current_state[face] = state[1][face]
+                    if rotation == 1:  # Next state up
+                        alg += " " + face
+                    elif rotation == -1:  # Next state down
+                        alg += " " + face + "'"
+                    elif rotation == -3:  # Next state up with wrap-around
+                        alg += " " + face
+                    elif rotation == 3:  # Next state down with wrap-around
+                        alg += " " + face + "'"
+        return alg
+
+
+a_cube = AuditorySupercube()
+
+given_alg = "U U U U D D D D R R R R L L L L F F F F B B B B"
+given_tps = 5
+a_cube.apply_alg(given_alg, given_tps, simulation=True)
+a_cube.play_simulation(silent=True)
+received_alg = a_cube.extract_alg_from_audio("./tones.wav")
+
+print(f"Given Alg: {given_alg}\nReceived Alg: {received_alg}")
+print("MATCH!" if given_alg.strip() == received_alg.strip() else "MISMATCH :(")
 
 # pos = AuditorySupercube()
 # pos.transmitAlg("U U U U D D D D R R R R L L L L F F F F B B B B", 1.5)
