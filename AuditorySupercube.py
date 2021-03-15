@@ -143,7 +143,6 @@ class AuditorySupercube:
 
     def __extract_state_over_time(self, wav_path):
         SAMPLES_PER_WINDOW = 1024  # Seems to be a good number to balance frequency precision with time precision.
-        # THRESHOLD = 1500  # The minimum value required for a frequency to be detected as present.
         sample_rate, audio_samples = wavfile.read(wav_path)
         freq, time, Zxx = signal.stft(audio_samples,
                                       fs=sample_rate,
@@ -160,15 +159,16 @@ class AuditorySupercube:
         state_over_time = []
         for time_idx in range(len(time)):
             important_freqs = []
-            threshold = np.std(spectrogram[time_idx])
-            plt.plot(freq, spectrogram[time_idx])
-            plt.axhline(threshold, color='red')
-            plt.axis([0, 20000, 0, 4000])
-            plt.title(f"Frequencies at {time[time_idx]:.2f} seconds")
-            plt.ylabel("Strength")
-            plt.xlabel("Frequency [Hz]")
-            plt.savefig(f"./plt/{time[time_idx]:.2f}.png")
-            plt.clf()
+            threshold = max(np.std(spectrogram[time_idx]), 50)
+            # Save an image of the current strength of the frequency slice.
+            # plt.plot(freq, spectrogram[time_idx])
+            # plt.axhline(threshold, color='red')
+            # plt.axis([0, 20000, 0, 4000])
+            # plt.title(f"Frequencies at {time[time_idx]:.2f} seconds")
+            # plt.ylabel("Strength")
+            # plt.xlabel("Frequency [Hz]")
+            # plt.savefig(f"./plt/{time[time_idx]:.2f}.png")
+            # plt.clf()
             for freq_idx in range(len(freq)):
                 if spectrogram[time_idx][freq_idx] > threshold:
                     important_freqs.append((freq[freq_idx], spectrogram[time_idx][freq_idx]))
@@ -202,14 +202,25 @@ class AuditorySupercube:
 
     def extract_alg_from_state_over_time(self, state_over_time):
         useful_states = [x for x in state_over_time if len(x[1]) == 6 and 'ERR' not in x[1]]
+        num_useful_states = len(useful_states)
+        window_size = 5  # Empirically seen to give good results.
         current_state = useful_states[0][1]
         alg = ""
-        for state in useful_states[1:]:
-            """temp string for pausing"""
+        for idx in range(0, num_useful_states - window_size):  # Iterate over batches of size `window_size`
             for face in ["U", "D", "F", "B", "R", "L"]:
-                rotation = state[1][face] - current_state[face]
-                if rotation != 0:
-                    current_state[face] = state[1][face]
+                candidate_state = -1
+                confidence = 0
+                rotation = 0
+                for state in useful_states[idx : idx + window_size]:
+                    if state[1][face] == candidate_state:
+                        confidence += 1
+                    else:
+                        candidate_state = state[1][face]
+                        confidence = 1
+                if confidence >= window_size:  # If all the states in the window are the same
+                    if face in current_state:  # If we've already determined the starting position
+                        rotation = candidate_state - current_state[face]  # Calculate the rotation
+                    current_state[face] = candidate_state
                     if rotation == 1:  # Next state up
                         alg += " " + face
                     elif rotation == -1:  # Next state down
@@ -225,8 +236,8 @@ a_cube = AuditorySupercube()
 
 given_alg = "U U U U D D D D R R R R L L L L F F F F B B B B"
 given_tps = 5
-a_cube.apply_alg(given_alg, given_tps, simulation=True)
-a_cube.play_simulation(silent=True)
+# a_cube.apply_alg(given_alg, given_tps, simulation=True)
+# a_cube.play_simulation(silent=True)
 received_alg = a_cube.extract_alg_from_audio("./output.wav")
 
 print(f"Given Alg: {given_alg}\nReceived Alg: {received_alg}")
