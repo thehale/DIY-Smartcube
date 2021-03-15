@@ -138,25 +138,40 @@ class AuditorySupercube:
 
     def extract_alg_from_audio(self, wav_path):
         state_over_time = self.__extract_state_over_time(wav_path)
-        alg = self.__extract_alg_from_state_over_time(state_over_time)
+        alg = self.extract_alg_from_state_over_time(state_over_time)
         return alg
 
     def __extract_state_over_time(self, wav_path):
         SAMPLES_PER_WINDOW = 1024  # Seems to be a good number to balance frequency precision with time precision.
-        THRESHOLD = 1500  # The minimum value required for a frequency to be detected as present.
+        # THRESHOLD = 1500  # The minimum value required for a frequency to be detected as present.
         sample_rate, audio_samples = wavfile.read(wav_path)
         freq, time, Zxx = signal.stft(audio_samples,
                                       fs=sample_rate,
                                       nperseg=SAMPLES_PER_WINDOW,
                                       noverlap=(SAMPLES_PER_WINDOW // 4) * 3)
         # Determine the frequencies of interest
-        spectrogram = np.abs(Zxx)
+        spectrogram = np.abs(Zxx).transpose()
+        # Show off a spectrogram of the detected audio
+        # plt.pcolormesh(time, freq, np.abs(Zxx), shading='gouraud')
+        # plt.title('STFT Magnitude')
+        # plt.ylabel('Frequency [Hz]')
+        # plt.xlabel('Time [sec]')
+        # plt.show()
         state_over_time = []
         for time_idx in range(len(time)):
             important_freqs = []
+            threshold = np.std(spectrogram[time_idx])
+            plt.plot(freq, spectrogram[time_idx])
+            plt.axhline(threshold, color='red')
+            plt.axis([0, 20000, 0, 4000])
+            plt.title(f"Frequencies at {time[time_idx]:.2f} seconds")
+            plt.ylabel("Strength")
+            plt.xlabel("Frequency [Hz]")
+            plt.savefig(f"./plt/{time[time_idx]:.2f}.png")
+            plt.clf()
             for freq_idx in range(len(freq)):
-                if spectrogram[freq_idx][time_idx] > THRESHOLD:
-                    important_freqs.append(freq[freq_idx])
+                if spectrogram[time_idx][freq_idx] > threshold:
+                    important_freqs.append((freq[freq_idx], spectrogram[time_idx][freq_idx]))
             if len(important_freqs) > 0:
                 detected_states = self.get_state_from_freq(important_freqs)
                 state_over_time.append((time[time_idx], detected_states))
@@ -166,18 +181,27 @@ class AuditorySupercube:
 
     def get_state_from_freq(self, detected_freqs: List[float]) -> List[str]:
         detected_states = {}
-        for d_freq in detected_freqs:
+        strongest_state = {
+            "U": 0,
+            "D": 0,
+            "R": 0,
+            "L": 0,
+            "F": 0,
+            "B": 0,
+        }
+        for d_freq, power in detected_freqs:
             for s_freq in self.freq_to_state.keys():
                 if abs(d_freq - s_freq) < 40:
                     state = self.freq_to_state[s_freq]
-                    if state[0] in detected_states and detected_states[state[0]] != int(state[1]):
-                        detected_states["ERR"] = "Duplicate States Detected"
-                    else:
-                        detected_states[state[0]] = int(state[1])
+                    face = state[0]
+                    rotation = int(state[1])
+                    if power > strongest_state[face]:
+                        detected_states[face] = rotation
+                        strongest_state[face] = power
         return detected_states
 
-    def __extract_alg_from_state_over_time(self, state_over_time):
-        useful_states = [x for x in state_over_time if len(x[1]) == 6]
+    def extract_alg_from_state_over_time(self, state_over_time):
+        useful_states = [x for x in state_over_time if len(x[1]) == 6 and 'ERR' not in x[1]]
         current_state = useful_states[0][1]
         alg = ""
         for state in useful_states[1:]:
@@ -203,7 +227,7 @@ given_alg = "U U U U D D D D R R R R L L L L F F F F B B B B"
 given_tps = 5
 a_cube.apply_alg(given_alg, given_tps, simulation=True)
 a_cube.play_simulation(silent=True)
-received_alg = a_cube.extract_alg_from_audio("./tones.wav")
+received_alg = a_cube.extract_alg_from_audio("./output.wav")
 
 print(f"Given Alg: {given_alg}\nReceived Alg: {received_alg}")
 print("MATCH!" if given_alg.strip() == received_alg.strip() else "MISMATCH :(")

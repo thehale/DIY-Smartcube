@@ -7,7 +7,7 @@ from scipy import signal
 from scipy.io import wavfile
 import numpy as np
 
-from FaceMapping import AuditorySupercube
+from AuditorySupercube import AuditorySupercube
 
 SAMPLES_PER_WINDOW = 1024  # Seems to be a good number to balance frequency precision with time precision.
 THRESHOLD = 1500  # The minimum value required for a frequency to be detected as present.
