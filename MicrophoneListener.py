@@ -65,7 +65,7 @@ try:
         # soundfile expects an int, sounddevice provides a float:
         args.samplerate = int(device_info['default_samplerate'])
     if args.filename is None:
-        args.filename = "output.wav"
+        args.filename = "outputs.wav"
         # tempfile.mktemp(prefix='delme_rec_unlimited_',
         #                                         suffix='.wav', dir='')
 

@@ -3,3 +3,6 @@ venv/
 .idea/
 plt/
 audio/
+csv/
+logs/
+__pycache__/

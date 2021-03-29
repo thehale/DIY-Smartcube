@@ -9,10 +9,18 @@ from scipy.io import wavfile
 import numpy as np
 import matplotlib.pyplot as plt
 
+from Logger import Logger
+
 
 class AuditorySupercube:
 
-    def __init__(self):
+    def __init__(self, wav_path, window_size=5, stdv=1, alt_min=50, threshold_function=None):
+        self.wav_path = wav_path
+        self.log = Logger(wav_path.split("/")[1])
+        self.window_size = window_size
+        self.stdv = stdv
+        self.alt_min = alt_min
+        self.compute_threshold = threshold_function if threshold_function else self.default_compute_threshold
         self.__mixer = None
         self.state_to_freq = {}
         self.freq_to_state = {}
@@ -76,11 +84,8 @@ class AuditorySupercube:
         if simulation:  # Represent the initial cube state
             if not self.__mixer:
                 self.__create_mixer()
-            self.__append_state_to_mixer(tps=tps)
-            self.__append_state_to_mixer(tps=tps)
-            self.__append_state_to_mixer(tps=tps)
-            self.__append_state_to_mixer(tps=tps)
-            self.__append_state_to_mixer(tps=tps)
+            for i in range(0, 5):
+                self.__append_state_to_mixer(tps=tps)
         for move in moves:
             if move == "U":
                 self.U()
@@ -108,7 +113,7 @@ class AuditorySupercube:
                 self.Lprime()
             if simulation:
                 self.__append_state_to_mixer(tps=tps)
-            print(self)
+            self.log.info(self)
 
     def play_simulation(self, silent: bool = False):
         # Mix all tracks into a single list of samples and write to .wav file
@@ -117,7 +122,7 @@ class AuditorySupercube:
             if not silent:
                 playsound('tones.wav')
         else:
-            print("ERROR: No simulation to play")
+            self.log.error("No simulation to play")
 
     def __create_mixer(self):
         self.__mixer = Mixer(44100, 1)
@@ -136,10 +141,23 @@ class AuditorySupercube:
         self.__mixer.add_tone('R', self.state_to_freq['R' + str(self.state['R'])], 1 / tps)
         self.__mixer.add_tone('L', self.state_to_freq['L' + str(self.state['L'])], 1 / tps)
 
-    def extract_alg_from_audio(self, wav_path):
-        state_over_time = self.__extract_state_over_time(wav_path)
+    def extract_alg_from_audio(self):
+        state_over_time = self.__extract_state_over_time(self.wav_path)
         alg = self.extract_alg_from_state_over_time(state_over_time)
         return alg
+
+    @staticmethod
+    def default_compute_threshold(spectrogram_slice, pct_of_stdv: float = 1, alt_min=50):
+        """
+        The default approach to computing the threshold value to use for identifying face turn frequencies.
+
+        Returns the standard deviation of the spectrogram slice or 50, whichever is higher.
+        :param spectrogram_slice: The slice of the spectrogram to analyze.
+        :param pct_of_stdv: A saaling factor for the standard deviation
+        :param alt_min: The smallest possible threshold to return
+        :return:
+        """
+        return max(np.std(spectrogram_slice) * pct_of_stdv, alt_min)
 
     def __extract_state_over_time(self, wav_path):
         SAMPLES_PER_WINDOW = 1024  # Seems to be a good number to balance frequency precision with time precision.
@@ -159,11 +177,11 @@ class AuditorySupercube:
         state_over_time = []
         for time_idx in range(len(time)):
             important_freqs = []
-            threshold = max(np.std(spectrogram[time_idx]), 50)
+            threshold = self.compute_threshold(spectrogram[time_idx], self.stdv, self.alt_min)
             # Save an image of the current strength of the frequency slice.
             # plt.plot(freq, spectrogram[time_idx])
             # plt.axhline(threshold, color='red')
-            # plt.axis([0, 20000, 0, 4000])
+            # plt.axis([0, 20000, 0, np.amax(spectrogram)])
             # plt.title(f"Frequencies at {time[time_idx]:.2f} seconds")
             # plt.ylabel("Strength")
             # plt.xlabel("Frequency [Hz]")
@@ -175,8 +193,8 @@ class AuditorySupercube:
             if len(important_freqs) > 0:
                 detected_states = self.get_state_from_freq(important_freqs)
                 state_over_time.append((time[time_idx], detected_states))
-                print(f"At time {time[time_idx]:.6f} the states {detected_states} were detected based on the "
-                      f"{len(important_freqs)} frequencies {important_freqs} that surpassed the threshold.")
+                self.log.info(f"At time {time[time_idx]:.6f} the states {detected_states} were detected.") # based on the "
+                      # f"{len(important_freqs)} frequencies {important_freqs} that surpassed the threshold.")
         return state_over_time
 
     def get_state_from_freq(self, detected_freqs: List[float]) -> List[str]:
@@ -201,9 +219,9 @@ class AuditorySupercube:
         return detected_states
 
     def extract_alg_from_state_over_time(self, state_over_time):
-        useful_states = [x for x in state_over_time if len(x[1]) == 6 and 'ERR' not in x[1]]
+        useful_states = [x for x in state_over_time if 'ERR' not in x[1]]
         num_useful_states = len(useful_states)
-        window_size = 5  # Empirically seen to give good results.
+        window_size = self.window_size
         current_state = useful_states[0][1]
         alg = ""
         for idx in range(0, num_useful_states - window_size):  # Iterate over batches of size `window_size`
@@ -212,11 +230,12 @@ class AuditorySupercube:
                 confidence = 0
                 rotation = 0
                 for state in useful_states[idx : idx + window_size]:
-                    if state[1][face] == candidate_state:
-                        confidence += 1
-                    else:
-                        candidate_state = state[1][face]
-                        confidence = 1
+                    if face in state[1]:
+                        if state[1][face] == candidate_state:
+                            confidence += 1
+                        else:
+                            candidate_state = state[1][face]
+                            confidence = 1
                 if confidence >= window_size:  # If all the states in the window are the same
                     if face in current_state:  # If we've already determined the starting position
                         rotation = candidate_state - current_state[face]  # Calculate the rotation
@@ -230,31 +249,3 @@ class AuditorySupercube:
                     elif rotation == 3:  # Next state down with wrap-around
                         alg += " " + face + "'"
         return alg
-
-
-a_cube = AuditorySupercube()
-
-given_alg = "U U U U D D D D R R R R L L L L F F F F B B B B"
-given_tps = 5
-# a_cube.apply_alg(given_alg, given_tps, simulation=True)
-# a_cube.play_simulation(silent=True)
-received_alg = a_cube.extract_alg_from_audio("./output.wav")
-
-print(f"Given Alg: {given_alg}\nReceived Alg: {received_alg}")
-print("MATCH!" if given_alg.strip() == received_alg.strip() else "MISMATCH :(")
-
-# pos = AuditorySupercube()
-# pos.transmitAlg("U U U U D D D D R R R R L L L L F F F F B B B B", 1.5)
-# pos.playSound()
-# pos.parseAlg("U U U U", 2)
-# pos.playSound()
-# pos.parseAlg("D D D D", 2)
-# pos.playSound()
-# pos.parseAlg("R R R R", 2)
-# pos.playSound()
-# pos.parseAlg("L L L L", 2)
-# pos.playSound()
-# pos.parseAlg("F F F F", 2)
-# pos.playSound()
-# pos.parseAlg("B B B B", 2)
-# pos.playSound()
