@@ -47,3 +47,44 @@
 # plt.plot(signal)
 # plt.show()
 # #/Addition
+
+# Generate a random number using numpy
+from numpy.random import randintCell_size = (5, 5)
+maze = np.zeros(cell_size)
+maze[1:3, 1:3] = 1
+maze[4, 4] = 0
+print(maze)
+#/Generate a random number using numpy
+
+#Generate a random maze using recursive backtracking algorithm
+def generate_maze(maze, pos, N):
+    if N == 0:
+        return
+    else:
+        maze[pos[0]][pos[1]] = 1
+        new_positions = [(pos[0]+1, pos[1]), (pos[0]-1, pos[1]), (pos[0], pos[1]+1), (pos[0], pos[1]-1)]
+        shuffle(new_positions)
+        for new_position in new_positions:
+            generate_maze(maze, new_position, N-1)
+
+
+maze = np.zeros(cell_size)
+generate_maze(maze, (1,1), cell_size[0]*cell_size[1])
+print(maze)
+#/Generate a random maze using recursive backtracking algorithm
+
+#Generate a random maze using recursive backtracking algorithm
+def generate_maze(maze, pos, N):
+    if N == 0:
+        return
+    else:
+        maze[pos[0]][pos[1]] = 1
+        new_positions = [(pos[0]+1, pos[1]), (pos[0]-1, pos[1]), (pos[0], pos[1]+1), (pos[0], pos[1]-1)]
+        shuffle(new_positions)
+        for new_position in new_positions:
+            if maze[new_position[0]][new_position[1]] == 0:
+                generate_maze(maze, new_position, N-1)
+
+
+maze = np.zeros(cell_size)
+generate_maze(
