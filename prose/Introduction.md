@@ -1,5 +1,7 @@
-# Introduction
-In early 1974, Erno Rubik, a Hungarian professor of architecture, sought to help his students visualize space in three dimensions. To that end he created a unique object with faces that could independently rotate around all three physical axes. [^ernorubik-motivation] When he added colored stickers to further aid in visualizing the movements, Rubik realized he had created a new puzzle. He filed a patent in 1975, [^ernorubik-patent] and since then an estimated 1 in 7 humans on earth has played with one [^used-count] with over 450 million units sold. [^sold-count]
+## Introduction
+In 1974, Erno Rubik, a Hungarian professor of architecture, sought to help his students visualize space in three dimensions. To that end, he created a special cube whose faces could independently rotate around all three physical axes [^ernorubik-motivation]. When he added colored stickers to further aid in visualizing the movements, Mr. Rubik realized he had created a new puzzle. He patented his cube in 1975, [^ernorubik-patent] and since then over 450 million units have been sold [^sold-count], allowing an estimated 1 in 7 humans on earth to try their hand at solving it [^used-count].
+
+Since then, the cube has been the subject of academic research, competition, leisure, and cultural iconography. 
 
 [^ernorubik-motivation]: https://www.rubiks.com/en-us/about *(Accessed 10 August 2021)*
 
