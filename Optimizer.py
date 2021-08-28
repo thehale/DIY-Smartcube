@@ -9,7 +9,7 @@ given_alg = "U U U U D D D D R R R R L L L L F F F F B B B B"
 # a_cube.play_simulation(silent=True)
 csv = open(f"csv/data.csv", "a")
 csv.write("file_name,window_size,stdv,alt_min,received_alg,similarity\n")
-for (root, dirs, files) in os.walk('test_sounds'):
+for (root, dirs, files) in os.walk('resources/sounds'):
     for file in files:
         for window_size in (range(1, 11)):  # + range(10, 201, 30)):
             for stdv in range(25, 301, 25):

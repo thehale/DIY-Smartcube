@@ -1,13 +1,21 @@
-venv*/
-*.iml
-.idea/
+# Auto-generate project files
 plt/
 audio/
 csv/
 logs/
-__pycache__/
 demo*.wav
+
+# Python runtime files
+venv*/
+__pycache__/
+
+# OS Specific Files
 .DS_Store
+
+# IDE Specific Files
+.vscode
+*.iml
+.idea/
 
 # LaTeX Auto-generated files
 *.aux
