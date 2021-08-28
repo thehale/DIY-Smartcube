@@ -6,3 +6,5 @@ audio/
 csv/
 logs/
 __pycache__/
+demo*.wav
+.DS_Store
