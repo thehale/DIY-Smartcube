@@ -1,5 +1,4 @@
-venv/
-venv.old/
+venv*/
 *.iml
 .idea/
 plt/
