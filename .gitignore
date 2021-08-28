@@ -10,19 +10,16 @@ demo*.wav
 .DS_Store
 
 # LaTeX Auto-generated files
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
 thesis/draft/main-blx.bib
-thesis/draft/main.aux
-thesis/draft/main.bbl
-thesis/draft/main.blg
-thesis/draft/main.fdb_latexmk
-thesis/draft/main.fls
-thesis/draft/main.lof
-thesis/draft/main.log
-thesis/draft/main.lot
-thesis/draft/main.out
-thesis/draft/main.run.xml
-thesis/draft/main.synctex.gz
-thesis/draft/main.toc
-thesis/draft/Appendices/AppendixA.aux
-thesis/draft/Chapters/Chapter1.aux
-thesis/draft/Chapter/Chapter1.aux
