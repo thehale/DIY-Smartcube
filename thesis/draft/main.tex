@@ -43,9 +43,11 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{mathpazo} % Use the Palatino font by default
 
-\usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
+\usepackage[sorting=none]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
+% \usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 
-\addbibresource{example.bib} % The filename of the bibliography
+% \addbibresource{example.bib} % The filename of the bibliography
+\addbibresource{main.bib} % The filename of the bibliography
 
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
 
@@ -91,7 +93,7 @@ headsepline, % Uncomment to get a line under the header
 	\hypersetup{colorlinks=true} % Don't color links in the print version
 	\hypersetup{urlcolor=[rgb]{0.2549,0.0353,0.3569}} % Set the color of hyperlinks to ProblemSolved-You's Purple
 	\hypersetup{linkcolor=[rgb]{0.2549,0.0353,0.3569}} % Set the color of hyperlinks to  ProblemSolved-You's Purple
-	\hypersetup{citecolor=yellow} % Set the color of hyperlinks to ProblemSolved-You's Yellow
+	\hypersetup{citecolor=[rgb]{0.2549,0.0353,0.3569}} % Set the color of hyperlinks to ProblemSolved-You's Purple
 }
 
 \begin{document}
