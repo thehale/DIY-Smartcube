@@ -42,7 +42,7 @@ Tone selection shall be biased in favor of tones beyond the typical human audito
 
 Each of the Rubik's Cube's six faces has four possible positions, for a total of 24 unique tones required for our protocol.
 
-Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam sapien, in viverra eros. Donec pellentesque justo a massa fringilla non vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia. Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis, condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula hendrerit.
+TODO finish this protocol proposal.
 
 
 \section{Relative Sound Positioning}
@@ -52,5 +52,7 @@ This strategy seeks to minimize the number of discrete frequencies required to c
 However this model presents challenges. Take for example, a speedcuber averaging 5 turns per second (common for a 12-15 second solver) with bursts up to 10 TPS. The burst TPS would require the successful transmission of 20 sequential tones within a single second - only 50ms per tone, all in the midst of additional noise from the cube's pieces hitting each other harder at the higher turn speed. And, to cap it all off, since each tone is only ever transmitted once, the audio detection model must achieve 100\% tone recognition to be able to accurately reconstruct the originating move sequence. As a result, this model fails to support any sort of error correction that would make it resistant to the common challenges to data transmission through sound.
 
 However this model inherently precludes robust error checking procedures. Each tone that is not accurately detectedany of the tones are not accurately detected, the data of that particular rotation cannotit becomes impossible to entirely reconstruct the executed move sequence
+
+TODO finish discussing this protocol proposal
 
 
