@@ -41,19 +41,22 @@ TODO discuss the Google's "data over sound" project and its applicability to thi
 
 
 \subsection{Computer Vision}
-TODO discuss the viability of using sound for making a smart cube.
+Computer Vision refers to the "field of Artificial Intelligence (AI) that enables computers and systems to derive meaningful information from digital images, videos, and other visual inputs." \cite{ibm-cv-definition}
+Since human manipulation of a Rubik's Cube is a physical, observable process, Computer Vision algorithms could be developed to extract face turn information from videos of Rubik's Cube solutions.
 
-\subsubsection{Jay Hack's Rubik's Face Recognizer}
+This section summarizes some of the relevant research in this area, including computer vision algorithms capable of extracting individual sticker colors from video, measuring the angle of rotation of a specific face, and detection of entire face turns and face turn sequences.
+
+\subsubsection{Sticker Color Classification}
 In 2015, Jay Hack, an graduate student studying Computer Science at Stanford developed a neural network capable of recognizing the colors of a Rubik's Cube face from video in various lighting conditions.
 His algorithm could classify frames within 7 milliseconds with 92\% accuracy. \cite{jay-hack-opencv}
 
-\subsubsection{OpenAI's Robot Hand}
+\subsubsection{Measuring a Face's Angle of Rotation}
 In 2019, OpenAI et al. published a viral video of a robot hand that had taught itself to solve a Rubik's Cube.
 While the final, most successful version of the robot hand's software used a Giiker Cube to obtain the current rotational state of the cube, OpenAI et al. also researched the viability of tracking a Rubik's Cube's position using only computer vision.
 Their most successful vision-only algorithm measured only the rotation angle of the top-most face on the Rubik's Cube and assumed significant hardware requirements: a modified sticker set for the Rubik's Cube, a well-lit environment, three strategically positioned RBG Basler cameras, and a neural network trained on "a pool of optimizer nodes, each of which uses 8 NVIDIA V100 GPUs and 64 CPU cores".
 At peak performance, their vision-only algorithm's average error (the difference between the predicted face angle and the actual face angle) was 15.92$^\circ$, nearly three times the 5.90$^\circ$ average error of the hardware-based face angle measurement. \cite{openai2019rubiks}
 
-\subsubsection{DeepCube Dataset}
+\subsubsection{Classification of Single Moves and Entire Move Sequences}
 In 2020, Junshen Kevin Chen, Wanze Xie, and Zhouheng Sun, graduate Computer Science students at Stanford created the DeepCube dataset consisting of over 20,000 videos of Rubik's Cube face turns with consistent lighting and backgrounds. 
 They also built a neural network to classify the videos with the face turn they contained.
 Their best performing model only made "one mistake every 15 moves" which corresponds to a 93.3\% accuracy. \cite{chen-deep-cube-dataset}
