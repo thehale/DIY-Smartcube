@@ -15,7 +15,7 @@ TODO, be a *neutral* presentation of the current state of this technology. Give 
 Commercial Smartcubes are special Rubik's Cubes built around sensors that can detect face turns and transmit that information over Bluetooth.
 Some models can also measure and transmit data about the cube's orientation.
 
-At the time of writing, there are three major smartcubes on the market: the Giiker Cube, the Go Cube, and the Gans 356i.
+At the time of writing, there are four major smartcubes on the market: the Giiker Cube, the Go Cube, the Rubik's Connected (which is powered by GoCube technology) and the Gans 356i.
 This section will discuss the internal components of each of these cubes that provide this move-tracking functionality.
 
 \subsection{Giiker Cube}
@@ -60,7 +60,9 @@ The center cap circuit controls its output voltage by using a copper brush to ch
 \subsection{Go Cube}
 Announced on Kickstarter in June 2018, Patricula's GoCube was the first smartcube to include a gyroscope that would track a Rubik's Cube's orientation in addition to the face turns applied to it. \cite{gocube-product-launch-video}
 Like the Giiker Cube before it, the GoCube's core contains a small circuit board with the main electronics including a microcontroller, bluetooth antenna, and the added gyroscope (Figure ~\ref{fig:gocube-core}). 
-Though the teardown pictures from the Go Cube's FCC filing aren't particularly clear, it appears that the cube produces a voltage drop by changing which one of the four resistors across the bottom of the center cap board is in series with the circuit (Figure ~\ref{fig:gocube-cap-chip})
+Though the teardown pictures from the Go Cube's FCC filing aren't particularly clear, it appears that the cube registers face turns similarly to the Giiker Cube: by producing a voltage drop via changing which one of the four resistors shown across the bottom of the center cap board in Figure ~\ref{fig:gocube-cap-chip} is in series with the circuit.
+
+GoCube also serves as the underlying technology for the Rubik's Connected, the official smartcube from The Rubik's Company. \cite{gocube-rubiksconnected}
 
 % How to do a sub-figure: https://tex.stackexchange.com/a/37597
 \begin{figure}
@@ -83,9 +85,7 @@ Though the teardown pictures from the Go Cube's FCC filing aren't particularly c
         \caption{Full Center Cap Teardown}
         \label{fig:gocube-centers}
     \end{subfigure}%
-    \caption{The internal components of the Go Cube \cite{gocube-internals}
-    \cite{gocube-internals}
-    \cite{gocube-internals}}
+    \caption{The internal components of the Go Cube \cite{gocube-internals}}
     \label{fig:gocube-internal-components}
 \end{figure}
 
@@ -103,19 +103,13 @@ While the Gans 356i also uses a microcontroller to process the face turns and Bl
 
 
 \section{Academia}
+In addition to the various commercial smartcubes, many academic research projects have involved some element of tracking the state/face turns of a Rubik's Cube.
 
-\subsection{Rotary Encoders + Bluetooth}
-TODO Discuss the viability of using rotary encoders + bluetooth for making a smart cube. Make sure to discuss the difference between absolute/relative rotary encoders.
-
-
-\subsection{Sound}
-TODO discuss the viability of using sound for making a smart cube.
-
-\subsubsection{Google's "Data Over Sound" Project}
-TODO discuss the Google's "data over sound" project and its applicability to this problem space.
+This section explores the current state of academic research into using Computer Vision, Magnetic Resonance, and a Muscle-Tracking armband to track the state of a Rubik's Cube.
 
 
 \subsection{Computer Vision}
+\label{subsec:computer-vision}
 Computer Vision refers to the "field of Artificial Intelligence (AI) that enables computers and systems to derive meaningful information from digital images, videos, and other visual inputs." \cite{ibm-cv-definition}
 Since human manipulation of a Rubik's Cube is a physical, observable process, Computer Vision algorithms could be developed to extract face turn information from videos of Rubik's Cube solutions.
 
@@ -137,16 +131,51 @@ They also built a neural network to classify the videos with the face turn they 
 Their best performing model only made "one mistake every 15 moves" which corresponds to a 93.3\% accuracy. \cite{chendeepcube}
 
 
-\subsection{Other Approaches}
+\subsection{Magnetic Resonance}
+In 2018, Maria Mannone et al. used the IM3D magnetic 3D motion tracking technology introduced by Huang et al. \cite{im3d} to track the state of a Rubik's Cube across various movements for the purpose of generating a sequence of musical chords.
+This approach to turn tracking requires a special array of magnetic coils as shown in Figure ~\ref{fig:im3d-architecture} and the installation of "multiple small, light-
+weight, wireless markers (LC coils) with unique IDs" (a process that requires permanant modifications to the cube as evidenced by the damaged plastic in Figure ~\ref{fig:cubeharmonic-trackers}).
+Mannone et al. reported no issues with mistakes in the move tracking technology.
 
-TODO In this section I'm laying out a structure for discussing several of the options I looked into but ultimately disregarded. Should that go in the State of the Art chapter? or would it fit better in the Evaluation chapter to contrast against the potential of the sound-based implementation?
+% How to do a sub-figure: https://tex.stackexchange.com/a/37597
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.60\textwidth}
+        \centering
+        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/im3d.png}
+        \caption{IM3D System Architecture \cite{im3d}}
+        \label{fig:im3d-architecture}
+    \end{subfigure}%
+    \begin{subfigure}{0.40\textwidth}
+        \centering
+        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/cubeharmonic-2019-tags.png}
+        \caption{IM3D trackers in a Rubik's Cube \cite{mannone-cubeharmonic-2019}}
+        \label{fig:cubeharmonic-trackers}
+    \end{subfigure}%
+    \caption{The IM3D technology as used in the Cube Harmonic}
+    \label{fig:cubeharmonic-im3d}
+\end{figure}
 
-\subsubsection{RFID}
+\subsection{Muscle-Tracking Armband}
+In 2017, Richard Polfreman and Benjamin Oliver researched ways to use the face turns of a Rubik's Cube as controls for a music synthesizer. They explored the use of a muscle-tracking armband (specifically the Myo Armband) to track the human solver's finger movements while manipulating the cube. However, since "the Myo moved a little when 'cubing'", they ultimately found greater success with a computer vision based tracking solution similar to those discussed in \ref{subsec:computer-vision}.
+
+
+\section{Other Relevant Research}
+Finally, there are a number of research papers/commerical products that seek to transmit data in highly-constrained environments that are potentially relevant to the challenge of tracking the turns of a Rubik's Cube.
+
+This section discusses some of these potential alternate move tracking mediums, specifically sound, RFID, and off-angle magnetic rotation sensors.
+
+\subsection{Sound}
+TODO discuss the viability of using sound for making a smart cube.
+
+\subsubsection{Google's "Data Over Sound" Project}
+TODO discuss the Google's "data over sound" project and its applicability to this problem space.
+
+\subsection{RFID}
 TODO discuss the viability of using RFID for making a smart cube.
-\subsubsection{Magnetic Resonance}
-TODO discuss the viability of using magnetic resonance for making a smart cube.
-\subsubsection{Muscle-Tracking Armband}
-TODO discuss the viability of using a muscle tracking armband for making a smart cube.
+
+\subsection{Off-Angle Magnetic Rotational Sensors}
+TODO discuss the viability of using Off-Angle Magnetic Rotational Sensors for making a smart cube.
 
 
 \section{Choice of Sound for My Thesis}
