@@ -7,7 +7,14 @@
 
 \section{Introduction}
 
-TODO, be a *neutral* presentation of the current state of this technology. Give a big information dump to the reader.
+This chapter seeks to provide a comphrensive summary of the existing approaches to tracking the face turns of a Rubik's Cube.
+The most widely used solutions to date are found in Commercial Smartcubes, but significant research has also been carried out into Computer Vision based solutions.
+Other researchers have also explored the use of magnetic resonance and a muscle-tracking armband.
+
+This chapter will also explore a selection of wireless communication techniques that at the time of writing have not been applied to the challenge of tracking the moves of a Rubik's Cube.
+Specifically this chapter will review the potential usage of sound, Radio Frequency Identification (RFID), and Off-Axis Magnetic Angle Sensors.
+
+Finally, this chapter will close by detailing the specific research questions this thesis will seek to answer.
 
 
 \section{Commercial Smartcubes}
@@ -135,7 +142,7 @@ Their best performing model only made "one mistake every 15 moves" which corresp
 In 2018, Maria Mannone et al. used the IM3D magnetic 3D motion tracking technology introduced by Huang et al. \cite{im3d} to track the state of a Rubik's Cube across various movements for the purpose of generating a sequence of musical chords.
 This approach to turn tracking requires a special array of magnetic coils as shown in Figure ~\ref{fig:im3d-architecture} and the installation of "multiple small, light-
 weight, wireless markers (LC coils) with unique IDs" (a process that requires permanant modifications to the cube as evidenced by the damaged plastic in Figure ~\ref{fig:cubeharmonic-trackers}).
-Mannone et al. reported no issues with mistakes in the move tracking technology.
+Mannone et al. reported no issues with mistakes in this move tracking technology. \cite{mannone-cubeharmonic-2018}
 
 % How to do a sub-figure: https://tex.stackexchange.com/a/37597
 \begin{figure}
@@ -166,19 +173,40 @@ Finally, there are a number of research papers/commerical products that seek to 
 This section discusses some of these potential alternate move tracking mediums, specifically sound, RFID, and off-angle magnetic rotation sensors.
 
 \subsection{Sound}
-TODO discuss the viability of using sound for making a smart cube.
+Sound is another communication medium that could be leveraged to track the moves of a Rubik's Cube. In 2015, Jonas Michel, a researcher at The University of Texas at Austin documented his exploration of the viability of creating an "acoustic modem" to transmit an arbitrary sequence of bits using sound.
+He observed that "as commercial off-the-shelf (COTS) smartphones become more powerful, it is worthwile to revisit the use of sound as a medium for aerial digital device-to-device communications." \cite{michel-sound}
 
-\subsubsection{Google's "Data Over Sound" Project}
-TODO discuss the Google's "data over sound" project and its applicability to this problem space.
+Indeed, since many speedcubers practice by timing solves on a microphone-equipped smartphone or laptop \footnote{One of the highest rated cubing timers on Android, Twisty Timer, has over 100,000 downloads on the Google Play Store \cite{googleplay-twistytimer}. By comparison, SpeedSolving.com, the central forum for speedcubing related discussion, has about 43,000 members \cite{speedsolving-com}}, sound is a promising alternative communication medium to existing Bluetooth-based smartcubes.
 
-\subsection{RFID}
-TODO discuss the viability of using RFID for making a smart cube.
+\subsection{Radio Frequency Identification (RFID)}
+Radio Frequency Identification (RFID) is a wireless technology often used in supply-chain systems \cite{rfid-rotary-encoder} based on individual tags that can transmit a fixed set of information to a nearby reader. \cite{fda-rfid}.
+In 2018, Genovesi et al. proposed a rotary encoder based on RFID that produced angle measurements accurate to within 3$^\circ$ after a calibration that "must only be done once (when the sensor is put in place) if the distance between the reader and the tag does not change." \cite{rfid-rotary-encoder}
 
-\subsection{Off-Angle Magnetic Rotational Sensors}
-TODO discuss the viability of using Off-Angle Magnetic Rotational Sensors for making a smart cube.
+While this approach may not be particularly useful for tracking the moves of human speedcubers since their movement of the cube would require constant re-calibration, it could be used in robotics based applications desiring to track the ongoing state of the cube.
+
+\subsection{Off-Axis Magnetic Angle Sensors}
+Another unique type of rotary encoder is an off-angle magnetic rotational sensor like the ones produced by NVE Corporation. \cite{nve-mag-sensor} In the context of a Rubik's Cube, a properly sized diametric ring magnet could be fastened to the inner screw below the center cap of each face of the cube and the resulting optimal position for the magnetic sensor would stay within the walls of the center cap as shown by the calculations in Figure ~\ref{fig:nve-mag-calculations}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/3 State of the Art/nve-mag-calculations.png}
+    \decoRule
+    \caption[Off-Angle Magnetic Sensor Calculations]{Off-Angle Magnetic Sensor Calculations. Notice how the $z_0$ and $R_0$ values are smaller than the 8mm distance between the center screw and the inner wall of the center cap in a standard-sized cube like the Gans 356. \cite{nve-mag-sensor-calculations}}
+    \label{fig:nve-mag-calculations}
+\end{figure}
 
 
-\section{Choice of Sound for My Thesis}
+\section{Research Questions}
+While there are many effective solutions for tracking the moves of a Rubik's Cube if the cube is built for that purpose, there does not yet exist a comparably effective technique for tracking the moves of a standard, "non-smart" Rubik's Cube.
+As shown above, significant effort has been spent researching and developing solutions that can leverage the Bluetooth transmitters and camera sensors of consumer grade smartphones and laptops with varying degrees of success.
+However, little to no research has been carried out exploring the viability of using the microphones readily available on the same devices for this purpose.
 
-TODO This section might be large enough to merit its own chapter...
-TODO Briefly detail the rationale for chosing to pursue a sound-based approach.
+Thus, this thesis will seek to answer the overarching question from Chapter \ref{Chapter1} \emph{"Is it possible to track the face turns of a standard, "non-smart" speedcube in a non-destructive, competition-legal way?"} by detailing a proof-of-concept for a sound-based smartcube design created in response to the following questions:
+
+\begin{enumerate}
+    \item \textbf{Feasibility on Consumer Hardware}: \emph{What are the constraints for a sound-based smart cube design compatible with consumer-grade microphones like those found in common smartphones and laptops?}
+    \item \textbf{Compatibility with Standard Speedcubes}: \emph{How could such a sound-based smart cube design be deployed within a standard, "non-smart" speedcube without requiring permanent modifications to the original cube?}
+    \item \textbf{Move Tracking Accuracy}: \emph{How could such a sound-based smart cube design track the face turns of a Rubik's Cube with over 99\% accuracy?}
+    \item \textbf{Move Tracking Granularity}: \emph{How could such a sound-based smart cube design record the time spent executing each individual face turn of a Rubik's Cube?}
+    \item \textbf{Competition Legality}: \emph{How could such a sound-based smartcube design comply with competition regulations prohibiting the use of electronics while performing a competitive solve?}
+\end{enumerate}
