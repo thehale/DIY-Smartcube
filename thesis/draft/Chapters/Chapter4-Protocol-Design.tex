@@ -9,76 +9,225 @@ Designing a sound-based protocol for tracking the moves of a Rubik's Cube requir
 Lots of things produce sound that could interfere with the protocol: people talking, machines operating, nature stirring, and so forth.
 Furthermore, the structure of the Rubik's Cube itself imposes stringent physical constraints on the size of any components used to produce the sounds used in the protocol.
 
-This chapter first seeks to clearly detail the specific constraints that must be considered when designing a sound-based protocol for tracking the moves of a Rubik's Cube.
-From there, a specific protocol will be proposed for use in the successive chapters of this thesis.
+This chapter first seeks to clearly detail the specific constraints that must be considered when designing a sound-based protocol for tracking the moves of a Rubik's Cube (\ref{sec:requirements}).
+From there, a specific protocol will be proposed in Section \ref{sec:specification} for use in the successive chapters of this thesis.
+This proposed protocol will be contrasted with an alternative option in Section \ref{sec:alternatives}.
 
 
 \section{Requirements}
+\label{sec:requirements}
+This section will detail the constraints required for designing a protocol for tracking the moves of a Rubik's Cube.
 
+These constraints include a sufficiently strong signal-to-noise ratio (\ref{subsec:signal-to-noise-ratio}), sufficient distinctiveness between tones (\ref{subsec:tone-distinctiveness}), the frequency response range of consumer hardware (\ref{subsec:frequency-response-range}), and the human auditory range (\ref{subsec:human-auditory-range}).
 
-\subsection{Signal to Noise Ratio}
+\subsection{Signal-to-Noise Ratio}
+\label{subsec:signal-to-noise-ratio}
 Sound is an easily accessible, and therefore noisy, medium of communication.
 As a result, any data transmission protocol based on sound must be resilient to the presence of additional noise unrelated to the signal being transmitted.
-For a sound-based protocol to be effective, the tones used in the protocol must be easily distinguishable from background noise.
+For a sound-based protocol to be effective, its tones must be easily distinguishable from background noise.
 
 For the purpose of this thesis, "background noise" will be considered the ambient noise present in a quiet room when a speedcuber is actively solving a Rubik's Cube.
-To measure this background noise, three recordings were taken in a household bedroom (a typical place for a speedcuber to practice solving the cube) while solving a variety of speedcubes selected based on their "noisyness" along with a fourth control recording taken of just the ambient noise in the bedroom (i.e. while no cubes were being solved).
-The recordings were then analyzed to see which frequencies were most prevalent in the recorded audio. 
-% TODO re-record the audio without the actual tones of the test turn sequence. Make a table and/or multi-part graphic of the resulting data. Draw conclusions of a quantitative definition of "background noise"
+To measure this background noise, three recordings were taken in a household bedroom (a typical place for a speedcuber to practice solving the cube) while solving a variety of speedcubes selected based on their "noisiness" along with a fourth control recording taken of just the ambient noise in the bedroom (i.e. while no cubes were being solved).
+
+Measurements were taken for the following specific background environments:
 \begin{enumerate}
     \item Background noise in a room without any use of a speedcube (Control).
     \item Background noise in a room while solving a "quiet" speedcube (the Gans 356).
     \item Background noise in a room while solving a "standard-volume" speedcube (the Gans XS).
     \item Background noise in a room while solving a "noisy" speedcube (the QiYi Qimeng).
 \end{enumerate}
-TODO incorporate these pieces into the above paragraph.
+
+% How to do a sub-figure: https://tex.stackexchange.com/a/37597
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.50\textwidth}
+        \centering
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/silent_background_noise.jpg}
+        \caption{Silent Room}
+        \label{fig:signal-to-noise-ratio-silent}
+    \end{subfigure}%
+    \begin{subfigure}{.50\textwidth}
+        \centering
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/356_background_noise.jpg}
+        \caption{Quiet Solving (Gans 356)}
+        \label{fig:signal-to-noise-ratio-356}
+    \end{subfigure}\\%
+    \begin{subfigure}{.50\textwidth}
+        \centering
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/xs_background_noise.jpg}
+        \caption{Normal Solving (Gans XS)}
+        \label{fig:signal-to-noise-ratio-xs}
+    \end{subfigure}%
+    \begin{subfigure}{.50\textwidth}
+        \centering
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/qiyi_background_noise.jpg}
+        \caption{Loud Solving (QiYi Qimeng)}
+        \label{fig:signal-to-noise-ratio-qiyi}
+    \end{subfigure}%
+    \caption{The background noise of a quiet room compared to solving several speedcubes}
+    \label{fig:signal-to-noise-ratio}
+\end{figure}
+
+As shown in Figure ~\ref{fig:signal-to-noise-ratio}, the predominant background noises in a "quiet" room are the tones between 80Hz - 500Hz which reach a max strength of -54dB.
+In contrast, the background noise of solving a speedcube spans all the way from 1000Hz - 20000Hz, with particular strength from the noisy QiYi cube in the 1000Hz - 10000Hz range reaching up to -30dB.
+
+Thus, a sound-based move tracking protocol must account for the following items in order to achieve an adequate signal-to-noise ratio:
 \begin{itemize}
-    \item Lower frequency tones (e.g. < 100Hz) are more prominent in background noise.
-    \item Analysis based on this criterion should also consider the background noise generated by the rotation of the Rubik's Cube itself.
-    \item Most of the concerns involved in this criteria are solved by increasing the volume of the generated tone.
-    \item Contrast with the WCA regulation. Perhaps a protocol that is weaker in noisy environments is more likely to be permissible.
+    \item Tones between 500Hz and 1000Hz are the easiest to detect while solving a speedcube.
+    \item Tones between 1000Hz and 20000Hz must be significantly louder than -30dB to be properly detected.
 \end{itemize}
 
 \subsection{Tone Distinctiveness}
-Next, if more than one tone is required for the protocol, each tone must be unique enough to be easily distinguished from each other tone.
-Since a standard smartphone or laptop microphone will be used on the listening end of this protocol, the definition of "easily distinguishable" must be based on an assessment of how clearly smartphone/laptop grade microphones can distinguish similar frequencies. % TODO continue this discussion.
+\label{subsec:tone-distinctiveness}
+If more than one tone is required for the protocol, each tone must be unique enough to be easily distinguished from each other tone.
+Since a standard smartphone or laptop microphone will be used on the listening end of this protocol, the definition of "easily distinguishable" must be based on an assessment of how clearly smartphone and laptop-grade microphones can distinguish similar frequencies.
 
-Some sound-based communcation protocols (e.g. Morse Code) can communicate through a single frequency by controlling the duration/pattern of activation of that frequency. \cite{TODO}
+To measure the sensitivity of a standard smartphone microphone (in this case a Google Pixel 1), a recording was taken of two distinct tones that started 500 Hz apart and stepped closer together in 10 Hz increments every 0.5 seconds until their frequencies were identical.
+
+% How to do a sub-figure: https://tex.stackexchange.com/a/37597
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.33\textwidth}
+        \centering
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Tone Distinctiveness/0.06.png}
+        \caption{500Hz Separation}
+        \label{fig:tone-sep-500}
+    \end{subfigure}%
+    \begin{subfigure}{0.33\textwidth}
+        \centering
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Tone Distinctiveness/17.53.png}
+        \caption{150Hz Separation}
+        \label{fig:tone-sep-150}
+    \end{subfigure}%
+    \begin{subfigure}{0.33\textwidth}
+        \centering
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Tone Distinctiveness/21.01.png}
+        \caption{80Hz Separation}
+        \label{fig:tone-sep-80}
+    \end{subfigure}%
+    \caption{As two tones get more similar, they get harder to distinguish, particular when fewer than 100Hz apart.}
+    \label{fig:tone-sep}
+\end{figure}
+
+As shown in Figure ~\ref{fig:tone-sep}, the two tones are clearly distinguishable from 500Hz apart to 150Hz apart.
+However, once the tones came within 80Hz of each other, they became entirely indistinguishable.
+
+Thus, a sound-based move tracking protocol must account for the following items in order to achieve adequate tone distinctiveness:
 \begin{itemize}
-    \item Our testing with smartphone microphones suggested that tones needed to be separated by at least 100Hz to be uniquely detected from each other.
-    \item We can also exploit the fact that only one of each faces four positions will be active at a time.
+    \item Tones must be separated by at least 100Hz in order to be clearly distinguished from other tones in the protocol.
 \end{itemize}
 
-\subsection{Ease of Deployment on Consumer Hardware}
-Each selected tone must be easily produced by a consumer grade speaker and consumed by a consumer grade microphone.
+
+\subsection{Frequency Response Range of Consumer Hardware}
+\label{subsec:frequency-response-range}
+Since a standard smartphone or laptop microphone will be used on the listening end of this protocol, any tones used in the protocol must be within the range of tones that a smartphone or laptop-grade microphones can pick up.
+This range is formally known as the "frequency response range" of the microphone.
+
+According to a Stanford research paper that analyzed over 10,000 mobile devices, the typical smartphone microphone has a frequency response range of 20Hz to 20kHz as shown in Figure ~\ref{fig:freq-res-range}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.50\linewidth]{Figures/4 Protocol Design/Frequency Response Range/typical-smartphone-response-range.png}
+    \decoRule
+    \caption{"A typical frequency response curve for a microphone." \cite{typical-mic-range}}
+    \label{fig:freq-res-range}
+\end{figure}
+
+Thus, a sound-based move tracking protocol must account for the following restrictions on which tones can be used for the protocol:
 \begin{itemize}
-    \item A typical smartphone can produce and consume tones in the human auditory range of 10Hz - 20kHz \cite{TODO}.
+    \item Tones used in the protocol must fall on the range of 20Hz-20kHz in order to be detectable by a typical smartphone or laptop microphone.
 \end{itemize}
 
 \subsection{Human Auditory Range}
-Tone selection shall be biased in favor of tones beyond the typical human auditory range; however, in intial prototypes, this criterion is subordinate to all other criteria.
+\label{subsec:human-auditory-range}
+An audible protocol could be distracting to a speedcuber. 
+The human ear can detect audible frequencies from 20Hz to 20kHz, though this usually degrades with age with many people unable to notice sounds above 16kHz. \cite{audible-range}.
+However, not all tones are pleasant to listen to, particularly higher frequency tones.
+Tones within the frequency range of a piano (27.5Hz - 4kHz) are generally considered acceptable, while tones above the piano's upper range are often irritating. \cite{piano-range}
+
+Thus, a sound-based move tracking protocol should be considerate of the human ear's sensitivity to various frequencies:
 \begin{itemize}
-    \item Many humans are unable to hear tones above 17kHz (TODO how many? source?)
+    \item The most acceptable tones for human speedsolvers are in the musical range of up to 4kHz or above the standard audible range of 16kHz
 \end{itemize}
 
 
-\section{Absolute Sound Positioning}
+\section{Specification}
+\label{sec:specification}
+Given the above constraints, this section will detail a sound-based protocol for tracking the moves of a Rubik's Cube by continuously transmitting the current state of the cube. In this protocol, changes to the cube's state cause a change in the transmitted tones which can be recorded and analyzed to determine the face turn applied.
 
-Each of the Rubik's Cube's six faces has four possible positions, for a total of 24 unique tones required for our protocol.
+\subsection{Representing the Cube's Current State}
+\label{subsec:representing-cube-state}
+As mentioned in Section \ref{sec:rubiks-anatomy}, a Rubik's Cube has six centerpieces that are fixed relative to each other, but can each rotate freely through four possible rotational positions as shown in Figure \ref{fig:rotation-alignment}.
 
-TODO finish this protocol proposal.
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.25\textwidth}
+        \centering
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Specification/fully-aligned.png}
+        \caption{Full Alignment}
+        \label{fig:rotation-aligned}
+    \end{subfigure}%
+    \begin{subfigure}{0.25\textwidth}
+        \centering
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Specification/90_misaligned.png}
+        \caption{90$^\circ$ Misalignment}
+        \label{fig:rotation-misaligned-90}
+    \end{subfigure}%
+    \begin{subfigure}{0.25\textwidth}
+        \centering
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Specification/180_misaligned.png}
+        \caption{180$^\circ$ Misalignment}
+        \label{fig:rotation-misaligned-180}
+    \end{subfigure}%
+    \begin{subfigure}{0.25\textwidth}
+        \centering
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Specification/270_misaligned.png}
+        \caption{270$^\circ$ Misalignment}
+        \label{fig:rotation-misaligned-270}
+    \end{subfigure}%
+    \caption{Each face of the Rubik's Cube can occupy one of four rotational positions at any given time (Pictures from \cite{rubiks-turns-images})}
+    \label{fig:rotation-alignment}
+\end{figure}
+
+The state of a centerpiece is defined as its current rotational position. 
+Implicit in this definition is the fact that a centerpiece is guaranteed to occupy one and only one of its four possible states at any given time.
+
+Each of the six centerpieces has an independent set of four possible states, yielding a total of 24 different centerpiece states for the Rubik's Cube, of which there will always be exactly six active at any given time.
+
+It's important to note that a knowledge of the current state of each centerpiece does not imply knowledge of the exact state of each of edge and corner cubie.
+For example, after applying the algorithm R U R' U' all centerpieces have the same state they occupied prior to the algorithm's execution while, most of the edges and corners in the R and U layers will have been moved or rotated.
+However, in the reverse case, knowledge of the applied move sequence is sufficient information to determine the exact state of all cubies.
+Section \ref{subsec:tracking-face-turns} will explain how extract full move sequences using only the state information of the centers.
+
+\subsection{Tracking Face Turns}
+\label{subsec:tracking-face-turns}
+The only way to change a centerpiece's state is by applying a face turn.
+As such, when a centerpiece is rotated to a new position, its state changes to that of the new position.
+From there, a simple comparison of the new state to the previous state reveals the exact face turn applied to the cube.
+
+Thus, in order to determine the sequences of moves applied to the Rubik's Cube, one simply needs to track how the state of its centerpieces changes over time. 
+
+\subsection{Conveying State Through Sound}
+\label{subsec:conveying-state-through-sound}
+Conveying the current state of the cube's centerpieces through sound can be done by simply associating each of the 24 possible centerpiece states with a specific tone and broadcasting a signal composed of the six tones corresponding to the active states of the cube's centerpieces.
+Whenever a face turn is applied, the tone associated with the rotated centerpiece would change to the tone representing the piece's new state.
+From there, a microphone equipped device can record the broadcast frequencies, measure the changes in the frequencies over time, convert the frequency changes to state changes, and finally extract any move sequence applied to the cube.
 
 
-\section{Alternative Protocol Designs}
+\section{Alternatives}
+\label{sec:alternatives}
+% \subsection{Relative Sound Positioning}
+% \label{subsec:relative-sound-positioning}
+Instead of transmitting the current state of the cube's centerpieces, an alternative protocol design could seek to directly transmit the face turns applied to the cube.
 
-\subsection{Relative Sound Positioning}
+This perspective focuses on the fact that all move sequences can be broken down into a series of 90$^\circ$ face turns.
+Since the cube consists of 6 faces, and each face can be turned either clockwise or counterclockwise, one could design a two-tone protocol using only 8 discrete audio frequencies to build the smart cube.
+The first tone would come from one of six predefined audio bands, one for each face of the cube. 
+The second tone would come from one of two separately predefined audio bands, one for each possible direction of rotation.
+From this, an audio processing model could be designed to process a sequence of these two-tone pairs and reconstruct the sequence of face rotations by recording the rotated face followed by its direction of rotation.
 
-This strategy seeks to minimize the number of discrete frequencies required to communicate changes in the cube's state. Since the cube consists of 6 faces, and each face can be turned either clockwise or counterclockwise, one could design a two-tone protocol using only 8 discrete audio frequencies to build the smart cube. The first tone would come from one of six predefined audio bands, one for each face of the cube. The second tone would come from one of two separately predefined audio bands, one for each possible direction of rotation. From this, an audio processing model could be designed to process a sequence of these two-tone pairs and reconstruct the sequence of face rotations by recording the rotated face followed by its direction of rotation.
-
-However this model presents challenges. Take for example, a speedcuber averaging 5 turns per second (common for a 12-15 second solver) with bursts up to 10 TPS. The burst TPS would require the successful transmission of 20 sequential tones within a single second - only 50ms per tone, all in the midst of additional noise from the cube's pieces hitting each other harder at the higher turn speed. And, to cap it all off, since each tone is only ever transmitted once, the audio detection model must achieve 100\% tone recognition to be able to accurately reconstruct the originating move sequence. As a result, this model fails to support any sort of error correction that would make it resistant to the common challenges to data transmission through sound.
-
-However this model inherently precludes robust error checking procedures. Each tone that is not accurately detectedany of the tones are not accurately detected, the data of that particular rotation cannotit becomes impossible to entirely reconstruct the executed move sequence
-
-TODO finish discussing this protocol proposal
-
-
+However, while this model minimizes the number of discrete frequencies required to communicate changes in the cube's state, it carries many challenges.
+Consider the example of a speedcuber averaging 5 turns per second (common for a 12-15 second solver) with bursts up to 10 TPS.
+The burst TPS would require the successful transmission of 20 sequential tones within a single second - only 50ms per tone, all in the midst of additional noise from the cube's pieces hitting each other harder at the higher turn speed.
+Adding to the difficulty, since each tone is only ever transmitted once, the audio detection model must achieve 100\% tone recognition to be able to accurately reconstruct the originating move sequence.
+As a result, this model fails to support any sort of error correction that would make it resistant to the common challenges to data transmission through sound.

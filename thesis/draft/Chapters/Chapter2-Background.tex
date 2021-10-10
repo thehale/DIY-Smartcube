@@ -8,7 +8,7 @@ TODO Each chapter starts with a paragraph that briefly outlines the purpose of e
 
 
 \section{A Brief History of the Rubik's Cube}
-
+\label{sec:rubiks-history}
 In 1974, Erno Rubik, a Hungarian professor of architecture, sought to help his students visualize space in three dimensions. 
 To that end, he created a special cube whose faces could independently rotate around all three physical axes \cite{rubik-motivation}.
 When he added colored stickers to further aid in visualizing the movements, Mr. Rubik realized he had created a new puzzle.
@@ -17,9 +17,33 @@ He patented his cube in 1975, \cite{rubik-patent} and since then over 450 millio
 Since then, the cube has been the subject of academic research, competition, leisure, and cultural iconography.
 
 
-\section{The Mechanics of the Rubik's Cube}
+\section{The Anatomy of a Rubik's Cube}
+\label{sec:rubiks-anatomy}
+The Rubik's Cube, like a standard geometric cube, has six faces, all of which are squares and positioned at right angles to each other.
+When solved, each of these faces has a single, unique color.
 
+The Rubik's Cube is further subdivided into a 3x3x3 arrangement of smaller "cubies" such that each face consists of nine individual colored stickers/tiles. 
+There are three different types of cubies: centers, edges, and corners.
+Each type of cubie is distinguished by the number of unique colors it binds together into a single physical unit.
 
+\begin{center}
+    \begin{minipage}{10cm}
+        \begin{tabular}{ | c | c | c | }
+            \hline
+            Type of Cubie & Number of Colors & Count per Rubik's Cube \\ 
+            \hline \hline
+            Center & 1 & 6\footnote[1]{All six center pieces are attached a single core} \\
+            \hline
+            Edge & 2 & 12 \\  
+            \hline
+            Corner & 3 & 8 \\
+            \hline
+        \end{tabular}
+    \end{minipage}
+\end{center}
+
+Each of the six center cubies are also attached to a common core which allows them to rotate freely, but fixes their position relative to each other.
+As such, the single color of each center cubie is also the color shared by the corresponding face when the entire cube is solved.
 
 \subsection{Algorithm Notation}
 TODO
