@@ -1,43 +1,188 @@
 % Chapter Template
 
-\chapter{Audio Decoding Algorithm Design} % Main chapter title
+\chapter{The Receiver} % Main chapter title
 
-\label{Chapter5} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+\label{Chapter5}
+
+\section{Introduction}
+The receiver for the sound-based move tracking protocol is in charge of decoding a sequence of face turns from the transmitted audio.
+
+To do this, the receiver must go through the following steps:
+\begin{enumerate}
+    \item Record the transmitted audio.
+    \item Measure the audible frequencies at each time step.
+    \item Convert each time step's audible frequencies to the cube's state at that moment.
+    \item Decode the applied face turns from the sequence of cube states.
+\end{enumerate}
+
+This chapter will describe the development of a software algorithm in Python that can serve as a receiver for this sound-based move tracking protocol. 
+This development began with the creation of synthetic audio recordings representing the tones that would be emitted by a Rubik's Cube equipped with an ideal transmitter (Section \ref{sec:synthetic-audio-generation}) followed by the implementation of an algorithm capable of decoding that ideal synthetic audio (Section \ref{sec:decoding-synthetic-audio}).
+The algorithm was then made more robust by adding realistic noise to the synthetic audio to better simulate a real speedcubing environment (Section \ref{sec:adding-realistic-noise}) followed by enhancing the previously designed algorithm to continue to decode the applied move sequence in the midst of the added noise (Section: \ref{sec:decoding-realistic-noise}).
 
 
 \section{Synthetic Audio Generation}
+\label{sec:synthetic-audio-generation}
+The first step of designing a receiver is to synthesize an audio signal representative of the output of the ideal receiver.
 
-Prior to investing significant resources in PCB design, we found it prudent to develop a synthetic model of the ideal audio output of the DIY Supercube. This model consists of a synthetic audio generator that, when given a specific move sequence, generates a `.wav` file consisting of the distinct time series tones that the DIY Supercube would theoretically produce. The synthetic data produced by this model then served as the first test cases for the final audio decoding model.
-
+This is done by encoding the frequency corresponding to each centerpiece state (Section \ref{subsec:represent-audio-protocol}), creating a virtual Rubik's Cube (Section \ref{subsec:represent-rubiks-cube}), and finally generating the audio signal from the virtual Rubik's Cube's state (Section \ref{subsec:generate-audible-algorithm}).
+\newpage
 \subsection{Representing the Audio Protocol}
-TODO pull from Jupyter notebook
+\label{subsec:represent-audio-protocol}
+For the synthetic audio generator to produce a realistic signal, it needs to know which frequencies to transmit for each centerpiece state. 
+For this design the frequencies listed in Table \ref{table:centerpiece-frequencies} are converted to a dictionary.
+
+\begin{verbatim}
+CENTERPIECE_ROTATION_TO_FREQUENCY_MAPPINGS = {
+    "U": {
+        0: 800,
+        1: 900,
+        2: 1000,
+        3: 1100,
+    },
+    "D": {
+        0: 1300,
+        1: 1400,
+        2: 1500,
+        3: 1600,
+    },
+    "R": {
+        0: 1800,
+        1: 1900,
+        2: 2000,
+        3: 2100,
+    },
+    "L": {
+        0: 2300,
+        1: 2400,
+        2: 2500,
+        3: 2600,
+    },
+    "F": {
+        0: 2800,
+        1: 2900,
+        2: 3000,
+        3: 3100,
+    },
+    "B": {
+        0: 3300,
+        1: 3400,
+        2: 3500,
+        3: 3600,
+    }
+}
+\end{verbatim}
+
+\newpage
+With this dictionary in place, determining the frequency to transmit for any particular centerpiece's current rotation is reduced to a simple lookup.
+\begin{verbatim}
+    def frequency_of(centerpiece: str, rotation: int) -> float:
+        return CENTERPIECE_ROTATION_TO_FREQUENCY_MAPPINGS[centerpiece][rotation]
+\end{verbatim}
 
 \subsection{Representing the Rubik's Cube}
-TODO pull from Jupyter Notebook
+\label{subsec:represent-rubiks-cube}
+Next, the synthetic audio generator needs a representation of a Rubik's Cube on which face turns can be virtually applied, and the resulting cube state can be read out.
+\begin{verbatim}
+class RubiksCube:
+    
+    CLOCKWISE = 1
+    COUNTERCLOCKWISE = 3
 
-\subsection{Generating the Audio for an Arbitary Algorithm}
-TODO pull from Jupyter Notebook
+    def __init__(self):
+        self.state = { "U": 0, "D": 0, "R": 0, "L": 0, "F": 0, "B": 0 }
+    
+    def apply_move(self, move: str):
+        # Extract the face and direction from the move string.
+        face = move[0]
+        if len(move) == 1:                             # e.g. U
+            direction = RubiksCube.CLOCKWISE
+        else:                                          # e.g. U'
+            direction = RubiksCube.COUNTERCLOCKWISE
+        # Update the state to apply the move.
+        self.state[face] = (self.state[face] + direction) % 4
+\end{verbatim}
 
-TODO show a spectrogram of the generated audio here
+\subsection{Generating the Audio for an Arbitrary Algorithm}
+\label{subsec:generate-audible-algorithm}
+Now the synthetic audio can be generated for any valid algorithm.
+This is done using the "tones" library \cite{pip-tones} created by Erik Nyquist.
+First, a separate audio track is created for each centerpiece on the cube and the frequencies representing the initial state of each centerpiece are added to its corresponding audio track.
+From there, the rest of the synthetic audio can be created by iterating through each step of the given algorithm, applying it to the virtual Rubik's Cube, and adding the frequency for each centerpiece's resulting state to its corresponding audio track.
+
+\begin{verbatim}
+from tones.mixer import Mixer  # https://pypi.org/project/tones/
+from tones import SINE_WAVE
+    
+def _create_mixer(rubiks_cube: RubiksCube) -> Mixer:
+    mixer: Mixer = Mixer(sample_rate=44100, amplitude=1)
+    # Add a separate track for each centerpiece.
+    for face, _ in rubiks_cube.state.items():
+        mixer.create_track(face, SINE_WAVE, attack=0, decay=0)
+    return mixer
+
+def _render_cube_state(mixer: Mixer, rubiks_cube: RubiksCube, tps: float):
+    for face, rotation in rubiks_cube.state.items():
+        mixer.add_tone(face, frequency_of(face, rotation), duration=1 / tps)
+
+def render_audible_alg(alg: str, wav_path: str=None, tps: float=4):
+    # Create the virtual Rubik's Cube.
+    rubiks_cube: RubiksCube = RubiksCube()
+    
+    # Create the audio mixer used to create the synthesized audio.
+    mixer = _create_mixer(rubiks_cube)
+    
+    # Add the initial cube state to the mixer.
+    _render_cube_state(mixer, rubiks_cube, tps)
+    
+    # Iterate over the moves in the algorithm, adding
+    # the cube state to the mixer after each move.
+    moves = alg.split(" ")
+    for move in moves:
+        rubiks_cube.apply_move(move)
+        _render_cube_state(mixer, rubiks_cube, tps)
+    
+    # Save the final audio to a .wav file.
+    mixer.write_wav(wav_path if wav_path else f"{alg}.wav")
+\end{verbatim}
+
+With these functions in place, synthetic audio can be easily created for any valid Rubik's Cube algorithm. For example, generating synthetic audio that sweeps through every possible centerpiece state can be done with the following snippet of code:
+
+\begin{verbatim}
+demo_alg = "U U U U D D D D R R R R L L L L F F F F B B B B"
+demo_wav_path = "demo_all_states.wav"
+render_audible_alg(demo_alg, demo_wav_path)
+\end{verbatim}
 
 
 \section{Decoding the Synthetic Audio}
+\label{sec:decoding-synthetic-audio}
+With synthetic audio now available for any valid Rubik's Cube algorithm, the next step is to create an initial software algorithm that can decode that audio back into the original move sequence.
 
-TODO pull from Jupyter Notebook
+TODO summarize the subsections that make this possible.
 
-\subsection{Examining the Waveform}
-TODO pull from Jupyter Notebook
+\subsection{Decoding Component Frequencies}
+\label{subsec:decode-component-frequencies}
+The first step in decoding the synthetic audio is determining its component frequencies at any specific moment in time.
+These component frequencies can be easily visualized using a spectrogram, like the one in in Figure \ref{fig:spectrogram} of the synthetic audio created in Section \ref{subsec:generate-audible-algorithm}.
 
-\subsection{Conversion to Strength of Individual Frequencies}
-TODO pull from Jupyter Notebook
+The bright yellow bands on the spectrogram represent the component frequencies present in the audio signal at each point in time.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{Figures/5 Algorithm Design/component_frequencies.png}
+    \caption{Spectrogram of the synthetic audio created in Section \ref{subsec:generate-audible-algorithm}. The source code for this diagram is available in Appendix \ref{appendix:code}.}
+    \label{fig:spectrogram}
+\end{figure}
 
 
-\section{Adding Realisitic Noise to the Synthetic Audio}
+\section{Adding Realistic Noise to the Synthetic Audio}
+\label{sec:adding-realistic-noise}
 
 TODO pull from Jupyter Notebook
 
 
 \section{Decoding the Noisy Synthetic Audio}
+\label{sec:decoding-realistic-noise}
 
 TODO pull from Jupyter Notebook
 

@@ -1,8 +1,7 @@
-% Chapter Template
-
 \chapter{Protocol Design} % Main chapter title
 
 \label{Chapter4} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+
 
 \section{Introduction}
 Designing a sound-based protocol for tracking the moves of a Rubik's Cube requires great care.
@@ -10,8 +9,9 @@ Lots of things produce sound that could interfere with the protocol: people talk
 Furthermore, the structure of the Rubik's Cube itself imposes stringent physical constraints on the size of any components used to produce the sounds used in the protocol.
 
 This chapter first seeks to clearly detail the specific constraints that must be considered when designing a sound-based protocol for tracking the moves of a Rubik's Cube (\ref{sec:requirements}).
-From there, a specific protocol will be proposed in Section \ref{sec:specification} for use in the successive chapters of this thesis.
-This proposed protocol will be contrasted with an alternative option in Section \ref{sec:alternatives}.
+From there, a specific protocol that meets these constraints will be proposed in Section \ref{sec:specification}.
+This proposed protocol will then be contrasted with an alternative option in Section \ref{sec:alternatives}.
+Finally, an overview of the plan to implement the proposed protocol in a proof-of-concept will be given in Section \ref{sec:implementation}
 
 
 \section{Requirements}
@@ -209,12 +209,29 @@ Thus, in order to determine the sequences of moves applied to the Rubik's Cube, 
 
 \subsection{Conveying State Through Sound}
 \label{subsec:conveying-state-through-sound}
-Conveying the current state of the cube's centerpieces through sound can be done by simply associating each of the 24 possible centerpiece states with a specific tone and broadcasting a signal composed of the six tones corresponding to the active states of the cube's centerpieces.
+Conveying the current state of the cube's centerpieces through sound can be done by simply associating each of the 24 possible centerpiece states with a specific tone as shown in Table \ref{table:centerpiece-frequencies} and broadcasting a signal composed of the six tones corresponding to the active states of the cube's centerpieces.
 Whenever a face turn is applied, the tone associated with the rotated centerpiece would change to the tone representing the piece's new state.
 From there, a microphone equipped device can record the broadcast frequencies, measure the changes in the frequencies over time, convert the frequency changes to state changes, and finally extract any move sequence applied to the cube.
 
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ | c | c | c | c | c | c | c | }
+        \hline
+        Alignment & Yellow (U) & White (D) & Red (R) & Orange (L) & Blue (F) & Green (B)\\
+        \hline
+        \hline
+        Full & 800 Hz & 1300 Hz & 1800 Hz & 2300 Hz & 2800 Hz & 3300 Hz\\
+        90$^\circ$ & 900 Hz & 1400 Hz & 1900 Hz & 2400 Hz & 2900 Hz & 3400 Hz\\
+        180$^\circ$ & 1000 Hz & 1500 Hz & 2000 Hz & 2500 Hz & 3000 Hz & 3500 Hz\\
+        270$^\circ$ & 1100 Hz & 1600 Hz & 2100 Hz & 2600 Hz & 3100 Hz & 3600 Hz\\
+        \hline
+    \end{tabular}
+    \caption{Example frequencies for representing a Rubik's Cube's centerpiece state in a sound-based move tracking protocol}
+    \label{table:centerpiece-frequencies}
+\end{table}
 
-\section{Alternatives}
+
+\section{Alternative Protocol}
 \label{sec:alternatives}
 % \subsection{Relative Sound Positioning}
 % \label{subsec:relative-sound-positioning}
@@ -231,3 +248,8 @@ Consider the example of a speedcuber averaging 5 turns per second (common for a 
 The burst TPS would require the successful transmission of 20 sequential tones within a single second - only 50ms per tone, all in the midst of additional noise from the cube's pieces hitting each other harder at the higher turn speed.
 Adding to the difficulty, since each tone is only ever transmitted once, the audio detection model must achieve 100\% tone recognition to be able to accurately reconstruct the originating move sequence.
 As a result, this model fails to support any sort of error correction that would make it resistant to the common challenges to data transmission through sound.
+
+
+\section{Implementation}
+\label{sec:implementation}
+Implementing the protocol proposed in Section \ref{sec:specification} requires the creation of a transmitter and a receiver that support the protocol. The details of implementing such a receiver are documented in Chapter \ref{Chapter5}, while the details of the transmitter are documented in Chapter \ref{Chapter6}.

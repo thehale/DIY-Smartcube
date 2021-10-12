@@ -1,0 +1,67 @@
+% Appendix A
+
+\chapter{Longer Code Snippets} % Main appendix title
+\label{appendix:code} % For referencing this appendix elsewhere, use \ref{AppendixA}
+
+\section{Spectrogram Generation from Section \ref{subsec:decode-component-frequencies}}
+This code snippet actually generates a full animation of how the component frequencies change over time. Figure \ref{fig:spectrogram} is only one frame of this animation.
+\begin{verbatim}
+# Heavily aided by https://matplotlib.org/stable/gallery/animation/simple_anim.html
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+import numpy as np
+from scipy import signal
+from scipy.io import wavfile
+
+def animate(wav_path: str, alg: str):
+    # Parse the audio sample into its spectrogram
+    SAMPLES_PER_WINDOW = 1024  # Seems balance frequency precision with time precision.
+    sample_rate, audio_samples = wavfile.read(wav_path)
+    freq, time, Zxx = signal.stft(audio_samples, fs=sample_rate,
+        nperseg=SAMPLES_PER_WINDOW, noverlap=(SAMPLES_PER_WINDOW // 4) * 3)
+    spectrogram = np.abs(Zxx).transpose()
+
+    # Generate the plots
+    fig, (ax_spectrogram, ax_fourier) = plt.subplots(2)
+
+    # Set the spectrogram
+    ax_spectrogram.specgram(audio_samples,
+        Fs=sample_rate, 
+        NFFT=SAMPLES_PER_WINDOW, 
+        noverlap=SAMPLES_PER_WINDOW // 4 * 3)  # 3/4 of the window size
+    line_spectrogram, = ax_spectrogram.plot([], [], '-', color='red')
+    time_tracker_spectrogram = ax_spectrogram.axvline(0, color='red')
+    ax_spectrogram.set_ylim(0, 4000)
+    ax_spectrogram.set_title(f"Spectrogram")
+    ax_spectrogram.set_ylabel('Frequency [Hz]')
+    ax_spectrogram.set_xlabel('Time [sec]')
+
+    # Set the Fourier transform
+    STEP = 10
+    indices = np.arange(0, len(time) + 1, step=STEP)
+    line_fourier, = ax_fourier.plot(freq, spectrogram[0], color='red')
+    ax_fourier.set_title("")
+    ax_fourier.set_xlim(0, 4000)  # Frequency
+    ax_fourier.set_xlabel("Frequency [Hz]")
+    ax_fourier.set_ylim(0, np.amax(spectrogram))  # Strength
+    ax_fourier.set_ylabel("Strength")
+
+    # Space figures nicely
+    fig.suptitle(alg)
+    fig.tight_layout(h_pad=3)
+
+    def draw_frame_at(i):
+        time_tracker_spectrogram.set_xdata(time[i])
+        line_fourier.set_ydata(spectrogram[i])
+        ax_fourier.set_title(f"Frequencies at {time[i]:.2f} seconds")
+        return line_spectrogram, line_fourier
+
+    ani = animation.FuncAnimation(fig, draw_frame_at,
+        frames=indices, interval=1, blit=True, save_count=len(time)/STEP)
+    ani.save(f"plt/animation/{wav_path[:-4]}.mp4",
+        fps=len(time)/STEP/5, dpi=300)
+    plt.show()
+
+animate(demo_wav_path, demo_alg)
+\end{verbatim}
+

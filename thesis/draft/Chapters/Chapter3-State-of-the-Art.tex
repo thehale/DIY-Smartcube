@@ -4,8 +4,6 @@
 
 
 \section{Introduction}
-\label{sec:introduction}
-
 This chapter seeks to provide a comprehensive summary of the existing approaches to tracking the face turns of a Rubik's Cube.
 The most widely used solutions to date are found in Commercial Smartcubes (\ref{sec:commercial-smartcubes}), but significant research has also been carried out into Computer Vision based solutions (\ref{subsec:computer-vision}).
 Other researchers have also explored the use of magnetic resonance and a muscle-tracking armband (\ref{sec:other-research})
@@ -18,7 +16,6 @@ Finally, this chapter will close by detailing the specific research questions th
 
 \section{Commercial Smartcubes}
 \label{sec:commercial-smartcubes}
-
 Commercial Smartcubes are special Rubik's Cubes built around sensors that can detect face turns and transmit that information over Bluetooth.
 Some models can also measure and transmit data about the cube's orientation.
 
@@ -31,7 +28,6 @@ This "Supercube" as it was branded, used a relatively simple system for tracking
 The core of the cube is built around a small circuit board with a microcontroller that measures the cube's movements and a bluetooth antenna that transmits those moves wirelessly (Figure ~\ref{fig:giiker-internal-board}).
 The microcontroller detects each face turn by reading the voltage drop across a small circuit embedded within each center cap (Figure ~\ref{fig:giiker-center-front}).
 The center cap circuit controls its output voltage by using a copper brush to change between four separate electric paths, three different resistors and ground, as each face rotates (Figure ~\ref{fig:giiker-center-brush}). \cite{giiker-internals}
-
 
 % How to do a sub-figure: https://tex.stackexchange.com/a/37597
 \begin{figure}[h]
@@ -115,7 +111,6 @@ In addition to the various commercial smartcubes, many academic research project
 
 This section summarizes the current state of academic research into using computer vision, magnetic resonance, and a muscle-tracking armband to track the state of a Rubik's Cube.
 
-
 \subsection{Computer Vision}
 \label{subsec:computer-vision}
 Computer Vision refers to the "field of Artificial Intelligence (AI) that enables computers and systems to derive meaningful information from digital images, videos, and other visual inputs." \cite{ibm-cv-definition}
@@ -141,8 +136,7 @@ Their best performing model only made "one mistake every 15 moves" which corresp
 
 \subsection{Magnetic Resonance}
 In 2018, Maria Mannone et al. used the IM3D magnetic 3D motion tracking technology introduced by Huang et al. \cite{im3d} to track the state of a Rubik's Cube across various movements for the purpose of generating a sequence of musical chords.
-This approach to turn tracking requires a special array of magnetic coils as shown in Figure ~\ref{fig:im3d-architecture} and the installation of "multiple small, light-
-weight, wireless markers (LC coils) with unique IDs" (a process that requires permanent modifications to the cube as evidenced by the damaged plastic in Figure ~\ref{fig:cubeharmonic-trackers}).
+This approach to turn tracking requires a special array of magnetic coils as shown in Figure ~\ref{fig:im3d-architecture} and the installation of "multiple small, light-weight, wireless markers (LC coils) with unique IDs" (a process that requires permanent modifications to the cube as evidenced by the damaged plastic in Figure ~\ref{fig:cubeharmonic-trackers}).
 Mannone et al. reported no issues with mistakes in this move tracking technology. \cite{mannone-cubeharmonic-2018}
 
 % How to do a sub-figure: https://tex.stackexchange.com/a/37597

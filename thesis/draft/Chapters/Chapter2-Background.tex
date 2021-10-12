@@ -26,7 +26,8 @@ The Rubik's Cube is further subdivided into a 3x3x3 arrangement of smaller "cubi
 There are three different types of cubies: centers, edges, and corners.
 Each type of cubie is distinguished by the number of unique colors it binds together into a single physical unit.
 
-\begin{center}
+\begin{table}[h]
+    \centering
     \begin{minipage}{10cm}
         \begin{tabular}{ | c | c | c | }
             \hline
@@ -40,7 +41,9 @@ Each type of cubie is distinguished by the number of unique colors it binds toge
             \hline
         \end{tabular}
     \end{minipage}
-\end{center}
+    \caption{The number of each type of Rubik's Cube cubie}
+    \label{table:cubie-count}
+\end{table}
 
 Each of the six center cubies are also attached to a common core which allows them to rotate freely, but fixes their position relative to each other.
 As such, the single color of each center cubie is also the color shared by the corresponding face when the entire cube is solved.
