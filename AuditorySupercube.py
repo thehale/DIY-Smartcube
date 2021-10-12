@@ -162,10 +162,8 @@ class AuditorySupercube:
     def __extract_state_over_time(self, wav_path):
         SAMPLES_PER_WINDOW = 1024  # Seems to be a good number to balance frequency precision with time precision.
         sample_rate, audio_samples = wavfile.read(wav_path)
-        freq, time, Zxx = signal.stft(audio_samples,
-                                      fs=sample_rate,
-                                      nperseg=SAMPLES_PER_WINDOW,
-                                      noverlap=(SAMPLES_PER_WINDOW // 4) * 3)
+        freq, time, Zxx = signal.stft(audio_samples, fs=sample_rate,
+            nperseg=SAMPLES_PER_WINDOW, noverlap=(SAMPLES_PER_WINDOW // 4) * 3)
         # Determine the frequencies of interest
         spectrogram = np.abs(Zxx).transpose()
         # Show off a spectrogram of the detected audio

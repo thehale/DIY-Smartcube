@@ -17,7 +17,7 @@ To do this, the receiver must go through the following steps:
 
 This chapter will describe the development of a software algorithm in Python that can serve as a receiver for this sound-based move tracking protocol. 
 This development began with the creation of synthetic audio recordings representing the tones that would be emitted by a Rubik's Cube equipped with an ideal transmitter (Section \ref{sec:synthetic-audio-generation}) followed by the implementation of an algorithm capable of decoding that ideal synthetic audio (Section \ref{sec:decoding-synthetic-audio}).
-The algorithm was then made more robust by adding realistic noise to the synthetic audio to better simulate a real speedcubing environment (Section \ref{sec:adding-realistic-noise}) followed by enhancing the previously designed algorithm to continue to decode the applied move sequence in the midst of the added noise (Section: \ref{sec:decoding-realistic-noise}).
+The algorithm was then made more robust by adding realistic noise to the synthetic audio to better simulate a real speedcubing environment (Section \ref{sec:adding-realistic-noise}) followed by enhancing the previously designed algorithm to continue to decode the applied move sequence in the midst of the added noise (Section: \ref{sec:decoding-realistic-noise}). \footnote{The contents of this Chapter have been specially written so the reader can copy them into a Jupyter Notebook running a Python 3.9 kernel and see the same results for himself/herself.} 
 
 
 \section{Synthetic Audio Generation}
@@ -75,8 +75,8 @@ CENTERPIECE_ROTATION_TO_FREQUENCY_MAPPINGS = {
 \newpage
 With this dictionary in place, determining the frequency to transmit for any particular centerpiece's current rotation is reduced to a simple lookup.
 \begin{verbatim}
-    def frequency_of(centerpiece: str, rotation: int) -> float:
-        return CENTERPIECE_ROTATION_TO_FREQUENCY_MAPPINGS[centerpiece][rotation]
+def frequency_of(centerpiece: str, rotation: int) -> float:
+    return CENTERPIECE_ROTATION_TO_FREQUENCY_MAPPINGS[centerpiece][rotation]
 \end{verbatim}
 
 \subsection{Representing the Rubik's Cube}
@@ -102,7 +102,7 @@ class RubiksCube:
         self.state[face] = (self.state[face] + direction) % 4
 \end{verbatim}
 
-\subsection{Generating the Audio for an Arbitrary Algorithm}
+\subsection{Generating Synthetic Audio for an Arbitrary Algorithm}
 \label{subsec:generate-audible-algorithm}
 Now the synthetic audio can be generated for any valid algorithm.
 This is done using the "tones" library \cite{pip-tones} created by Erik Nyquist.
@@ -154,25 +154,173 @@ render_audible_alg(demo_alg, demo_wav_path)
 \end{verbatim}
 
 
-\section{Decoding the Synthetic Audio}
+\section{Decoding Move Sequences from Synthetic Audio}
 \label{sec:decoding-synthetic-audio}
 With synthetic audio now available for any valid Rubik's Cube algorithm, the next step is to create an initial software algorithm that can decode that audio back into the original move sequence.
 
-TODO summarize the subsections that make this possible.
+Accomplishing this will require computing the synthetic audio's spectrogram (Section \ref{subsec:compute-spectrogram}), followed by extracting the dominant frequencies present at each time step (Section \ref{subsec:extract-dominant-freqs}), and converting those dominant frequencies into the corresponding Rubik's Cube centerpiece states (Section \ref{subsec:translating-freqs-to-state}), all before finally recovering the originally applied move sequence (Section \ref{subsec:extract-moves}).
 
-\subsection{Decoding Component Frequencies}
-\label{subsec:decode-component-frequencies}
+\newpage
+\subsection{Compute the Spectrogram}
+\label{subsec:compute-spectrogram}
 The first step in decoding the synthetic audio is determining its component frequencies at any specific moment in time.
-These component frequencies can be easily visualized using a spectrogram, like the one in in Figure \ref{fig:spectrogram} of the synthetic audio created in Section \ref{subsec:generate-audible-algorithm}.
+These component frequencies can be easily visualized using a spectrogram, like the one in Figure \ref{fig:spectrogram} of the synthetic audio created in Section \ref{subsec:generate-audible-algorithm}.
 
-The bright yellow bands on the spectrogram represent the component frequencies present in the audio signal at each point in time.
-
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{Figures/5 Algorithm Design/component_frequencies.png}
-    \caption{Spectrogram of the synthetic audio created in Section \ref{subsec:generate-audible-algorithm}. The source code for this diagram is available in Appendix \ref{appendix:code}.}
+    \caption{Spectrogram of the synthetic audio created in Section \ref{subsec:generate-audible-algorithm}. The source code for this diagram is available in Appendix \ref{sec:code-spectrogram}.}
     \label{fig:spectrogram}
 \end{figure}
+
+The bright, horizontal yellow bands in the spectrogram represent the component frequencies present in the audio signal at each point in time.
+The vertical red line on the spectrogram indicates the specific slice of the spectrogram represented by the graph of the component frequencies at that specific point in time.
+
+While the Figure \ref{fig:spectrogram} was created using Matplotlib's specgram plot, the actual data of the spectogram for a given .wav file can be easily obtained using the numpy and scipy packages
+
+\begin{verbatim}
+import numpy as np
+from scipy import signal
+from scipy.io import wavfile
+
+def compute_spectrogram(wav_path: str):
+    SAMPLES_PER_WINDOW = 1024  # Balances frequency/time precision
+    sample_rate, audio_samples = wavfile.read(wav_path)
+    freq, time, Zxx = signal.stft(audio_samples, fs=sample_rate,
+        nperseg=SAMPLES_PER_WINDOW, noverlap=(SAMPLES_PER_WINDOW // 4) * 3)
+    spectrogram = np.abs(Zxx).transpose()
+    return freq, time, spectrogram
+\end{verbatim}
+
+\newpage
+\subsection{Extract the Dominant Component Frequencies}
+\label{subsec:extract-dominant-freqs}
+Notice how the component frequency graph in Figure \ref{fig:spectrogram} has six peaks: these are the transmitted frequencies representing the current state of the virtual Rubik's Cube's six centerpieces at that specific instant of time.
+
+The exact frequencies of these peaks can be extracted by filtering out all frequencies not above a specific threshold.
+In this case, a simple threshold of 85\% of the maximum strength of any component frequency (see the green line in Figure \ref{fig:spectrogram-with-naive-threshold}) isolates the peak of the six dominant component frequencies.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Figures/5 Algorithm Design/threshold.png}
+    \caption{Spectrogram of the synthetic audio created in Section \ref{subsec:generate-audible-algorithm} with a threshold at 85\% of the maximum strength of the component frequencies. The source code for this diagram is available in Appendix \ref{sec:code-spectrogram-with-naive-threshold}.}
+    \label{fig:spectrogram-with-naive-threshold}
+\end{figure}
+
+Using the actual spectogram data we can compute the exact values of these peaks.
+\begin{verbatim}
+def compute_threshold(values: list):
+    return max(values) * 0.85
+
+def extract_important_frequencies(freq, time, spectrogram, time_idx):
+    important_freqs = []
+    threshold = compute_threshold(spectrogram[time_idx])
+    for freq_idx in range(len(freq)):
+        if spectrogram[time_idx][freq_idx] > threshold:
+            important_freqs.append(dict(
+                hz=freq[freq_idx],
+                power=spectrogram[time_idx][freq_idx]
+            ))
+    return important_freqs
+
+freq, time, spectrogram = compute_spectrogram(demo_wav_path)
+important_freqs = extract_important_frequencies(freq, time, spectrogram,
+    time_idx=310) # 1.80 seconds
+
+important_freqs_hz = [i["hz"] for i in important_freqs]
+pretty_freqs = list(map(lambda x: f"{x:.0f} Hz", important_freqs_hz))
+print(pretty_freqs)
+
+>> ["818 Hz", "1593 Hz", "1809 Hz", "2283 Hz", "2799 Hz", "3316 Hz"]
+\end{verbatim}
+
+\newpage
+\subsection{Translating Component Frequencies to Centerpiece States}
+\label{subsec:translating-freqs-to-state}
+With the specific frequencies of each detected peak, the original state of the Rubik's Cube at that moment in time can be computed by finding the state whose corresponding frequency is closest to each detected peak frequency.
+
+\begin{verbatim}
+def _closest_state(detected_freq):
+    closest_rotation = None
+    closest_difference = None
+    for face, rotations in CENTERPIECE_ROTATION_TO_FREQUENCY_MAPPINGS.items():
+        for rotation, freq in rotations.items():
+            difference = abs(detected_freq - freq)
+            if closest_difference is None or difference < closest_difference:
+                closest_difference = difference
+                closest_rotation = {face: rotation}
+    return closest_rotation
+
+def get_state_from_freqs(important_freqs: list) -> dict:
+    state = {}
+    for freq in important_freqs:
+        state.update(_closest_state(freq))
+    return state
+
+print(get_state_from_freqs(important_freqs_hz))
+
+>> {"U": 0, "D": 3, "R": 0, "L": 0, "F": 0, "B": 0}
+\end{verbatim}
+
+Repeating this process for each time step in the recorded audio will yield a sequence of the Rubik's Cube's centerpiece states over the course of the recorded audio sequence.
+
+\begin{verbatim}
+def get_state_over_time(freq, time, spectrogram):
+    state_over_time = []
+    for time_idx in range(len(time)):
+        important_freqs = extract_important_frequencies(
+            freq, time, spectrogram, time_idx)
+        important_freqs_hz = [i["hz"] for i in important_freqs]
+        state = get_state_from_freqs(important_freqs_hz)
+        state_over_time.append(dict(
+            time=time[time_idx],
+            state=state
+        ))
+    return state_over_time
+
+state_over_time = get_state_over_time(freq, time, spectrogram)
+\end{verbatim}
+
+\newpage
+\subsection{Extracting Move Sequences from Centerpiece State Sequences}
+\label{subsec:extract-moves}
+Finally, the original move sequence can be recovered by iterating over the sequence of cube states, and registering any change to the cube state as a move applied to the cube.
+
+\begin{verbatim}
+def _move_from(face, current_rotation, new_rotation):
+    direction = None
+    if (current_rotation + RubiksCube.CLOCKWISE) % 4 == new_rotation:
+        direction = ""  # Clockwise
+    elif (current_rotation + RubiksCube.COUNTERCLOCKWISE) % 4 == new_rotation:
+        direction = "'" # Counterclockwise
+    return f"{face}{direction}"
+
+def detect_moves(state_over_time):
+    detected_moves = []
+    current_state = state_over_time[0]["state"]
+    for timed_state in state_over_time:
+        time, state = timed_state.values()
+        for face, rotation in state.items():
+            if rotation != current_state[face]:
+                detected_moves.append(dict(
+                    time=time,
+                    move=_move_from(face, current_state[face], rotation)
+                ))
+                current_state[face] = rotation
+    return detected_moves
+
+detected_moves = detect_moves(state_over_time)
+
+pretty_moves = [i["move"] for i in detected_moves]
+pretty_moves_str = " ".join(pretty_moves)
+print(pretty_moves_str)   
+print(f"Matches demo_alg? {demo_alg == pretty_moves_str}") 
+
+>> U U U U D D D D R R R R L L L L F F F F B B B B
+>> Matches demo_alg? True
+\end{verbatim}
+
+Clearly, the detected move sequence matches the demo algorithm used to create the synthetic audio in Section \ref{subsec:generate-audible-algorithm}, which means this algorithm is a functional receiver for an ideal transmitter.
 
 
 \section{Adding Realistic Noise to the Synthetic Audio}
@@ -181,7 +329,7 @@ The bright yellow bands on the spectrogram represent the component frequencies p
 TODO pull from Jupyter Notebook
 
 
-\section{Decoding the Noisy Synthetic Audio}
+\section{Decoding Move Sequences from Realistic Audio}
 \label{sec:decoding-realistic-noise}
 
 TODO pull from Jupyter Notebook
