@@ -17,7 +17,7 @@ To do this, the receiver must go through the following steps:
 
 This chapter will describe the development of a software algorithm in Python that can serve as a receiver for this sound-based move tracking protocol. 
 This development began with the creation of synthetic audio recordings representing the tones that would be emitted by a Rubik's Cube equipped with an ideal transmitter (Section \ref{sec:synthetic-audio-generation}) followed by the implementation of an algorithm capable of decoding that ideal synthetic audio (Section \ref{sec:decoding-synthetic-audio}).
-The algorithm was then made more robust by adding realistic noise to the synthetic audio to better simulate a real speedcubing environment (Section \ref{sec:adding-realistic-noise}) followed by enhancing the previously designed algorithm to continue to decode the applied move sequence in the midst of the added noise (Section: \ref{sec:decoding-realistic-noise}). \footnote{The contents of this Chapter have been specially written so the reader can copy them into a Jupyter Notebook running a Python 3.9 kernel and see the same results for himself/herself.} 
+The algorithm was then made more robust by adding realistic noise to the synthetic audio to better simulate a real speedcubing environment (Section \ref{sec:adding-realistic-noise}) followed by enhancing the previously designed algorithm to continue to decode the applied move sequence in the midst of the added noise (Section: \ref{sec:decoding-realistic-noise}). \footnote{The contents of this Chapter have been specially written so that the reader can copy them into a Jupyter Notebook running a Python 3.9 kernel and see the same results for himself/herself.} 
 
 
 \section{Synthetic Audio Generation}
@@ -176,7 +176,7 @@ These component frequencies can be easily visualized using a spectrogram, like t
 The bright, horizontal yellow bands in the spectrogram represent the component frequencies present in the audio signal at each point in time.
 The vertical red line on the spectrogram indicates the specific slice of the spectrogram represented by the graph of the component frequencies at that specific point in time.
 
-While the Figure \ref{fig:spectrogram} was created using Matplotlib's specgram plot, the actual data of the spectogram for a given .wav file can be easily obtained using the numpy and scipy packages
+While the Figure \ref{fig:spectrogram} was created using Matplotlib's specgram plot, the actual data of the spectrogram for a given .wav file can be easily obtained using the numpy and scipy packages
 
 \begin{verbatim}
 import numpy as np
@@ -207,7 +207,7 @@ In this case, a simple threshold of 85\% of the maximum strength of any componen
     \label{fig:spectrogram-with-naive-threshold}
 \end{figure}
 
-Using the actual spectogram data we can compute the exact values of these peaks.
+Using the actual spectrogram data we can compute the exact values of these peaks.
 \begin{verbatim}
 def compute_threshold(values: list):
     return max(values) * 0.85
@@ -248,16 +248,18 @@ def _closest_state(detected_freq):
             difference = abs(detected_freq - freq)
             if closest_difference is None or difference < closest_difference:
                 closest_difference = difference
-                closest_rotation = {face: rotation}
+                closest_rotation = dict(face=face, rotation=rotation)
     return closest_rotation
 
 def get_state_from_freqs(important_freqs: list) -> dict:
     state = {}
     for freq in important_freqs:
-        state.update(_closest_state(freq))
+        hz, power = freq.values()
+        closest_state = _closest_state(hz)
+        state[closest_state['face']] = closest_state['rotation']
     return state
 
-print(get_state_from_freqs(important_freqs_hz))
+print(get_state_from_freqs(important_freqs))
 
 >> {"U": 0, "D": 3, "R": 0, "L": 0, "F": 0, "B": 0}
 \end{verbatim}
@@ -270,8 +272,7 @@ def get_state_over_time(freq, time, spectrogram):
     for time_idx in range(len(time)):
         important_freqs = extract_important_frequencies(
             freq, time, spectrogram, time_idx)
-        important_freqs_hz = [i["hz"] for i in important_freqs]
-        state = get_state_from_freqs(important_freqs_hz)
+        state = get_state_from_freqs(important_freqs)
         state_over_time.append(dict(
             time=time[time_idx],
             state=state
@@ -297,10 +298,12 @@ def _move_from(face, current_rotation, new_rotation):
 
 def detect_moves(state_over_time):
     detected_moves = []
-    current_state = state_over_time[0]["state"]
-    for timed_state in state_over_time:
+    current_state = {}
+    for idx, timed_state in enumerate(state_over_time):
         time, state = timed_state.values()
         for face, rotation in state.items():
+            if not (face in current_state):
+                current_state[face] = rotation
             if rotation != current_state[face]:
                 detected_moves.append(dict(
                     time=time,
@@ -311,10 +314,9 @@ def detect_moves(state_over_time):
 
 detected_moves = detect_moves(state_over_time)
 
-pretty_moves = [i["move"] for i in detected_moves]
-pretty_moves_str = " ".join(pretty_moves)
-print(pretty_moves_str)   
-print(f"Matches demo_alg? {demo_alg == pretty_moves_str}") 
+pretty_moves = " ".join([i["move"] for i in detected_moves])
+print(pretty_moves)   
+print(f"Matches demo_alg? {demo_alg == pretty_moves}") 
 
 >> U U U U D D D D R R R R L L L L F F F F B B B B
 >> Matches demo_alg? True
@@ -323,16 +325,144 @@ print(f"Matches demo_alg? {demo_alg == pretty_moves_str}")
 Clearly, the detected move sequence matches the demo algorithm used to create the synthetic audio in Section \ref{subsec:generate-audible-algorithm}, which means this algorithm is a functional receiver for an ideal transmitter.
 
 
+\newpage
 \section{Adding Realistic Noise to the Synthetic Audio}
 \label{sec:adding-realistic-noise}
+While Section \ref{sec:decoding-synthetic-audio}'s successful recovery of a sequence of moves applied to a virtual Rubik's Cube is impressive, the synthetic audio is not realistic.
+This is made obvious by a comparison between the spectrograms of the background audio in Figure \ref{fig:signal-to-noise-ratio} and the synthetic audio in Figure \ref{fig:spectrogram}.
+In the latter, the bright yellow indicators of present frequencies are very clear and strong with no other frequencies present in the signal.
+In contrast, the former contains many areas with bright pink indicators of prominent frequencies (the color differences are due to the use of different applications to generate the diagrams).
+A more realistic signal would contain both the strong bands of the transmitted frequency along with the underlying background noise of whatever cube is actively being solved.
 
-TODO pull from Jupyter Notebook
+Adding this noise could be done in software by overlaying the synthetic audio with a recording of the background noise, but it was just as easy to play the synthetic audio from a laptop speaker and record it using a nearby smartphone while solving various Rubik's Cubes.
+An example of the resulting spectrogram can be seen in Figure \ref{fig:noisy-spectrogram}.
+\footnote{The astute reader will notice that the audio bands in Figure \ref{fig:noisy-spectrogram} fall on different frequencies than in Figure \ref{fig:spectrogram}. This is because the realistic audio samples encoded centerpiece states using slightly different frequency assignments than the synthetic audio generated in Section \ref{sec:synthetic-audio-generation}.}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Figures/5 Algorithm Design/transmitted-356-5tps.png}
+    \caption{A spectrogram of the audio representing the demo algorithm from Section \ref{subsec:generate-audible-algorithm} as recorded by a Google Pixel smartphone while actively solving a Gans 356 speedcube.}
+    \label{fig:noisy-spectrogram}
+\end{figure}
+
+Notice how the horizontal bands representing the transmitted signal are dimmer in the realistic audio.
+This reflects the loss of volume any sound experiences as it travels through the air.
+Additionally, the transmitted signal is also partially obscured by the additional audible noise of the Rubik's Cube's turns.
 
 \section{Decoding Move Sequences from Realistic Audio}
 \label{sec:decoding-realistic-noise}
+The loss of signal strength alongside the added noise creates several unique challenges that require more sophisticated analysis than that presented in Section \ref{sec:decoding-synthetic-audio}.
 
-TODO pull from Jupyter Notebook
+\subsection{Fine-Tuning the Threshold}
+\label{subsec:fine-tuning-threshold}
+Because some audio frequencies are dampened more than others as they travel through the air to the recording microphone, a static threshold like the one used in Section \ref{subsec:extract-dominant-freqs} fails to capture all the dominant frequencies that compose the audible signal (See Figure \ref{fig:threshold-miss})
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Figures/5 Algorithm Design/threshold-miss.png}
+    \caption{The 85\% threshold from Section \ref{subsec:extract-dominant-freqs} misses most of the signal peaks when applied to realistic audio}
+    \label{fig:threshold-miss}
+\end{figure}
+
+Furthermore, the natural background noise can also cause false positives during the moments between moves while the signal is weaker as a result of changing from one state to the next (See Figure \ref{fig:threshold-false-positives}).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Figures/5 Algorithm Design/threshold-false-positives.png}
+    \caption{Between face turns, when the audio signal is nearly non-existent, the background noise can falsely register the presence of random centerpiece states}
+    \label{fig:threshold-false-positives}
+\end{figure}
+
+Fortunately, since the power of the peak frequencies which contain the audio signal are generally statistical outliers among the set of component frequencies basing the threshold at one standard deviation above the mean generally captures all the peak frequencies while still excluding the underlying noise of the cube/environment. Additionally, the use of a hard minimum value for the threshold helps reduce the number of false positives during the gaps in the signal between face turns. (See Figure \ref{fig:threshold-refined})
+\begin{verbatim}
+def compute_threshold(values: list, stdv_pct: float=1, min_thresh: int=50):
+    return max(min_thresh, np.std(values) * stdv_pct)
+\end{verbatim}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Figures/5 Algorithm Design/threshold-refined.png}
+    \caption{Tying the threshold to the standard deviation of the power of the component frequencies at a specific time step consistently captures all the peak frequencies.}
+    \label{fig:threshold-refined}
+\end{figure}
+
+\subsection{Filtering through Similar Peak Frequencies}
+\label{subsec:filtering-similar-peak-frequencies}
+While the new threshold calculation does properly capture all the peak frequencies, it also captures more samples than just the six tips of each peak. 
+These extra samples can cause confusion when trying to extract each centerpiece's state if they correspond to different states for the same centerpiece.
+That said, as long as the power of each frequency is also saved, then any disagreements about a specific centerpiece's state can be resolved by accepting the one with the most intense frequency as the actual state.
+
+\begin{verbatim}
+def get_state_from_freqs(important_freqs: list) -> dict:
+    state = {}
+    state_power = {"U": 0, "D": 0, "R": 0, "L": 0, "F": 0, "B": 0}  # New
+    for freq in important_freqs:
+        hz, power = freq.values()
+        closest_state = _closest_state(hz)
+        if power > state_power[closest_state["face"]]:              # New
+            state[closest_state["face"]] = closest_state["rotation"]
+            state_power[closest_state["face"]] = power              # New
+    return state
+
+transmitted_wav_path = "transmitted-356-5tps.wav"
+freq, time, spectrogram = compute_spectrogram(transmitted_wav_path)
+important_freqs = extract_important_frequencies(freq, time, spectrogram,
+    time_idx=800) # 4.64 seconds
+print(get_state_from_freqs(important_freqs))
+
+>> {"U": 0, "D": 0, "R": 0, "L": 0, "F": 0, "B": 0}
+\end{verbatim}
+
+\newpage
+\subsection{Ignoring Noise when Extracting Move Sequences}
+\label{subsec:ignoring-noise-when-extracting-move-sequences}
+However, the background noise occasionally causes the detection of an incorrect centerpiece state despite these noise filtering measures.
+Since the approach in Section \ref{subsec:extract-moves} registers an applied face turn for \emph{any} detected change in a centerpiece's state, \emph{any} mis-detection would incorrectly register a face turn that never happened.
+
+Fortunately, this issue can be mitigating by adding a simple sliding window to ensure that the state change persists over several time steps instead of blindly accepting any detected change in a centerpiece's state as a new face turn.
+
+\begin{verbatim}
+def detect_moves(state_over_time, window_size=8):                       # Edit
+    detected_moves = []
+    current_state = {}
+    new_state = {"U": -1, "D": -1, "R": -1, "L": -1, "F": -1, "B": -1}  # New
+    new_state_idx = {"U": 0, "D": 0, "R": 0, "L": 0, "F": 0, "B": 0}    # New
+    for idx, timed_state in enumerate(state_over_time):
+        time, state = timed_state.values()
+        for face, rotation in state.items():
+            # Update new_state whenever the rotation changes
+            if rotation != new_state[face]:
+                new_state[face] = rotation
+                new_state_idx[face] = idx
+            # If the new state has persisted over window_size time steps...
+            if idx - new_state_idx[face] == window_size:
+                if not (face in current_state):
+                    current_state[face] = new_state[face]
+                # ... and it's a different rotation than the current state...
+                elif new_state[face] != current_state[face]:
+                    # ... then we have detected a face turn!
+                    detected_moves.append(dict(
+                        time=state_over_time[new_state_idx[face]]["time"],
+                        move=_move_from(face, current_state[face], rotation)
+                    ))
+                    current_state[face] = rotation
+                    new_state_idx[face] = 0
+    return detected_moves
+
+state_over_time = get_state_over_time(freq, time, spectrogram)
+detected_moves = detect_moves(state_over_time)
+
+pretty_moves = " ".join([i["move"] for i in detected_moves])
+print(pretty_moves)   
+print(f"Matches demo_alg? {demo_alg == pretty_moves}")
+
+>> U U U U D D D D R R R R L L L L F F F F B B B B
+>> Matches demo_alg? True
+\end{verbatim}
 
 \subsection{Optimizing algorithm parameters}
-TODO - Share the strategy for finding the optimal parameters, and the end results, but defer the detailed analysis for the Evaluation.
+\label{subsec:optimizing-params}
+Determining the specific values for each of the new parameters that enabled this successful move sequence detection through the realistic noise required lots of testing and fine-tuning.
+While each cube responded differently to various combinations of settings, this testing discovered multiple combinations for each cube that would yield a perfect extraction of the original move sequence.
+
+A detailed exploration of this testing and its findings is discussed in Chapter \ref{Chapter7}.

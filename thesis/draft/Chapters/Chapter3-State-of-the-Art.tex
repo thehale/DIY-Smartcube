@@ -25,7 +25,7 @@ This section will discuss the internal components of each of these cubes that pr
 \subsection{Giiker Cube}
 The Xiaomi Giiker Cube was released in September 2018 making it the first commercial smartcube on the market \cite{giiker-thecubicle}.
 This "Supercube" as it was branded, used a relatively simple system for tracking the cube's movements.
-The core of the cube is built around a small circuit board with a microcontroller that measures the cube's movements and a bluetooth antenna that transmits those moves wirelessly (Figure ~\ref{fig:giiker-internal-board}).
+The core of the cube is built around a small circuit board with a microcontroller that measures the cube's movements and a Bluetooth antenna that transmits those moves wirelessly (Figure ~\ref{fig:giiker-internal-board}).
 The microcontroller detects each face turn by reading the voltage drop across a small circuit embedded within each center cap (Figure ~\ref{fig:giiker-center-front}).
 The center cap circuit controls its output voltage by using a copper brush to change between four separate electric paths, three different resistors and ground, as each face rotates (Figure ~\ref{fig:giiker-center-brush}). \cite{giiker-internals}
 
@@ -62,7 +62,7 @@ The center cap circuit controls its output voltage by using a copper brush to ch
 
 \subsection{Go Cube}
 Announced on Kickstarter in June 2018, Patricula's GoCube was the first smartcube to include a gyroscope that would track a Rubik's Cube's orientation in addition to the face turns applied to it. \cite{gocube-product-launch-video}
-Like the Giiker Cube before it, the GoCube's core contains a small circuit board with the main electronics including a microcontroller, bluetooth antenna, and the added gyroscope (Figure ~\ref{fig:gocube-core}). 
+Like the Giiker Cube before it, the GoCube's core contains a small circuit board with the main electronics including a microcontroller, Bluetooth antenna, and the added gyroscope (Figure ~\ref{fig:gocube-core}). 
 Though the teardown pictures from the Go Cube's FCC filing aren't particularly clear, it appears that the cube registers face turns similarly to the Giiker Cube: by producing a voltage drop via changing which one of the four resistors shown across the bottom of the center cap board in Figure ~\ref{fig:gocube-cap-chip} is in series with the circuit.
 
 GoCube also serves as the underlying technology for the Rubik's Connected, the official smartcube from The Rubik's Company. \cite{gocube-rubiksconnected}
@@ -171,7 +171,7 @@ This section discusses some of these potential alternate move tracking mediums, 
 \subsection{Sound}
 \label{subsec:sound}
 Sound is another communication medium that could be leveraged to track the moves of a Rubik's Cube. In 2015, Jonas Michel, a researcher at The University of Texas at Austin documented his exploration of the viability of creating an "acoustic modem" to transmit an arbitrary sequence of bits using sound.
-He observed that "as commercial off-the-shelf (COTS) smartphones become more powerful, it is worthwile to revisit the use of sound as a medium for aerial digital device-to-device communications." \cite{michel-sound}
+He observed that "as commercial off-the-shelf (COTS) smartphones become more powerful, it is worthwhile to revisit the use of sound as a medium for aerial digital device-to-device communications." \cite{michel-sound}
 
 Indeed, since many speedcubers practice by timing solves on a microphone-equipped smartphone or laptop\footnote{One of the highest rated cubing timers on Android, Twisty Timer, has over 100,000 downloads on the Google Play Store \cite{googleplay-twistytimer}. By comparison, SpeedSolving.com, the central forum for speedcubing related discussion, has about 43,000 members \cite{speedsolving-com}}, sound is a promising alternative communication medium to existing Bluetooth-based smartcubes.
 
