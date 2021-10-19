@@ -55,6 +55,22 @@ headsepline, % Uncomment to get a line under the header
 \usepackage{subcaption}  % Provides the \subfigure command
 \usepackage{epigraph}
 
+%-----------------------------------------------------------------
+% Code Formatting
+\usepackage{listings}  % Provides pretty code formatting
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{backgray}{rgb}{0.95,0.95,0.95}
+\lstset{
+	basicstyle=\footnotesize,
+	% backgroundcolor=\color{backgray},
+	% numberstyle=\color{codegray},
+	xleftmargin=2em,
+	numbers=left,
+	numbersep=5pt,
+	% frame=trBL,
+	% frameround=fttt
+}
+
 %----------------------------------------------------------------------------------------
 %	MARGIN SETTINGS
 %----------------------------------------------------------------------------------------
@@ -220,6 +236,7 @@ The acknowledgments and the people to thank go here, don't forget to include you
 \begin{abbreviations}{ll} % Include a list of abbreviations (a table of two columns)
 
 \textbf{TPS} & \textbf{T}urns \textbf{P}er \textbf{S}econd\\
+\textbf{WCA} & \textbf{W}orld \textbf{C}ube \textbf{A}ssociation\\
 
 \end{abbreviations}
 

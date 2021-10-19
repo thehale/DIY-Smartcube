@@ -20,7 +20,7 @@ This development began with the creation of synthetic audio recordings represent
 The algorithm was then made more robust by adding realistic noise to the synthetic audio to better simulate a real speedcubing environment (Section \ref{sec:adding-realistic-noise}) followed by enhancing the previously designed algorithm to continue to decode the applied move sequence in the midst of the added noise (Section: \ref{sec:decoding-realistic-noise}). \footnote{The contents of this Chapter have been specially written so that the reader can copy them into a Jupyter Notebook running a Python 3.9 kernel and see the same results for himself/herself.} 
 
 
-\section{Synthetic Audio Generation}
+\section{Creating Synthetic Audio}
 \label{sec:synthetic-audio-generation}
 The first step of designing a receiver is to synthesize an audio signal representative of the output of the ideal receiver.
 
@@ -29,60 +29,42 @@ This is done by encoding the frequency corresponding to each centerpiece state (
 \subsection{Representing the Audio Protocol}
 \label{subsec:represent-audio-protocol}
 For the synthetic audio generator to produce a realistic signal, it needs to know which frequencies to transmit for each centerpiece state. 
-For this design the frequencies listed in Table \ref{table:centerpiece-frequencies} are converted to a dictionary.
+For this design, the frequencies listed in Table \ref{table:centerpiece-frequencies} are converted to a dictionary.
 
-\begin{verbatim}
-CENTERPIECE_ROTATION_TO_FREQUENCY_MAPPINGS = {
+\begin{lstlisting}[language=Python]
+FREQUENCY_MAPPINGS = {
     "U": {
-        0: 800,
-        1: 900,
-        2: 1000,
-        3: 1100,
+        0: 800, 1: 900, 2: 1000, 3: 1100
     },
     "D": {
-        0: 1300,
-        1: 1400,
-        2: 1500,
-        3: 1600,
+        0: 1300, 1: 1400, 2: 1500, 3: 1600
     },
     "R": {
-        0: 1800,
-        1: 1900,
-        2: 2000,
-        3: 2100,
+        0: 1800, 1: 1900, 2: 2000, 3: 2100
     },
     "L": {
-        0: 2300,
-        1: 2400,
-        2: 2500,
-        3: 2600,
+        0: 2300, 1: 2400, 2: 2500, 3: 2600
     },
     "F": {
-        0: 2800,
-        1: 2900,
-        2: 3000,
-        3: 3100,
+        0: 2800, 1: 2900, 2: 3000, 3: 3100
     },
     "B": {
-        0: 3300,
-        1: 3400,
-        2: 3500,
-        3: 3600,
+        0: 3300, 1: 3400, 2: 3500, 3: 3600
     }
 }
-\end{verbatim}
+\end{lstlisting}
 
-\newpage
 With this dictionary in place, determining the frequency to transmit for any particular centerpiece's current rotation is reduced to a simple lookup.
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 def frequency_of(centerpiece: str, rotation: int) -> float:
-    return CENTERPIECE_ROTATION_TO_FREQUENCY_MAPPINGS[centerpiece][rotation]
-\end{verbatim}
+    return FREQUENCY_MAPPINGS[centerpiece][rotation]
+\end{lstlisting}
 
 \subsection{Representing the Rubik's Cube}
 \label{subsec:represent-rubiks-cube}
 Next, the synthetic audio generator needs a representation of a Rubik's Cube on which face turns can be virtually applied, and the resulting cube state can be read out.
-\begin{verbatim}
+\begin{figure}[h]
+\begin{lstlisting}[language=Python]
 class RubiksCube:
     
     CLOCKWISE = 1
@@ -100,16 +82,18 @@ class RubiksCube:
             direction = RubiksCube.COUNTERCLOCKWISE
         # Update the state to apply the move.
         self.state[face] = (self.state[face] + direction) % 4
-\end{verbatim}
+\end{lstlisting}
+\label{fig:rubiks-cube-code}
+\end{figure}
 
-\subsection{Generating Synthetic Audio for an Arbitrary Algorithm}
+\subsection{Creating Synthetic Audio for an Arbitrary Algorithm}
 \label{subsec:generate-audible-algorithm}
 Now the synthetic audio can be generated for any valid algorithm.
 This is done using the "tones" library \cite{pip-tones} created by Erik Nyquist.
 First, a separate audio track is created for each centerpiece on the cube and the frequencies representing the initial state of each centerpiece are added to its corresponding audio track.
 From there, the rest of the synthetic audio can be created by iterating through each step of the given algorithm, applying it to the virtual Rubik's Cube, and adding the frequency for each centerpiece's resulting state to its corresponding audio track.
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 from tones.mixer import Mixer  # https://pypi.org/project/tones/
 from tones import SINE_WAVE
     
@@ -143,18 +127,18 @@ def render_audible_alg(alg: str, wav_path: str=None, tps: float=4):
     
     # Save the final audio to a .wav file.
     mixer.write_wav(wav_path if wav_path else f"{alg}.wav")
-\end{verbatim}
+\end{lstlisting}
 
 With these functions in place, synthetic audio can be easily created for any valid Rubik's Cube algorithm. For example, generating synthetic audio that sweeps through every possible centerpiece state can be done with the following snippet of code:
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 demo_alg = "U U U U D D D D R R R R L L L L F F F F B B B B"
 demo_wav_path = "demo_all_states.wav"
 render_audible_alg(demo_alg, demo_wav_path)
-\end{verbatim}
+\end{lstlisting}
 
 
-\section{Decoding Move Sequences from Synthetic Audio}
+\section{Decoding Synthetic Audio}
 \label{sec:decoding-synthetic-audio}
 With synthetic audio now available for any valid Rubik's Cube algorithm, the next step is to create an initial software algorithm that can decode that audio back into the original move sequence.
 
@@ -178,7 +162,7 @@ The vertical red line on the spectrogram indicates the specific slice of the spe
 
 While the Figure \ref{fig:spectrogram} was created using Matplotlib's specgram plot, the actual data of the spectrogram for a given .wav file can be easily obtained using the numpy and scipy packages
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 import numpy as np
 from scipy import signal
 from scipy.io import wavfile
@@ -190,7 +174,7 @@ def compute_spectrogram(wav_path: str):
         nperseg=SAMPLES_PER_WINDOW, noverlap=(SAMPLES_PER_WINDOW // 4) * 3)
     spectrogram = np.abs(Zxx).transpose()
     return freq, time, spectrogram
-\end{verbatim}
+\end{lstlisting}
 
 \newpage
 \subsection{Extract the Dominant Component Frequencies}
@@ -208,11 +192,11 @@ In this case, a simple threshold of 85\% of the maximum strength of any componen
 \end{figure}
 
 Using the actual spectrogram data we can compute the exact values of these peaks.
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 def compute_threshold(values: list):
     return max(values) * 0.85
 
-def extract_important_frequencies(freq, time, spectrogram, time_idx):
+def extract_important_freqs(freq, time, spectrogram, time_idx):
     important_freqs = []
     threshold = compute_threshold(spectrogram[time_idx])
     for freq_idx in range(len(freq)):
@@ -224,26 +208,25 @@ def extract_important_frequencies(freq, time, spectrogram, time_idx):
     return important_freqs
 
 freq, time, spectrogram = compute_spectrogram(demo_wav_path)
-important_freqs = extract_important_frequencies(freq, time, spectrogram,
+important_freqs = extract_important_freqs(
+    freq, time, spectrogram,
     time_idx=310) # 1.80 seconds
 
-important_freqs_hz = [i["hz"] for i in important_freqs]
-pretty_freqs = list(map(lambda x: f"{x:.0f} Hz", important_freqs_hz))
-print(pretty_freqs)
+print([f"{x["hz"]:.0f}Hz" for x in important_freqs])
 
->> ["818 Hz", "1593 Hz", "1809 Hz", "2283 Hz", "2799 Hz", "3316 Hz"]
-\end{verbatim}
+>> ["818Hz", "1593Hz", "1809Hz", "2283Hz", "2799Hz", "3316Hz"]
+\end{lstlisting}
 
 \newpage
 \subsection{Translating Component Frequencies to Centerpiece States}
 \label{subsec:translating-freqs-to-state}
 With the specific frequencies of each detected peak, the original state of the Rubik's Cube at that moment in time can be computed by finding the state whose corresponding frequency is closest to each detected peak frequency.
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 def _closest_state(detected_freq):
     closest_rotation = None
     closest_difference = None
-    for face, rotations in CENTERPIECE_ROTATION_TO_FREQUENCY_MAPPINGS.items():
+    for face, rotations in FREQUENCY_MAPPINGS.items():
         for rotation, freq in rotations.items():
             difference = abs(detected_freq - freq)
             if closest_difference is None or difference < closest_difference:
@@ -262,15 +245,15 @@ def get_state_from_freqs(important_freqs: list) -> dict:
 print(get_state_from_freqs(important_freqs))
 
 >> {"U": 0, "D": 3, "R": 0, "L": 0, "F": 0, "B": 0}
-\end{verbatim}
+\end{lstlisting}
 
 Repeating this process for each time step in the recorded audio will yield a sequence of the Rubik's Cube's centerpiece states over the course of the recorded audio sequence.
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 def get_state_over_time(freq, time, spectrogram):
     state_over_time = []
     for time_idx in range(len(time)):
-        important_freqs = extract_important_frequencies(
+        important_freqs = extract_important_freqs(
             freq, time, spectrogram, time_idx)
         state = get_state_from_freqs(important_freqs)
         state_over_time.append(dict(
@@ -280,14 +263,14 @@ def get_state_over_time(freq, time, spectrogram):
     return state_over_time
 
 state_over_time = get_state_over_time(freq, time, spectrogram)
-\end{verbatim}
+\end{lstlisting}
 
 \newpage
 \subsection{Extracting Move Sequences from Centerpiece State Sequences}
 \label{subsec:extract-moves}
 Finally, the original move sequence can be recovered by iterating over the sequence of cube states, and registering any change to the cube state as a move applied to the cube.
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 def _move_from(face, current_rotation, new_rotation):
     direction = None
     if (current_rotation + RubiksCube.CLOCKWISE) % 4 == new_rotation:
@@ -320,13 +303,13 @@ print(f"Matches demo_alg? {demo_alg == pretty_moves}")
 
 >> U U U U D D D D R R R R L L L L F F F F B B B B
 >> Matches demo_alg? True
-\end{verbatim}
+\end{lstlisting}
 
 Clearly, the detected move sequence matches the demo algorithm used to create the synthetic audio in Section \ref{subsec:generate-audible-algorithm}, which means this algorithm is a functional receiver for an ideal transmitter.
 
 
 \newpage
-\section{Adding Realistic Noise to the Synthetic Audio}
+\section{Creating Realistic Audio}
 \label{sec:adding-realistic-noise}
 While Section \ref{sec:decoding-synthetic-audio}'s successful recovery of a sequence of moves applied to a virtual Rubik's Cube is impressive, the synthetic audio is not realistic.
 This is made obvious by a comparison between the spectrograms of the background audio in Figure \ref{fig:signal-to-noise-ratio} and the synthetic audio in Figure \ref{fig:spectrogram}.
@@ -349,7 +332,7 @@ Notice how the horizontal bands representing the transmitted signal are dimmer i
 This reflects the loss of volume any sound experiences as it travels through the air.
 Additionally, the transmitted signal is also partially obscured by the additional audible noise of the Rubik's Cube's turns.
 
-\section{Decoding Move Sequences from Realistic Audio}
+\section{Decoding Realistic Audio}
 \label{sec:decoding-realistic-noise}
 The loss of signal strength alongside the added noise creates several unique challenges that require more sophisticated analysis than that presented in Section \ref{sec:decoding-synthetic-audio}.
 
@@ -374,10 +357,10 @@ Furthermore, the natural background noise can also cause false positives during 
 \end{figure}
 
 Fortunately, since the power of the peak frequencies which contain the audio signal are generally statistical outliers among the set of component frequencies basing the threshold at one standard deviation above the mean generally captures all the peak frequencies while still excluding the underlying noise of the cube/environment. Additionally, the use of a hard minimum value for the threshold helps reduce the number of false positives during the gaps in the signal between face turns. (See Figure \ref{fig:threshold-refined})
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 def compute_threshold(values: list, stdv_pct: float=1, min_thresh: int=50):
     return max(min_thresh, np.std(values) * stdv_pct)
-\end{verbatim}
+\end{lstlisting}
 
 \begin{figure}[h]
     \centering
@@ -392,7 +375,7 @@ While the new threshold calculation does properly capture all the peak frequenci
 These extra samples can cause confusion when trying to extract each centerpiece's state if they correspond to different states for the same centerpiece.
 That said, as long as the power of each frequency is also saved, then any disagreements about a specific centerpiece's state can be resolved by accepting the one with the most intense frequency as the actual state.
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 def get_state_from_freqs(important_freqs: list) -> dict:
     state = {}
     state_power = {"U": 0, "D": 0, "R": 0, "L": 0, "F": 0, "B": 0}  # New
@@ -406,12 +389,12 @@ def get_state_from_freqs(important_freqs: list) -> dict:
 
 transmitted_wav_path = "transmitted-356-5tps.wav"
 freq, time, spectrogram = compute_spectrogram(transmitted_wav_path)
-important_freqs = extract_important_frequencies(freq, time, spectrogram,
+important_freqs = extract_important_freqs(freq, time, spectrogram,
     time_idx=800) # 4.64 seconds
 print(get_state_from_freqs(important_freqs))
 
 >> {"U": 0, "D": 0, "R": 0, "L": 0, "F": 0, "B": 0}
-\end{verbatim}
+\end{lstlisting}
 
 \newpage
 \subsection{Ignoring Noise when Extracting Move Sequences}
@@ -421,7 +404,7 @@ Since the approach in Section \ref{subsec:extract-moves} registers an applied fa
 
 Fortunately, this issue can be mitigating by adding a simple sliding window to ensure that the state change persists over several time steps instead of blindly accepting any detected change in a centerpiece's state as a new face turn.
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 def detect_moves(state_over_time, window_size=8):                       # Edit
     detected_moves = []
     current_state = {}
@@ -458,9 +441,9 @@ print(f"Matches demo_alg? {demo_alg == pretty_moves}")
 
 >> U U U U D D D D R R R R L L L L F F F F B B B B
 >> Matches demo_alg? True
-\end{verbatim}
+\end{lstlisting}
 
-\subsection{Optimizing algorithm parameters}
+\subsection{Optimizing Algorithm Parameters}
 \label{subsec:optimizing-params}
 Determining the specific values for each of the new parameters that enabled this successful move sequence detection through the realistic noise required lots of testing and fine-tuning.
 While each cube responded differently to various combinations of settings, this testing discovered multiple combinations for each cube that would yield a perfect extraction of the original move sequence.

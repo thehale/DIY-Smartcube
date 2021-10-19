@@ -1,4 +1,4 @@
-\chapter{Protocol Design} % Main chapter title
+\chapter{The Protocol} % Main chapter title
 
 \label{Chapter4} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
 
@@ -8,14 +8,14 @@ Designing a sound-based protocol for tracking the moves of a Rubik's Cube requir
 Lots of things produce sound that could interfere with the protocol: people talking, machines operating, nature stirring, and so forth.
 Furthermore, the structure of the Rubik's Cube itself imposes stringent physical constraints on the size of any components used to produce the sounds used in the protocol.
 
-This chapter first seeks to clearly detail the specific constraints that must be considered when designing a sound-based protocol for tracking the moves of a Rubik's Cube (\ref{sec:requirements}).
+This chapter first seeks to clearly detail the specific constraints that must be considered when designing a sound-based protocol for tracking the moves of a Rubik's Cube (\ref{sec:protocol-requirements}).
 From there, a specific protocol that meets these constraints will be proposed in Section \ref{sec:specification}.
 This proposed protocol will then be contrasted with an alternative option in Section \ref{sec:alternatives}.
 Finally, an overview of the plan to implement the proposed protocol in a proof-of-concept will be given in Section \ref{sec:implementation}
 
 
 \section{Requirements}
-\label{sec:requirements}
+\label{sec:protocol-requirements}
 This section will detail the constraints required for designing a protocol for tracking the moves of a Rubik's Cube.
 
 These constraints include a sufficiently strong signal-to-noise ratio (\ref{subsec:signal-to-noise-ratio}), sufficient distinctiveness between tones (\ref{subsec:tone-distinctiveness}), the frequency response range of consumer hardware (\ref{subsec:frequency-response-range}), and the human auditory range (\ref{subsec:human-auditory-range}).
@@ -27,40 +27,37 @@ As a result, any data transmission protocol based on sound must be resilient to 
 For a sound-based protocol to be effective, its tones must be easily distinguishable from background noise.
 
 For the purpose of this thesis, "background noise" will be considered the ambient noise present in a quiet room when a speedcuber is actively solving a Rubik's Cube.
-To measure this background noise, three recordings were taken in a household bedroom (a typical place for a speedcuber to practice solving the cube) while solving a variety of speedcubes selected based on their "noisiness" along with a fourth control recording taken of just the ambient noise in the bedroom (i.e. while no cubes were being solved).
-
-Measurements were taken for the following specific background environments:
-\begin{enumerate}
-    \item Background noise in a room without any use of a speedcube (Control).
-    \item Background noise in a room while solving a "quiet" speedcube (the Gans 356).
-    \item Background noise in a room while solving a "standard-volume" speedcube (the Gans XS).
-    \item Background noise in a room while solving a "noisy" speedcube (the QiYi Qimeng).
-\end{enumerate}
+Measurement of the background noise was carried out by using the Android app Spectroid \cite{googleplay-spectroid} to create live visualizations of the background noise in a household bedroom (a typical place for a speedcuber to practice solving the cube) while solving three types of speedcubes selected based on their "noisiness".
+A fourth visualization of just the ambient noise in the bedroom (i.e. while no cubes were being solved) was also recorded as a control.
+These visualizations are shown in Figure \ref{fig:signal-to-noise-ratio}.
 
 % How to do a sub-figure: https://tex.stackexchange.com/a/37597
 \begin{figure}
     \centering
-    \begin{subfigure}{0.50\textwidth}
+    \begin{subfigure}{\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/silent_background_noise.jpg}
-        \caption{Silent Room}
+        \includegraphics[width=\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/silent_background_noise.jpg}
+        \caption{Quiet Bedroom}
         \label{fig:signal-to-noise-ratio-silent}
-    \end{subfigure}%
-    \begin{subfigure}{.50\textwidth}
+    \end{subfigure}\\
+    \begin{subfigure}{\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/356_background_noise.jpg}
+        \includegraphics[width=\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/356_background_noise.jpg}
         \caption{Quiet Solving (Gans 356)}
         \label{fig:signal-to-noise-ratio-356}
-    \end{subfigure}\\%
-    \begin{subfigure}{.50\textwidth}
+    \end{subfigure}
+\end{figure}
+\begin{figure}\ContinuedFloat
+    \centering
+    \begin{subfigure}{\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/xs_background_noise.jpg}
+        \includegraphics[width=\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/xs_background_noise.jpg}
         \caption{Normal Solving (Gans XS)}
         \label{fig:signal-to-noise-ratio-xs}
-    \end{subfigure}%
-    \begin{subfigure}{.50\textwidth}
+    \end{subfigure}\\
+    \begin{subfigure}{\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/qiyi_background_noise.jpg}
+        \includegraphics[width=\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/qiyi_background_noise.jpg}
         \caption{Loud Solving (QiYi Qimeng)}
         \label{fig:signal-to-noise-ratio-qiyi}
     \end{subfigure}%
@@ -68,13 +65,27 @@ Measurements were taken for the following specific background environments:
     \label{fig:signal-to-noise-ratio}
 \end{figure}
 
-As shown in Figure ~\ref{fig:signal-to-noise-ratio}, the predominant background noises in a "quiet" room are the tones between 80Hz - 500Hz which reach a max strength of -54dB.
-In contrast, the background noise of solving a speedcube spans all the way from 1000Hz - 20000Hz, with particular strength from the noisy QiYi cube in the 1000Hz - 10000Hz range reaching up to -30dB.
+\subsubsection{How to Read a Spectrogram}
+\label{subsubsec:how-to-read-a-spectrogram}
+These visualizations are formally known as an audio "spectrogram", and show both the specific frequencies present in each audio sample and their intensity.
+
+The graph on top shows the current and maximum strengths of each frequency present in the background audio with the yellow and red lines respectively. 
+The x-axis measures the specific frequencies in Hz, while the y-axis shows the intensity (aka loudness) of those frequencies in dB.
+
+The lower graph is the actual spectrogram of the background audio.
+It shares the same x-axis as the top graph, but its y-axis instead measures time with time = 0 at the bottom of the graph and time = now at the top.
+Here, the brighter colors represent a more intense (aka louder) frequency with the exact key shown on the left side of the graph. As such, this lower graph can be considered a "bird's eye view" of the top graph over time.
+
+\subsubsection{Key Observations from the Spectrogram}
+\label{subsubsec:key-observations-from-the-spectrogram}
+As shown in Figure \ref{fig:signal-to-noise-ratio-silent}, the predominant background noises in a quiet bedroom are the tones between 80Hz - 500Hz which reach a max strength of -54dB.
+
+In contrast, Figures \ref{fig:signal-to-noise-ratio-356} and \ref{fig:signal-to-noise-ratio-xs} show that solving a speedcube creates additional noise in the frequency ranges from 1000Hz - 20000Hz, with Figure \ref{fig:signal-to-noise-ratio-qiyi} showing particular strength from the noisy QiYi cube with the frequencies in the 1000Hz - 10000Hz range reaching up to -30dB.
 
 Thus, a sound-based move tracking protocol must account for the following items in order to achieve an adequate signal-to-noise ratio:
 \begin{itemize}
-    \item Tones between 500Hz and 1000Hz are the easiest to detect while solving a speedcube.
-    \item Tones between 1000Hz and 20000Hz must be significantly louder than -30dB to be properly detected.
+    \item Tones between 500Hz and 1000Hz are the easiest to detect while solving a speedcube since they have the least competition from other background sounds while solving a speedcube.
+    \item Tones between 1000Hz and 20000Hz must be significantly louder than -30dB or they risk being indistinguishable from the background noise created by a noisy speedcube like the QiYi Qimeng.
 \end{itemize}
 
 \subsection{Tone Distinctiveness}
@@ -84,22 +95,31 @@ Since a standard smartphone or laptop microphone will be used on the listening e
 
 To measure the sensitivity of a standard smartphone microphone (in this case a Google Pixel 1), a recording was taken of two distinct tones that started 500 Hz apart and stepped closer together in 10 Hz increments every 0.5 seconds until their frequencies were identical.
 
+As shown in Figure \ref{fig:tone-sep}, the two tones are clearly distinguishable from 500Hz apart to 150Hz apart.
+However, the distinction began waning once the tones came within 100Hz of each other, and by 80Hz they became entirely indistinguishable.
+
 % How to do a sub-figure: https://tex.stackexchange.com/a/37597
 \begin{figure}[h]
     \centering
-    \begin{subfigure}{0.33\textwidth}
+    \begin{subfigure}{0.5\textwidth}
         \centering
         \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Tone Distinctiveness/0.06.png}
         \caption{500Hz Separation}
         \label{fig:tone-sep-500}
     \end{subfigure}%
-    \begin{subfigure}{0.33\textwidth}
+    \begin{subfigure}{0.5\textwidth}
         \centering
         \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Tone Distinctiveness/17.53.png}
         \caption{150Hz Separation}
         \label{fig:tone-sep-150}
+    \end{subfigure}\\
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Tone Distinctiveness/20.03.png}
+        \caption{100Hz Separation}
+        \label{fig:tone-sep-100}
     \end{subfigure}%
-    \begin{subfigure}{0.33\textwidth}
+    \begin{subfigure}{0.5\textwidth}
         \centering
         \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Tone Distinctiveness/21.01.png}
         \caption{80Hz Separation}
@@ -109,12 +129,9 @@ To measure the sensitivity of a standard smartphone microphone (in this case a G
     \label{fig:tone-sep}
 \end{figure}
 
-As shown in Figure ~\ref{fig:tone-sep}, the two tones are clearly distinguishable from 500Hz apart to 150Hz apart.
-However, once the tones came within 80Hz of each other, they became entirely indistinguishable.
-
 Thus, a sound-based move tracking protocol must account for the following items in order to achieve adequate tone distinctiveness:
 \begin{itemize}
-    \item Tones must be separated by at least 100Hz in order to be clearly distinguished from other tones in the protocol.
+    \item Tones should be separated by at least 100Hz in order to be clearly distinguished from other tones in the protocol.
 \end{itemize}
 
 
@@ -123,7 +140,7 @@ Thus, a sound-based move tracking protocol must account for the following items 
 Since a standard smartphone or laptop microphone will be used on the listening end of this protocol, any tones used in the protocol must be within the range of tones that a smartphone or laptop-grade microphones can pick up.
 This range is formally known as the "frequency response range" of the microphone.
 
-According to a Stanford research paper that analyzed over 10,000 mobile devices, the typical smartphone microphone has a frequency response range of 20Hz to 20kHz as shown in Figure ~\ref{fig:freq-res-range}
+According to a Stanford research paper \cite{typical-mic-range} that analyzed over 10,000 mobile devices, the typical smartphone microphone has a frequency response range of 20Hz to 20kHz as shown in Figure ~\ref{fig:freq-res-range}.
 
 \begin{figure}[h]
     \centering
@@ -195,7 +212,7 @@ Implicit in this definition is the fact that a centerpiece is guaranteed to occu
 Each of the six centerpieces has an independent set of four possible states, yielding a total of 24 different centerpiece states for the Rubik's Cube, of which there will always be exactly six active at any given time.
 
 It's important to note that a knowledge of the current state of each centerpiece does not imply knowledge of the exact state of each of edge and corner cubie.
-For example, after applying the algorithm R U R' U' all centerpieces have the same state they occupied prior to the algorithm's execution while, most of the edges and corners in the R and U layers will have been moved or rotated.
+For example, after applying the algorithm R U R' U' all centerpieces have the same state they occupied prior to the algorithm's execution, while most of the edges and corners in the R and U layers will have been moved or rotated.
 However, in the reverse case, knowledge of the applied move sequence is sufficient information to determine the exact state of all cubies.
 Section \ref{subsec:tracking-face-turns} will explain how extract full move sequences using only the state information of the centers.
 
@@ -210,8 +227,13 @@ Thus, in order to determine the sequences of moves applied to the Rubik's Cube, 
 \subsection{Conveying State Through Sound}
 \label{subsec:conveying-state-through-sound}
 Conveying the current state of the cube's centerpieces through sound can be done by simply associating each of the 24 possible centerpiece states with a specific tone as shown in Table \ref{table:centerpiece-frequencies} and broadcasting a signal composed of the six tones corresponding to the active states of the cube's centerpieces.
+
 Whenever a face turn is applied, the tone associated with the rotated centerpiece would change to the tone representing the piece's new state.
 From there, a microphone equipped device can record the broadcast frequencies, measure the changes in the frequencies over time, convert the frequency changes to state changes, and finally extract any move sequence applied to the cube.
+
+Since there will only ever be a single tone broadcast for a specific face, the four tones used to represent each of its possible states can be chosen closer to the minimum separation specified in Section \ref{subsec:tone-distinctiveness}. 
+However, the gap between tones for different faces should be larger to help prevent incorrectly classifying a tone as conveying a state of a different face. 
+In the sample frequencies shown in Table \ref{table:centerpiece-frequencies}, the frequency gap between faces is 200Hz, a value which performed well in testing.
 
 \begin{table}[h]
     \centering
@@ -244,12 +266,23 @@ The second tone would come from one of two separately predefined audio bands, on
 From this, an audio processing model could be designed to process a sequence of these two-tone pairs and reconstruct the sequence of face rotations by recording the rotated face followed by its direction of rotation.
 
 However, while this model minimizes the number of discrete frequencies required to communicate changes in the cube's state, it carries many challenges.
-Consider the example of a speedcuber averaging 5 turns per second (common for a 12-15 second solver) with bursts up to 10 TPS.
+Consider the example of a speedcuber averaging 5 turns per second (TPS) with bursts up to 10 TPS (common for a speedcuber that averages 12-15 seconds per solution).
 The burst TPS would require the successful transmission of 20 sequential tones within a single second - only 50ms per tone, all in the midst of additional noise from the cube's pieces hitting each other harder at the higher turn speed.
 Adding to the difficulty, since each tone is only ever transmitted once, the audio detection model must achieve 100\% tone recognition to be able to accurately reconstruct the originating move sequence.
 As a result, this model fails to support any sort of error correction that would make it resistant to the common challenges to data transmission through sound.
 
+\newpage
+\section{Summary}
+\label{sec:protocol-summary}
+In summary, a sound based protocol for tracking the moves of a Rubik's Cube must be considerate of the following constraints:
 
-\section{Implementation}
-\label{sec:implementation}
-Implementing the protocol proposed in Section \ref{sec:specification} requires the creation of a transmitter and a receiver that support the protocol. The details of implementing such a receiver are documented in Chapter \ref{Chapter5}, while the details of the transmitter are documented in Chapter \ref{Chapter6}.
+\begin{enumerate}
+    \item Tones should be transmitted with a strength greater than -30dB to achieve a high signal-to-noise ratio. (Section \ref{subsec:signal-to-noise-ratio})
+    \item Tones should be separated by at least 100Hz in order to be clearly distinguished from other tones in the protocol. (Section \ref{subsec:tone-distinctiveness})
+    \item Tones must fall on the range of 20Hz-20kHz in order to be detectable by a typical smartphone or laptop microphone. (Section \ref{subsec:frequency-response-range})
+    \item Tones should fall on the range 0Hz-4kHz or 16kHz-20kHz to minimize annoyance to the human speedsolver. (Section \ref{subsec:human-auditory-range}).
+\end{enumerate}
+
+The protocol that will be used in subsequent chapters consists of 24 unique tones, one for each possible rotational state of each centerpiece.
+A transmitter embedded in the Rubik's Cube will continuously broadcast the six tones corresponding to the current rotational state of each centerpiece adjust those tones as face turns are applied (Details in Chapter \ref{Chapter6}).
+A software receiver will then listen to the transmitted audio and measure the changes in the transmitted frequencies over time to reconstruct the originally applied sequence of face turns (Details in Chapter \ref{Chapter5}).

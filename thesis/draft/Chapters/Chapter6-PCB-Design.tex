@@ -1,31 +1,44 @@
 % Chapter Template
 
-\chapter{PCB Design} % Main chapter title
+\chapter{The Transmitter} % Main chapter title
+\label{Chapter6} 
 
-\label{Chapter6} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
 
+\section{Introduction}
+The transmitter for the sound-based move tracking protocol is in charge of creating the tones representing each centerpiece's current state, and updating those tones each time a centerpiece changes state.
+
+This chapter will detail a prototype PCB design containing only nine discrete components capable of generating all the tones required for encoding one centerpiece's state.
 
 \section{Requirements}
+\label{sec:transmitter-requirements}
 
 TODO lay out the requirements for the PCB
 
-\subsection{Accuracy of Tone Generation}
-TODO Describe this requirement
+\subsection{Prospects of Miniaturization}
+\label{subsec:prospects-of-miniaturization}
+The transmitter must be both removable and small enough to fit in the center cap of each face of a speedcube.
+This requirement stems from two sources.
+First, in contrast to all existing smartcubes, most non-smartcubes have small, solid cores that provide no extra space for the inclusion of any electronics, but do have a small amount of open space within their center cubies. (TODO - add picture of Gans 356 core), 
+Second, the use of a cube with non-removable, embedded electronics violates the WCA competition regulation 2i \cite{wca-regulations} (See also Section \ref{subsec:competition-regulations}).
 
-\subsection{Tone Response to Cube Rotations}
-TODO Describe this requirement
+\subsection{Precision of Tone Generation}
+\label{subsec:precision-of-tone-generation}
+While the receiver specified in Chapter \ref{Chapter5} supports custom state to frequency mappings, it expects that the frequency corresponding to each centerpiece's state stays constant throughout the entire audio recording.
+As such, the chosen transmitter design can encode centerpiece states with any frequency (assuming the chosen frequencies work within the constraints specified in Section \ref{sec:protocol-requirements}), but it must produce its chosen frequencies with high precision.
+
+\subsection{Responsiveness to Face Turns}
+\label{subsec:responsiveness-to-face-turns}
+The chosen transmitter design must respond to an applied face turn by changing the currently transmitted audio frequency to the frequency corresponding to the new centerpiece state.
 
 \subsection{Signal-to-Noise Ratio}
-TODO Describe this requirement
-TODO Discuss the dampening effect of the plastic enclosure.
-
-\subsection{Prospects of Miniaturization}
-TODO Describe this requirement
+\label{subsec:transmitter-signal-to-noise-ratio}
+The transmitter must create tones loud enough to be easily distinguished from ambient noise, including the sound of the Rubik's Cube's own turns.
+In light of the above requirement for the transmitter to fit within a center cubie (\ref{subsec:prospects-of-miniaturization}), this requirement will also require the transmitter design to consider how to overcome any audio dampening caused by such an enclosure.
 
 
 \section{Hardware Selection}
 
-TODO outline the process of chosing specific hardware to use for this project
+TODO outline the process of choosing specific hardware to use for this project
 
 \subsection{Minimizing Sound Obstruction}
 TODO Discuss the "tupperware" tests -> design of various center caps.
