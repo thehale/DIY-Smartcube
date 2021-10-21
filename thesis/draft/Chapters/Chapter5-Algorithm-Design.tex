@@ -29,8 +29,19 @@ This is done by encoding the frequency corresponding to each centerpiece state (
 \subsection{Representing the Audio Protocol}
 \label{subsec:represent-audio-protocol}
 For the synthetic audio generator to produce a realistic signal, it needs to know which frequencies to transmit for each centerpiece state. 
-For this design, the frequencies listed in Table \ref{table:centerpiece-frequencies} are converted to a dictionary.
+This is easily accomplished by creating a dictionary to map each possible state of each face to its corresponding frequency.
 
+For this design, the frequency assignments from Table \ref{table:centerpiece-frequencies} are converted to the dictionary shown in Figure \ref{fig:code-freq-mapping-dict} with two small changes.
+First, by assuming no cube rotations, the face color (e.g. "White") can be converted to a layer name (e.g. "U") which simplifies the code for both encoding and decoding a move sequence from audio.
+Second, the alignments from Figure \ref{fig:rotation-alignment} are divided by 90 to get a simple sequence of consecutive integers that are easier to manipulate in code.
+
+With this dictionary in place, the frequency to transmit for any particular centerpiece's current rotation can be determined by looking up the centerpiece and its rotation in the dictionary as shown in Figure \ref{fig:code-frequency-of}.
+
+\begin{figure}[h]
+\caption{Centerpiece State to Frequency Mapping}
+\begin{subfigure}{\textwidth}
+\caption{Frequency mapping dictionary}
+\label{fig:code-freq-mapping-dict}
 \begin{lstlisting}[language=Python]
 FREQUENCY_MAPPINGS = {
     "U": {
@@ -53,223 +64,379 @@ FREQUENCY_MAPPINGS = {
     }
 }
 \end{lstlisting}
-
-With this dictionary in place, determining the frequency to transmit for any particular centerpiece's current rotation is reduced to a simple lookup.
-\begin{lstlisting}[language=Python]
+\end{subfigure}\\
+\begin{subfigure}{\textwidth}
+\caption{Frequency lookup function}
+\label{fig:code-frequency-of}
+\begin{lstlisting}[language=Python, firstnumber=last]
 def frequency_of(centerpiece: str, rotation: int) -> float:
     return FREQUENCY_MAPPINGS[centerpiece][rotation]
 \end{lstlisting}
+\end{subfigure}
+\end{figure}
 
+
+\newpage
 \subsection{Representing the Rubik's Cube}
 \label{subsec:represent-rubiks-cube}
-Next, the synthetic audio generator needs a representation of a Rubik's Cube on which face turns can be virtually applied, and the resulting cube state can be read out.
+While there are many implementations of a digital Rubik's Cube that can track every cubie and render an interactive 3D cube, all that's needed for the synthetic audio generator is a representation of a Rubik's Cube on which individual face turns can be virtually applied and the resulting centerpiece state can be read out.
+
+To do this, a \code{RubiksCube} object is created that encapsulates a dictionary containing the same keys for each face as the \code{FREQUENCY\_MAPPINGS} dictionary in Figure \ref{fig:code-freq-mapping-dict} above, each associated with a single integer representing the current rotational state of that face.
+A method called \code{apply\_move} is also defined with a parameter for a valid move like \code{"U"} or \code{"U'"} that will update the \code{RubiksCube}'s state to reflect the rotation.
 \begin{figure}[h]
+\caption{A simple abstraction of a Rubik's Cube}
+\label{fig:rubiks-cube-code}
 \begin{lstlisting}[language=Python]
 class RubiksCube:
     
-    CLOCKWISE = 1
-    COUNTERCLOCKWISE = 3
+    CLOCKWISE = 1           # aka a 90 degree turn
+    COUNTERCLOCKWISE = 3    # aka a 270 degree turn which achieves the
+                            # same resulting state as a -90 degree turn
 
     def __init__(self):
         self.state = { "U": 0, "D": 0, "R": 0, "L": 0, "F": 0, "B": 0 }
     
     def apply_move(self, move: str):
-        # Extract the face and direction from the move string.
+        # Extract the face and direction from the `move` string.
         face = move[0]
         if len(move) == 1:                             # e.g. U
             direction = RubiksCube.CLOCKWISE
         else:                                          # e.g. U'
             direction = RubiksCube.COUNTERCLOCKWISE
+        
         # Update the state to apply the move.
+            # NOTE: The `mod 4` exists to wrap back around to 0
+            # after a full 360 degrees of rotation.
         self.state[face] = (self.state[face] + direction) % 4
 \end{lstlisting}
-\label{fig:rubiks-cube-code}
 \end{figure}
 
 \subsection{Creating Synthetic Audio for an Arbitrary Algorithm}
 \label{subsec:generate-audible-algorithm}
 Now the synthetic audio can be generated for any valid algorithm.
-This is done using the "tones" library \cite{pip-tones} created by Erik Nyquist.
-First, a separate audio track is created for each centerpiece on the cube and the frequencies representing the initial state of each centerpiece are added to its corresponding audio track.
-From there, the rest of the synthetic audio can be created by iterating through each step of the given algorithm, applying it to the virtual Rubik's Cube, and adding the frequency for each centerpiece's resulting state to its corresponding audio track.
+This is done using the \code{tones} library created by Erik Nyquist. \cite{pip-tones}
 
+First, a separate audio track is created for each centerpiece on the cube since there will be a tone continuously broadcast from each centerpiece of the cube (Figure \ref{fig:code-create-mixer}).
+
+Second, a new function is written to add the tones corresponding to the virtual cube's current state to the audio mixer using the \code{frequency\_of} function from Figure \ref{fig:code-frequency-of} (Figure \ref{fig:code-render-cube-state}).
+This function includes a \code{tps} parameter that controls the duration of the added tones so that they change to the next tone at the same speed as the turns on a speedcube being solved at that number of turns per second.
+
+Then, those two functions are tied together by iterating through each move in a Rubik's Cube \code{alg}orithm and saving the audio of the resulting state changes into a .wav file at a given file path (Figure \ref{fig:code-render-audible-alg}).
+Additionally, the \code{tps} parameter is propagated to this function to enable generating audio for an algorithm at different turn speeds.
+
+\begin{figure}[h]
+\caption{Generating audio for any Rubik's Cube algorithm}
+\label{fig:code-generate-alg-audio}
+\begin{subfigure}{\textwidth}
+\caption{Function to create an audio mixer for a virtual Rubik's Cube}
+\label{fig:code-create-mixer}
 \begin{lstlisting}[language=Python]
 from tones.mixer import Mixer  # https://pypi.org/project/tones/
 from tones import SINE_WAVE
-    
+
 def _create_mixer(rubiks_cube: RubiksCube) -> Mixer:
     mixer: Mixer = Mixer(sample_rate=44100, amplitude=1)
-    # Add a separate track for each centerpiece.
+    # Add a separate audio track for each centerpiece.
     for face, _ in rubiks_cube.state.items():
         mixer.create_track(face, SINE_WAVE, attack=0, decay=0)
     return mixer
-
+\end{lstlisting}
+\vspace*{2mm}
+\end{subfigure}\\
+\begin{subfigure}{\textwidth}
+\caption{Function to update an audio mixer with a virtual Rubik's Cube's state}
+\label{fig:code-render-cube-state}
+\begin{lstlisting}[language=Python, firstnumber=last]
 def _render_cube_state(mixer: Mixer, rubiks_cube: RubiksCube, tps: float):
     for face, rotation in rubiks_cube.state.items():
         mixer.add_tone(face, frequency_of(face, rotation), duration=1 / tps)
-
+\end{lstlisting}
+\vspace*{2mm}
+\end{subfigure}\\
+\begin{subfigure}{\textwidth}
+\caption{Function to create a .wav file of any Rubik's Cube algorithm}
+\label{fig:code-render-audible-alg}
+\begin{lstlisting}[language=Python, firstnumber=last]
 def render_audible_alg(alg: str, wav_path: str=None, tps: float=4):
     # Create the virtual Rubik's Cube.
     rubiks_cube: RubiksCube = RubiksCube()
-    
     # Create the audio mixer used to create the synthesized audio.
     mixer = _create_mixer(rubiks_cube)
-    
     # Add the initial cube state to the mixer.
     _render_cube_state(mixer, rubiks_cube, tps)
-    
-    # Iterate over the moves in the algorithm, adding
-    # the cube state to the mixer after each move.
+    # Iterate over the alg, updating the mixer after each move.
     moves = alg.split(" ")
     for move in moves:
         rubiks_cube.apply_move(move)
         _render_cube_state(mixer, rubiks_cube, tps)
-    
     # Save the final audio to a .wav file.
     mixer.write_wav(wav_path if wav_path else f"{alg}.wav")
 \end{lstlisting}
+\end{subfigure}
+\end{figure}
 
-With these functions in place, synthetic audio can be easily created for any valid Rubik's Cube algorithm. For example, generating synthetic audio that sweeps through every possible centerpiece state can be done with the following snippet of code:
+With these functions in place, synthetic audio can be easily created for any valid Rubik's Cube algorithm.
+For example, generating synthetic audio that sweeps through every possible centerpiece state can be done with the two lines of code in Figure \ref{fig:example-alg-audio}.
 
+\begin{figure}[h]
+\caption{Example Audio Generation for a Rubik's Cube Algorithm}
+\label{fig:example-alg-audio}
 \begin{lstlisting}[language=Python]
 demo_alg = "U U U U D D D D R R R R L L L L F F F F B B B B"
-demo_wav_path = "demo_all_states.wav"
-render_audible_alg(demo_alg, demo_wav_path)
+render_audible_alg(demo_alg, "demo_all_states.wav")
 \end{lstlisting}
+\end{figure}
 
 
-\section{Decoding Synthetic Audio}
+\section{Decoding the Synthetic Audio}
 \label{sec:decoding-synthetic-audio}
 With synthetic audio now available for any valid Rubik's Cube algorithm, the next step is to create an initial software algorithm that can decode that audio back into the original move sequence.
 
 Accomplishing this will require computing the synthetic audio's spectrogram (Section \ref{subsec:compute-spectrogram}), followed by extracting the dominant frequencies present at each time step (Section \ref{subsec:extract-dominant-freqs}), and converting those dominant frequencies into the corresponding Rubik's Cube centerpiece states (Section \ref{subsec:translating-freqs-to-state}), all before finally recovering the originally applied move sequence (Section \ref{subsec:extract-moves}).
 
-\newpage
-\subsection{Compute the Spectrogram}
+\subsection{Computing the Spectrogram}
 \label{subsec:compute-spectrogram}
 The first step in decoding the synthetic audio is determining its component frequencies at any specific moment in time.
-These component frequencies can be easily visualized using a spectrogram, like the one in Figure \ref{fig:spectrogram} of the synthetic audio created in Section \ref{subsec:generate-audible-algorithm}.
+These component frequencies can be easily visualized using a spectrogram, like the one in Figure \ref{fig:spectrogram} of the synthetic audio created in Section \ref{subsec:generate-audible-algorithm}. \footnote{The source code for Figure \ref{fig:spectrogram} is available in Appendix \ref{sec:code-spectrogram}.}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{Figures/5 Algorithm Design/component_frequencies.png}
-    \caption{Spectrogram of the synthetic audio created in Section \ref{subsec:generate-audible-algorithm}. The source code for this diagram is available in Appendix \ref{sec:code-spectrogram}.}
+    \caption{Spectrogram of the synthetic audio created in Section \ref{subsec:generate-audible-algorithm}}
     \label{fig:spectrogram}
+    \includegraphics[width=0.8\textwidth]{Figures/5 Algorithm Design/component_frequencies.png}
 \end{figure}
 
-The bright, horizontal yellow bands in the spectrogram represent the component frequencies present in the audio signal at each point in time.
-The vertical red line on the spectrogram indicates the specific slice of the spectrogram represented by the graph of the component frequencies at that specific point in time.
+This spectrogram has the same pieces as the ones described in Section \ref{subsubsec:how-to-read-a-spectrogram} with a few minor changes.
+First the order of the graphs has been reversed, so the top graph shows the actual spectrogram and the bottom graph shows the current strength of the component frequencies at that specific point in time.
+Additionally, the spectrogram has been rotated 90$^\circ$ so time is now on the x-axis and the component frequencies are shown on the y-axis.
+Finally, the color scheme is slightly different, with the presence of a strong component frequency indicated by a bright yellow color instead of bright purple or pink.
 
-While the Figure \ref{fig:spectrogram} was created using Matplotlib's specgram plot, the actual data of the spectrogram for a given .wav file can be easily obtained using the numpy and scipy packages
+\subsubsection{The Brief Overview of the Math behind the Spectrogram}
+However, while Matplotlib's \code{specgram} plot \cite{matplotlib} made it easy to create Figure \ref{fig:spectrogram}, it didn't return the underlying data of the spectrogram required to decode the exact values and strengths of the component frequencies at each point in time.
+To compute that data directly, it is helpful to understand the basics of the math behind the spectrogram. Dr. Steve Brunton from the University of Washington created an excellent video series on this topic \cite{fourier-analysis}, of which the following few paragraphs are a short summary.
 
+The foundational mathematical concept behind the spectrogram is the Fourier Transform, which is a technique for approximating any continuous function using only sine and cosine functions.
+In the case of an analog audio signal -which is inherently a composite of many sine functions (one for each component frequency)- applying a Fourier Transform would return data for a graph of all the frequencies present at any point in the entire signal and their overall strength throughout it.
+
+But digital audio signals, like .wav files, are a series of discrete values, not continuous functions, which means the Fourier Transform cannot directly operate on them.
+Fortunately, there exists a variant of the Fourier Transform called the Discrete Fourier Transform which can operate on a list of discrete data points by assuming they sample a continuous function and then computing the Fourier Transform of that function.
+
+However, when applied to a digital audio signal, the Discrete Fourier Transform still only computes which frequencies were present at \emph{any} time during the duration of the signal, but not \emph{when} they occurred. 
+Fortunately again, there exists a function called the Gabor Transform (sometimes called the Short-Time Fourier Transform) which computes a Discrete Fourier Transform over a sliding window of the input samples to approximate the changes in the strength of each component frequency over time.
+
+This knowledge, combined with the \code{numpy} \cite{numpy} and \code{scipy} \cite{scipy} libraries which can calculate these transforms, enables the creation of a function (Figure \ref{fig:code-compute-spectrogram}) to compute the spectrogram for the audio stored in a given .wav file.
+The return values \code{freq} and \code{time} are, respectively, lists of the .wav file's component frequencies and time steps, while \code{spectrogram} is a 2D array of the strengths of each component frequency at each time step.
+They are related by common indices, such that the strength of the frequency \code{freq[f\_idx]} at the time \code{time[t\_idx]} is found in \code{spectrogram[t\_idx][f\_idx]}.
+
+\begin{figure}[h]
+\caption{Function to compute the spectrogram of a .wav file}
+\label{fig:code-compute-spectrogram}
 \begin{lstlisting}[language=Python]
 import numpy as np
 from scipy import signal
 from scipy.io import wavfile
 
 def compute_spectrogram(wav_path: str):
-    SAMPLES_PER_WINDOW = 1024  # Balances frequency/time precision
+    SAMPLES_PER_WINDOW = 1024  # Balances frequency/time accuracy
     sample_rate, audio_samples = wavfile.read(wav_path)
     freq, time, Zxx = signal.stft(audio_samples, fs=sample_rate,
         nperseg=SAMPLES_PER_WINDOW, noverlap=(SAMPLES_PER_WINDOW // 4) * 3)
     spectrogram = np.abs(Zxx).transpose()
     return freq, time, spectrogram
 \end{lstlisting}
+\end{figure}
 
-\newpage
-\subsection{Extract the Dominant Component Frequencies}
+\subsection{Extracting the Dominant Component Frequencies}
 \label{subsec:extract-dominant-freqs}
-Notice how the component frequency graph in Figure \ref{fig:spectrogram} has six peaks: these are the transmitted frequencies representing the current state of the virtual Rubik's Cube's six centerpieces at that specific instant of time.
+Looking back at the component frequency graph in Figure \ref{fig:spectrogram} it is clear that it has six distinct peaks: these are the transmitted frequencies representing the current state of the virtual Rubik's Cube's six centerpieces at that specific instant of time.
 
-The exact frequencies of these peaks can be extracted by filtering out all frequencies not above a specific threshold.
-In this case, a simple threshold of 85\% of the maximum strength of any component frequency (see the green line in Figure \ref{fig:spectrogram-with-naive-threshold}) isolates the peak of the six dominant component frequencies.
+The exact frequencies of these peaks can be extracted by filtering out all frequencies whose strength is not above a specific threshold.
+In this case, a simple threshold of 85\% of the maximum strength of any component frequency (see the green line in Figure \ref{fig:spectrogram-with-naive-threshold}\footnote{The source code for Figure \ref{fig:spectrogram-with-naive-threshold} is available in Appendix \ref{sec:code-spectrogram-with-naive-threshold}.}) isolates the six dominant component frequencies.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{Figures/5 Algorithm Design/threshold.png}
-    \caption{Spectrogram of the synthetic audio created in Section \ref{subsec:generate-audible-algorithm} with a threshold at 85\% of the maximum strength of the component frequencies. The source code for this diagram is available in Appendix \ref{sec:code-spectrogram-with-naive-threshold}.}
+    \caption{Spectrogram from Figure \ref{fig:spectrogram} with a threshold at 85\% of the maximum strength of the component frequencies. }
     \label{fig:spectrogram-with-naive-threshold}
+    \includegraphics[width=0.8\textwidth]{Figures/5 Algorithm Design/threshold.png}
 \end{figure}
 
-Using the actual spectrogram data we can compute the exact values of these peaks.
+Using the actual spectrogram data, the exact values of these peaks can be computed.
+First, the threshold computation is broken into its own function (Figure \ref{fig:code-compute-threshold}).
+From there, a second function (Figure \ref{fig:code-extract-important-freqs}) can iterate through all the component frequencies of the computed spectrogram data at a specific time index to compile and return a list of the frequencies whose strength exceeds the threshold at that time step.
+
+\begin{figure}[h]
+\caption{Extracting dominant frequencies from one time step of audio}
+\label{fig:todo}
+
+\begin{subfigure}{\textwidth}
+\caption{Function to calculate a simple threshold to isolate the most dominant frequencies}
+\label{fig:code-compute-threshold}
 \begin{lstlisting}[language=Python]
 def compute_threshold(values: list):
     return max(values) * 0.85
+\end{lstlisting}
+\vspace*{2mm}
+\end{subfigure}\\
 
-def extract_important_freqs(freq, time, spectrogram, time_idx):
+\begin{subfigure}{\textwidth}
+\caption{Function to extract all frequencies stronger than a threshold at a given time step}
+\label{fig:code-extract-important-freqs}
+\begin{lstlisting}[language=Python, firstnumber=last]
+def extract_important_freqs(freq, time, spectrogram, t_idx):
+    # Create a list to store the important frequencies
     important_freqs = []
-    threshold = compute_threshold(spectrogram[time_idx])
-    for freq_idx in range(len(freq)):
-        if spectrogram[time_idx][freq_idx] > threshold:
+    # Compute the threshold for this time step
+    threshold = compute_threshold(spectrogram[t_idx])
+    # Check the strength of each frequency at this time step
+    for f_idx in range(len(freq)):
+        # If the frequency's strength is above the threshold ...
+        if spectrogram[t_idx][f_idx] > threshold:
+            # ... save the frequency and its strength for later processing
             important_freqs.append(dict(
-                hz=freq[freq_idx],
-                power=spectrogram[time_idx][freq_idx]
+                hz=freq[f_idx],
+                power=spectrogram[t_idx][f_idx]
             ))
     return important_freqs
+\end{lstlisting}
+\end{subfigure}\\
+\end{figure}
 
+With these functions, finding the actual frequencies of the peaks in Figure \ref{fig:spectrogram-with-naive-threshold} can be done in just a few lines of code as shown in Figure \ref{fig:code-extract-important-freqs-demo}.
+
+\begin{figure}[h]
+\caption{Example peak frequency decoding at a specific time step}
+\label{fig:code-extract-important-freqs-demo}
+\begin{subfigure}{\textwidth}
+\begin{lstlisting}[language=Python]
 freq, time, spectrogram = compute_spectrogram(demo_wav_path)
 important_freqs = extract_important_freqs(
-    freq, time, spectrogram,
-    time_idx=310) # 1.80 seconds
-
+    freq, time, spectrogram, t_idx=310) # 1.80 seconds
 print([f"{x["hz"]:.0f}Hz" for x in important_freqs])
+\end{lstlisting}
+\end{subfigure}\\
 
+\begin{subfigure}{\textwidth}
+\begin{lstlisting}[language=Python, numbers=none]
 >> ["818Hz", "1593Hz", "1809Hz", "2283Hz", "2799Hz", "3316Hz"]
 \end{lstlisting}
+\end{subfigure}
+\end{figure}
 
-\newpage
 \subsection{Translating Component Frequencies to Centerpiece States}
 \label{subsec:translating-freqs-to-state}
-With the specific frequencies of each detected peak, the original state of the Rubik's Cube at that moment in time can be computed by finding the state whose corresponding frequency is closest to each detected peak frequency.
+With the specific frequencies of each detected peak, the original state of the Rubik's Cube at that moment in time can be computed by finding the states whose corresponding frequency is closest to each detected peak frequency.
 
+This is done by first defining a function that will find the closest centerpiece state for one peak frequency by iterating through every centerpiece state in the \code{FREQUENCY\_MAPPINGS} dictionary from Section \ref{subsec:represent-audio-protocol}, comparing the difference between the state's frequency and the given peak frequency, and returning the state with the smallest difference (Figure \ref{fig:code-closest-state}).
+This function can then be called for all the detected peak frequencies to recover the state of the cube at that time step (Figure \ref{fig:code-get-state-from-freqs}).
+
+\begin{figure}[h]
+\caption{Converting peak frequencies to centerpiece states}
+\label{fig:code-convert-peak-freqs-to-state}
+\begin{subfigure}{\textwidth}
+\caption{Function to find the state most similar to the detected frequency}
+\label{fig:code-closest-state}
 \begin{lstlisting}[language=Python]
 def _closest_state(detected_freq):
-    closest_rotation = None
+    # Start with no assumptions regarding the closest state
+    closest_state = None
     closest_difference = None
+    # Iterate through each possible state to find the closest one
     for face, rotations in FREQUENCY_MAPPINGS.items():
         for rotation, freq in rotations.items():
             difference = abs(detected_freq - freq)
             if closest_difference is None or difference < closest_difference:
                 closest_difference = difference
-                closest_rotation = dict(face=face, rotation=rotation)
-    return closest_rotation
+                closest_state = dict(face=face, rotation=rotation)
+    return closest_state
+\end{lstlisting}
+\end{subfigure}\\
 
+\begin{subfigure}{\textwidth}
+\caption{Function to determine the cube's state from a set of peak frequencies}
+\label{fig:code-get-state-from-freqs} 
+\begin{lstlisting}[language=Python, firstnumber=last]
 def get_state_from_freqs(important_freqs: list) -> dict:
+    # Start with an unpopulated state
     state = {}
+    # Record the state represented by each of the peak frequencies
     for freq in important_freqs:
         hz, power = freq.values()
         closest_state = _closest_state(hz)
-        state[closest_state['face']] = closest_state['rotation']
+        state[closest_state["face"]] = closest_state["rotation"]
     return state
+\end{lstlisting}
+\end{subfigure}
+\end{figure}
 
-print(get_state_from_freqs(important_freqs))
+With these functions, the peak frequencies extracted in Figure \ref{fig:code-extract-important-freqs-demo} can be easily converted to their corresponding centerpiece states as shown in Figure \ref{fig:code-get-state-from-freqs-demo}.
 
+\begin{figure}[h]
+\caption{Example conversion of peak frequencies to states}
+\label{fig:code-get-state-from-freqs-demo} 
+\begin{subfigure}{\textwidth}
+\begin{lstlisting}[language=Python]
+detected_state = get_state_from_freqs(important_freqs)
+print(detected_state)
+\end{lstlisting}
+\end{subfigure}\\
+
+\begin{subfigure}{\textwidth}
+\begin{lstlisting}[language=Python, numbers=none]
 >> {"U": 0, "D": 3, "R": 0, "L": 0, "F": 0, "B": 0}
 \end{lstlisting}
+\end{subfigure}
+\end{figure}
 
-Repeating this process for each time step in the recorded audio will yield a sequence of the Rubik's Cube's centerpiece states over the course of the recorded audio sequence.
+As such, obtaining a sequence of the Rubik's Cube's centerpiece states over the course of the recorded audio sequence only requires repeating this process for each time step in the spectrogram data.
+This can also be easily turned into another function as shown in Figure \ref{fig:code-get-state-over-time}.
 
+\begin{figure}[h]
+\caption{Function to list the cube's state at each time step}
+\label{fig:code-get-state-over-time}
 \begin{lstlisting}[language=Python]
 def get_state_over_time(freq, time, spectrogram):
+    # Start with an empty list of centerpiece states
     state_over_time = []
-    for time_idx in range(len(time)):
+    # For each time step ...
+    for t_idx in range(len(time)):
+        # find the peak frequencies,
         important_freqs = extract_important_freqs(
-            freq, time, spectrogram, time_idx)
+            freq, time, spectrogram, t_idx)
+        # convert the peak frequencies to the corresponding state,
         state = get_state_from_freqs(important_freqs)
+        # and save the state and time stamp for later processing.
         state_over_time.append(dict(
-            time=time[time_idx],
+            time=time[t_idx],
             state=state
         ))
     return state_over_time
-
-state_over_time = get_state_over_time(freq, time, spectrogram)
 \end{lstlisting}
+\end{figure}
+
+And, like the others, this function makes it easy to get the full sequence of states for the synthetic audio generated in Section \ref{sec:synthetic-audio-generation}.
+\begin{figure}[h]
+\caption{Example listing of states over time}
+\label{fig:code-get-state-over-time-demo} 
+\begin{subfigure}{\textwidth}
+\begin{lstlisting}[language=Python]
+state_over_time = get_state_over_time(freq, time, spectrogram)
+print(state_over_time)
+\end{lstlisting}
+\end{subfigure}\\
+
+\begin{subfigure}{\textwidth}
+\begin{lstlisting}[language=Python, numbers=none]
+>> [{"time": 0.0, "state": {"U":0, "D":0, "R":0, "L":0, "F":0, "B":0}}, ... ]
+\end{lstlisting}
+\end{subfigure}
+\end{figure}
 
 \newpage
 \subsection{Extracting Move Sequences from Centerpiece State Sequences}
 \label{subsec:extract-moves}
 Finally, the original move sequence can be recovered by iterating over the sequence of cube states, and registering any change to the cube state as a move applied to the cube.
 
+\begin{figure}[h]
 \begin{lstlisting}[language=Python]
 def _move_from(face, current_rotation, new_rotation):
     direction = None
@@ -304,6 +471,9 @@ print(f"Matches demo_alg? {demo_alg == pretty_moves}")
 >> U U U U D D D D R R R R L L L L F F F F B B B B
 >> Matches demo_alg? True
 \end{lstlisting}
+\caption{Caption - TODO}
+\label{fig:todo}
+\end{figure}
 
 Clearly, the detected move sequence matches the demo algorithm used to create the synthetic audio in Section \ref{subsec:generate-audible-algorithm}, which means this algorithm is a functional receiver for an ideal transmitter.
 
@@ -357,10 +527,14 @@ Furthermore, the natural background noise can also cause false positives during 
 \end{figure}
 
 Fortunately, since the power of the peak frequencies which contain the audio signal are generally statistical outliers among the set of component frequencies basing the threshold at one standard deviation above the mean generally captures all the peak frequencies while still excluding the underlying noise of the cube/environment. Additionally, the use of a hard minimum value for the threshold helps reduce the number of false positives during the gaps in the signal between face turns. (See Figure \ref{fig:threshold-refined})
+\begin{figure}[h]
 \begin{lstlisting}[language=Python]
 def compute_threshold(values: list, stdv_pct: float=1, min_thresh: int=50):
     return max(min_thresh, np.std(values) * stdv_pct)
 \end{lstlisting}
+\caption{Caption - TODO}
+\label{fig:todo}
+\end{figure}
 
 \begin{figure}[h]
     \centering
@@ -375,6 +549,7 @@ While the new threshold calculation does properly capture all the peak frequenci
 These extra samples can cause confusion when trying to extract each centerpiece's state if they correspond to different states for the same centerpiece.
 That said, as long as the power of each frequency is also saved, then any disagreements about a specific centerpiece's state can be resolved by accepting the one with the most intense frequency as the actual state.
 
+\begin{figure}[h]
 \begin{lstlisting}[language=Python]
 def get_state_from_freqs(important_freqs: list) -> dict:
     state = {}
@@ -390,11 +565,14 @@ def get_state_from_freqs(important_freqs: list) -> dict:
 transmitted_wav_path = "transmitted-356-5tps.wav"
 freq, time, spectrogram = compute_spectrogram(transmitted_wav_path)
 important_freqs = extract_important_freqs(freq, time, spectrogram,
-    time_idx=800) # 4.64 seconds
+    t_idx=800) # 4.64 seconds
 print(get_state_from_freqs(important_freqs))
 
 >> {"U": 0, "D": 0, "R": 0, "L": 0, "F": 0, "B": 0}
 \end{lstlisting}
+\caption{Caption - TODO}
+\label{fig:todo}
+\end{figure}
 
 \newpage
 \subsection{Ignoring Noise when Extracting Move Sequences}
@@ -404,6 +582,7 @@ Since the approach in Section \ref{subsec:extract-moves} registers an applied fa
 
 Fortunately, this issue can be mitigating by adding a simple sliding window to ensure that the state change persists over several time steps instead of blindly accepting any detected change in a centerpiece's state as a new face turn.
 
+\begin{figure}[h]
 \begin{lstlisting}[language=Python]
 def detect_moves(state_over_time, window_size=8):                       # Edit
     detected_moves = []
@@ -421,9 +600,9 @@ def detect_moves(state_over_time, window_size=8):                       # Edit
             if idx - new_state_idx[face] == window_size:
                 if not (face in current_state):
                     current_state[face] = new_state[face]
-                # ... and it's a different rotation than the current state...
+                # ... and it is a different rotation than the current state...
                 elif new_state[face] != current_state[face]:
-                    # ... then we have detected a face turn!
+                    # ... then a face turn has been detected!
                     detected_moves.append(dict(
                         time=state_over_time[new_state_idx[face]]["time"],
                         move=_move_from(face, current_state[face], rotation)
@@ -442,6 +621,9 @@ print(f"Matches demo_alg? {demo_alg == pretty_moves}")
 >> U U U U D D D D R R R R L L L L F F F F B B B B
 >> Matches demo_alg? True
 \end{lstlisting}
+\caption{Caption - TODO}
+\label{fig:todo}
+\end{figure}
 
 \subsection{Optimizing Algorithm Parameters}
 \label{subsec:optimizing-params}

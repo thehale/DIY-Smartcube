@@ -32,32 +32,32 @@ The center cap circuit controls its output voltage by using a copper brush to ch
 % How to do a sub-figure: https://tex.stackexchange.com/a/37597
 \begin{figure}[h]
     \centering
-    \begin{subfigure}{0.25\textwidth}
-        \centering
-        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/giiker-internal-board.png}
-        \caption{Internal Board \cite{giiker-internals}}
-        \label{fig:giiker-internal-board}
-    \end{subfigure}%
-    \begin{subfigure}{0.25\textwidth}
-        \centering
-        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/giiker-center-front.png}
-        \caption{Center Cap Board \cite{eggins-giiker-internals}}
-        \label{fig:giiker-center-front}
-    \end{subfigure}%
-    \begin{subfigure}{0.25\textwidth}
-        \centering
-        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/giiker-center-pads.png}
-        \caption{Center Cap Pads \cite{eggins-giiker-internals}}
-        \label{fig:giiker-center-pads}
-    \end{subfigure}%
-    \begin{subfigure}{0.25\textwidth}
-        \centering
-        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/giiker-center-brush.png}
-        \caption{Center Cap Brush \cite{eggins-giiker-internals}}
-        \label{fig:giiker-center-brush}
-    \end{subfigure}%
     \caption{The internal components of the Giiker Cube}
     \label{fig:giiker-internal-components}
+    \begin{subfigure}{0.25\textwidth}
+        \centering
+        \caption{Internal Board \cite{giiker-internals}}
+        \label{fig:giiker-internal-board}
+        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/giiker-internal-board.png}
+    \end{subfigure}%
+    \begin{subfigure}{0.25\textwidth}
+        \centering
+        \caption{Center Cap Board \cite{eggins-giiker-internals}}
+        \label{fig:giiker-center-front}
+        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/giiker-center-front.png}
+    \end{subfigure}%
+    \begin{subfigure}{0.25\textwidth}
+        \centering
+        \caption{Center Cap Pads \cite{eggins-giiker-internals}}
+        \label{fig:giiker-center-pads}
+        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/giiker-center-pads.png}
+    \end{subfigure}%
+    \begin{subfigure}{0.25\textwidth}
+        \centering
+        \caption{Center Cap Brush \cite{eggins-giiker-internals}}
+        \label{fig:giiker-center-brush}
+        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/giiker-center-brush.png}
+    \end{subfigure}%
 \end{figure}
 
 \subsection{Go Cube}
@@ -70,26 +70,26 @@ GoCube also serves as the underlying technology for the Rubik's Connected, the o
 % How to do a sub-figure: https://tex.stackexchange.com/a/37597
 \begin{figure}[h]
     \centering
+    \caption{The internal components of the Go Cube \cite{gocube-internals}}
+    \label{fig:gocube-internal-components}
     \begin{subfigure}{0.25\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/gocube-core.png}
         \caption{Internal Board}
         \label{fig:gocube-core}
+        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/gocube-core.png}
     \end{subfigure}%
     \begin{subfigure}{0.25\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/gocube-cap-chip.png}
         \caption{Center Cap Board}
         \label{fig:gocube-cap-chip}
+        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/gocube-cap-chip.png}
     \end{subfigure}%
     \begin{subfigure}{0.50\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/gocube-centers.png}
         \caption{Full Center Cap Teardown}
         \label{fig:gocube-centers}
+        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/gocube-centers.png}
     \end{subfigure}%
-    \caption{The internal components of the Go Cube \cite{gocube-internals}}
-    \label{fig:gocube-internal-components}
 \end{figure}
 
 \subsection{Gans 356i}
@@ -98,10 +98,9 @@ While the Gans 356i also uses a microcontroller to process the face turns and Bl
 
 \begin{figure}[h]
     \centering
-    \includegraphics{Figures/3 State of the Art/gans356i-core.png}
-    \decoRule
     \caption[Gans 356i Teardown]{The Gans 356i Cube's internal components. \cite{gans-356i-internals}}
     \label{fig:gans356i-core}
+    \includegraphics{Figures/3 State of the Art/gans356i-core.png}
 \end{figure}
 
 
@@ -142,20 +141,20 @@ Mannone et al. reported no issues with mistakes in this move tracking technology
 % How to do a sub-figure: https://tex.stackexchange.com/a/37597
 \begin{figure}[h]
     \centering
+    \caption{The IM3D technology as used in the Cube Harmonic}
+    \label{fig:cubeharmonic-im3d}
     \begin{subfigure}{0.60\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/im3d.png}
         \caption{IM3D System Architecture \cite{im3d}}
         \label{fig:im3d-architecture}
+        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/im3d.png}
     \end{subfigure}%
     \begin{subfigure}{0.40\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/cubeharmonic-2019-tags.png}
         \caption{IM3D trackers in a Rubik's Cube \cite{mannone-cubeharmonic-2019}}
         \label{fig:cubeharmonic-trackers}
+        \includegraphics[width=.90\linewidth]{Figures/3 State of the Art/cubeharmonic-2019-tags.png}
     \end{subfigure}%
-    \caption{The IM3D technology as used in the Cube Harmonic}
-    \label{fig:cubeharmonic-im3d}
 \end{figure}
 
 \subsection{Muscle-Tracking Armband}
@@ -184,14 +183,13 @@ While this approach may not be particularly useful for tracking the moves of hum
 
 \subsection{Off-Axis Magnetic Angle Sensors}
 \label{subsec:magnetic-angle-sensors}
-Another unique type of rotary encoder is an off-angle magnetic rotational sensor like the ones produced by NVE Corporation. \cite{nve-mag-sensor} In the context of a Rubik's Cube, a properly sized diametric ring magnet could be fastened to the inner screw below the center cap of each face of the cube and the resulting optimal position for the magnetic sensor would stay within the walls of the center cap as shown by the calculations in Figure ~\ref{fig:nve-mag-calculations}.
+Another unique type of rotary encoder is an off-angle magnetic rotational sensor like the ones produced by NVE Corporation. \cite{nve-mag-sensor} In the context of a Rubik's Cube, a properly sized diametric ring magnet could be fastened to the inner screw below the center cap of each face of the cube and the resulting optimal position for the magnetic sensor would stay within the walls of the center cap as shown by the the $z_0$ and $R_0$ values in Figure ~\ref{fig:nve-mag-calculations} which are smaller than the 8 mm distance between the center screw and the inner wall of the center cap in a standard-sized cube like the Gans 356.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth]{Figures/3 State of the Art/nve-mag-calculations.png}
-    \decoRule
-    \caption[Off-Angle Magnetic Sensor Calculations]{Off-Angle Magnetic Sensor Calculations. Notice how the $z_0$ and $R_0$ values are smaller than the 8 mm distance between the center screw and the inner wall of the center cap in a standard-sized cube like the Gans 356. \cite{nve-mag-sensor-calculations}}
+    \caption[Off-Angle Magnetic Sensor Calculations]{Off-Angle Magnetic Sensor Calculations \cite{nve-mag-sensor-calculations}}
     \label{fig:nve-mag-calculations}
+    \includegraphics[width=\linewidth]{Figures/3 State of the Art/nve-mag-calculations.png}
 \end{figure}
 
 

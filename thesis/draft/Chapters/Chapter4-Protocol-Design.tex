@@ -34,35 +34,39 @@ These visualizations are shown in Figure \ref{fig:signal-to-noise-ratio}.
 % How to do a sub-figure: https://tex.stackexchange.com/a/37597
 \begin{figure}
     \centering
+    \caption{Background Noise of a Quiet Room while Speedsolving}
+    \label{fig:signal-to-noise-ratio}
     \begin{subfigure}{\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/silent_background_noise.jpg}
-        \caption{Quiet Bedroom}
+        \caption{No Speedsolving (Quiet Room)}
         \label{fig:signal-to-noise-ratio-silent}
+        \includegraphics[width=\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/silent_background_noise.jpg}
+        \vspace*{2mm}
     \end{subfigure}\\
     \begin{subfigure}{\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/356_background_noise.jpg}
         \caption{Quiet Solving (Gans 356)}
         \label{fig:signal-to-noise-ratio-356}
+        \includegraphics[width=\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/356_background_noise.jpg}
+        \vspace*{2mm}
     \end{subfigure}
 \end{figure}
 \begin{figure}\ContinuedFloat
     \centering
     \begin{subfigure}{\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/xs_background_noise.jpg}
         \caption{Normal Solving (Gans XS)}
         \label{fig:signal-to-noise-ratio-xs}
+        \includegraphics[width=\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/xs_background_noise.jpg}
+        \vspace*{2mm}
     \end{subfigure}\\
     \begin{subfigure}{\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/qiyi_background_noise.jpg}
         \caption{Loud Solving (QiYi Qimeng)}
         \label{fig:signal-to-noise-ratio-qiyi}
+        \includegraphics[width=\linewidth]{Figures/4 Protocol Design/Signal to Noise Ratio/qiyi_background_noise.jpg}
+        \vspace*{2mm}
     \end{subfigure}%
-    \caption{The background noise of a quiet room compared to solving several speedcubes}
-    \label{fig:signal-to-noise-ratio}
 \end{figure}
 
 \subsubsection{How to Read a Spectrogram}
@@ -101,32 +105,36 @@ However, the distinction began waning once the tones came within 100Hz of each o
 % How to do a sub-figure: https://tex.stackexchange.com/a/37597
 \begin{figure}[h]
     \centering
+    \caption{Distinctiveness of Two Increasingly Similar Tones}
+    \label{fig:tone-sep}
     \begin{subfigure}{0.5\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Tone Distinctiveness/0.06.png}
         \caption{500Hz Separation}
         \label{fig:tone-sep-500}
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Tone Distinctiveness/0.06.png}
+        \vspace*{2mm}
     \end{subfigure}%
     \begin{subfigure}{0.5\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Tone Distinctiveness/17.53.png}
         \caption{150Hz Separation}
         \label{fig:tone-sep-150}
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Tone Distinctiveness/17.53.png}
+        \vspace*{2mm}
     \end{subfigure}\\
     \begin{subfigure}{0.5\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Tone Distinctiveness/20.03.png}
         \caption{100Hz Separation}
         \label{fig:tone-sep-100}
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Tone Distinctiveness/20.03.png}
+        \vspace*{2mm}
     \end{subfigure}%
     \begin{subfigure}{0.5\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Tone Distinctiveness/21.01.png}
         \caption{80Hz Separation}
         \label{fig:tone-sep-80}
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Tone Distinctiveness/21.01.png}
+        \vspace*{2mm}
     \end{subfigure}%
-    \caption{As two tones get more similar, they get harder to distinguish, particular when fewer than 100Hz apart.}
-    \label{fig:tone-sep}
 \end{figure}
 
 Thus, a sound-based move tracking protocol must account for the following items in order to achieve adequate tone distinctiveness:
@@ -144,10 +152,9 @@ According to a Stanford research paper \cite{typical-mic-range} that analyzed ov
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=.50\linewidth]{Figures/4 Protocol Design/Frequency Response Range/typical-smartphone-response-range.png}
-    \decoRule
     \caption{"A typical frequency response curve for a microphone." \cite{typical-mic-range}}
     \label{fig:freq-res-range}
+    \includegraphics[width=.50\linewidth]{Figures/4 Protocol Design/Frequency Response Range/typical-smartphone-response-range.png}
 \end{figure}
 
 Thus, a sound-based move tracking protocol must account for the following restrictions on which tones can be used for the protocol:
@@ -178,32 +185,32 @@ As mentioned in Section \ref{sec:rubiks-anatomy}, a Rubik's Cube has six centerp
 
 \begin{figure}[h]
     \centering
+    \caption{The four possible rotations of a face of a Rubik's Cube \cite{rubiks-turns-images}}
+    \label{fig:rotation-alignment}
     \begin{subfigure}{0.25\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Specification/fully-aligned.png}
         \caption{Full Alignment}
         \label{fig:rotation-aligned}
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Specification/fully-aligned.png}
     \end{subfigure}%
     \begin{subfigure}{0.25\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Specification/90_misaligned.png}
         \caption{90$^\circ$ Misalignment}
         \label{fig:rotation-misaligned-90}
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Specification/90_misaligned.png}
     \end{subfigure}%
     \begin{subfigure}{0.25\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Specification/180_misaligned.png}
         \caption{180$^\circ$ Misalignment}
         \label{fig:rotation-misaligned-180}
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Specification/180_misaligned.png}
     \end{subfigure}%
     \begin{subfigure}{0.25\textwidth}
         \centering
-        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Specification/270_misaligned.png}
         \caption{270$^\circ$ Misalignment}
         \label{fig:rotation-misaligned-270}
+        \includegraphics[width=.90\linewidth]{Figures/4 Protocol Design/Specification/270_misaligned.png}
     \end{subfigure}%
-    \caption{Each face of the Rubik's Cube can occupy one of four rotational positions at any given time (Pictures from \cite{rubiks-turns-images})}
-    \label{fig:rotation-alignment}
 \end{figure}
 
 The state of a centerpiece is defined as its current rotational position. 
@@ -237,9 +244,11 @@ In the sample frequencies shown in Table \ref{table:centerpiece-frequencies}, th
 
 \begin{table}[h]
     \centering
+    \caption{Sample frequencies for encoding a Rubik's Cube's state}
+    \label{table:centerpiece-frequencies}
     \begin{tabular}{ | c | c | c | c | c | c | c | }
         \hline
-        Alignment & Yellow (U) & White (D) & Red (R) & Orange (L) & Blue (F) & Green (B)\\
+        Alignment & White & Yellow & Red & Orange & Green & Blue\\
         \hline
         \hline
         Full & 800 Hz & 1300 Hz & 1800 Hz & 2300 Hz & 2800 Hz & 3300 Hz\\
@@ -248,8 +257,6 @@ In the sample frequencies shown in Table \ref{table:centerpiece-frequencies}, th
         270$^\circ$ & 1100 Hz & 1600 Hz & 2100 Hz & 2600 Hz & 3100 Hz & 3600 Hz\\
         \hline
     \end{tabular}
-    \caption{Example frequencies for representing a Rubik's Cube's centerpiece state in a sound-based move tracking protocol}
-    \label{table:centerpiece-frequencies}
 \end{table}
 
 
