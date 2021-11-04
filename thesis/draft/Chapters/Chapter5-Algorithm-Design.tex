@@ -33,7 +33,7 @@ This is easily accomplished by creating a dictionary to map each possible state 
 
 For this design, the frequency assignments from Table \ref{table:centerpiece-frequencies} are converted to the dictionary shown in Figure \ref{fig:code-freq-mapping-dict} with two small changes.
 First, by assuming no cube rotations, the face color (e.g. "White") can be converted to a layer name (e.g. "U") which simplifies the code for both encoding and decoding a move sequence from audio.
-Second, the alignments from Figure \ref{fig:rotation-alignment} are divided by 90 to get a simple sequence of consecutive integers that are easier to manipulate in code.
+Second, the 0$^\circ$, 90$^\circ$, 180$^\circ$, and 270$^\circ$ alignments from Figure \ref{fig:rotation-alignment} are divided by 90 to be represented by the simple sequence of consecutive integers 0, 1, 2, and 3 that are easier to manipulate in code.
 
 With this dictionary in place, the frequency to transmit for any particular centerpiece's current rotation can be determined by looking up the centerpiece and its rotation in the dictionary as shown in Figure \ref{fig:code-frequency-of}.
 
@@ -116,7 +116,7 @@ class RubiksCube:
 Now the synthetic audio can be generated for any valid algorithm.
 This is done using the \code{tones} library created by Erik Nyquist. \cite{pip-tones}
 
-First, a separate audio track is created for each centerpiece on the cube since there will be a tone continuously broadcast from each centerpiece of the cube (Figure \ref{fig:code-create-mixer}).
+First, a separate audio track is created to simulate the output of each speaker embedded into each centerpiece on the cube (Figure \ref{fig:code-create-mixer}).
 
 Second, a new function is written to add the tones corresponding to the virtual cube's current state to the audio mixer using the \code{frequency\_of} function from Figure \ref{fig:code-frequency-of} (Figure \ref{fig:code-render-cube-state}).
 This function includes a \code{tps} parameter that controls the duration of the added tones so that they change to the next tone at the same speed as the turns on a speedcube being solved at that number of turns per second.
@@ -266,7 +266,7 @@ From there, a second function (Figure \ref{fig:code-extract-important-freqs}) ca
 
 \begin{figure}[h]
 \caption{Extracting dominant frequencies from one time step of audio}
-\label{fig:todo}
+\label{fig:code-extract-dominant-freqs}
 
 \begin{subfigure}{\textwidth}
 \caption{Function to calculate a simple threshold to isolate the most dominant frequencies}
@@ -559,7 +559,7 @@ And again, the extracted move sequence does match the one used to generate the s
 \newpage
 \section{Creating Realistic Audio}
 \label{sec:adding-realistic-noise}
-While Section \ref{sec:decoding-synthetic-audio}'s successful recovery of a sequence of moves applied to a virtual Rubik's Cube is impressive, the synthetic audio is not realistic.
+While the algorithm created in Section \ref{sec:decoding-synthetic-audio} can successfully recover a sequence of moves applied to a virtual Rubik's Cube with 100\% accuracy, the synthetic audio that it operates on is not realistic.
 This is made obvious by a comparison between the spectrograms of the background audio in Figure \ref{fig:signal-to-noise-ratio} and the synthetic audio in Figure \ref{fig:spectrogram}.
 In the latter, the bright yellow indicators of present frequencies are very clear and strong with no other frequencies present in the signal.
 In contrast, the former contains many areas with bright pink indicators of prominent frequencies (the color differences are due to the use of different applications to generate the diagrams).
@@ -567,7 +567,7 @@ A more realistic signal would contain both the strong bands of the transmitted f
 
 Adding this noise could be done in software by overlaying the synthetic audio with a recording of the background noise, but it was just as easy to play the synthetic audio from a laptop speaker and record it using a nearby smartphone while solving various Rubik's Cubes.
 An example of the spectrogram resulting from recording the audio of the demo algorithm from Section \ref{subsec:generate-audible-algorithm} on a Google Pixel smartphone while actively solving a Gans 356 speedcube can be seen in Figure \ref{fig:noisy-spectrogram}.
-\footnote{The astute reader will notice that the audio bands in Figure \ref{fig:noisy-spectrogram} fall on slightly different frequencies than in Figure \ref{fig:spectrogram}. This is because the realistic audio samples encoded centerpiece states using slightly different frequency assignments than the synthetic audio generated in Section \ref{sec:synthetic-audio-generation}.}
+\footnote{The astute reader will notice that the audio bands in Figure \ref{fig:noisy-spectrogram} fall on slightly different frequencies than in Figure \ref{fig:spectrogram}. This is because the realistic audio samples used for analysis in Sections \ref{sec:adding-realistic-noise} and \ref{sec:decoding-realistic-noise} were created before finalizing the frequency assignments presented Table \ref{table:centerpiece-frequencies}. Ultimately, this change in frequencies shows that this algorithm works across a variety of encoding frequencies.}
 
 \begin{figure}[h]
     \centering
@@ -700,6 +700,7 @@ Within the function, two new dictionaries are created to serve as a "staging are
 As the function iterates through each time step, it updates these staging dictionaries each time a new state is detected.
 Then, it checks to see if the current index of iteration is \code{window\_size} steps after the last reported state change.
 If so, the current state is updated to the value of the staged state, the change is recorded as a new move, and the window counter gets reset.
+Otherwise, the iteration continues until a new state is detected or the \code{window\_size} is reached.
 The full code for this is shown in Figure \ref{fig:code-detect-moves-new}.
 
 
@@ -760,16 +761,16 @@ print(f"Matches demo_alg? {demo_alg == pretty_moves}")
 \end{subfigure}
 \end{figure}
 
-And once again, despite the presence of the added noise of solving a speedcube, the detected algorithm perfectly matches the transmitted signal which further validates this approach as a viable proof-of-concept for tracking the moves of a Rubik's Cube using sound.
+And once again, the detected move sequence perfectly matches the transmitted signal despite both the reduced strength of the synthetic audio after being recorded through the air and the presence of the added noise of solving a speedcube, a result which further validates this approach as a viable proof-of-concept for tracking the moves of a Rubik's Cube using sound.
 
 \subsection{Optimizing Algorithm Parameters}
 \label{subsec:optimizing-params}
-Significant testing went into determining the best default values for each of the new function parameters \code{stdv\_pct} (Section \ref{subsec:fine-tuning-threshold}), \code{min\_thresh} (Section \ref{subsec:fine-tuning-threshold}), and \code{window\_size} (Section \ref{subsec:ignoring-noise-when-extracting-move-sequences}).
+Significant testing went into determining the best default values for each of the three new function parameters \code{stdv\_pct} (Section \ref{subsec:fine-tuning-threshold}), \code{min\_thresh} (Section \ref{subsec:fine-tuning-threshold}), and \code{window\_size} (Section \ref{subsec:ignoring-noise-when-extracting-move-sequences}).
 While each cube responded differently to various combinations of settings, this testing discovered multiple combinations for each cube that would yield a perfect extraction of the original move sequence.
 A detailed exploration of this testing and its findings is discussed in Chapter \ref{Chapter7}.
 
 \section{Summary}
 In summary, this chapter demonstrated a proof of concept for a sound analysis algorithm that could detect the face turns of a speedcube equipped with the proper transmitter (the details of which are explored in Chapter \ref{Chapter6}).
 This proof of concept algorithm works by computing the spectrogram of the transmitted audio, extracting the most intense frequencies from each time step, converting those dominant frequencies to centerpiece states at that time step, then iterating through that list of states over time to detect changes caused by face turns.
-Several noise-resisting measures were employed to help mitigate the impact of loud cubes and other background tones.
+Several noise mitigation measures were employed to help mitigate the impact of loud cubes and other background tones.
 Ultimately, this algorithm design successfully decoded both a purely synthetic audio signal and a realistic audio signal created by re-recording the synthetic audio while solving a speedcube.
