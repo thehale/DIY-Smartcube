@@ -11,15 +11,31 @@ This chapter will detail a prototype PCB design containing only nine discrete co
 
 \section{Requirements}
 \label{sec:transmitter-requirements}
-
-TODO lay out the requirements for the PCB
+This section will detail the constraints within which the transmitter will be required to operate. These constraints include the physical size of the transmitter (Section \ref{subsec:prospects-of-miniaturization}), the precision of tone generation (Section \ref{subsec:precision-of-tone-generation}), the reliability of the transmitter in changing tones to reflect a face turn (Section \ref{subsec:responsiveness-to-face-turns}), and the intensity of output audio that the transmitter can produce (Section \ref{subsec:transmitter-signal-to-noise-ratio}).
 
 \subsection{Prospects of Miniaturization}
 \label{subsec:prospects-of-miniaturization}
 The transmitter must be both removable and small enough to fit in the center cap of each face of a speedcube.
 This requirement stems from two sources.
-First, in contrast to all existing smartcubes, most non-smartcubes have small, solid cores that provide no extra space for the inclusion of any electronics, but do have a small amount of open space within their center cubies. (TODO - add picture of Gans 356 core), 
+First, in contrast to all existing smartcubes, most non-smartcubes have small, solid cores (Figure \ref{fig:356-core-closed}) that provide no extra space for the inclusion of any electronics, but do have a small amount of open space within their center cubies (Figure \ref{fig:356-core-open}).
 Second, the use of a cube with non-removable, embedded electronics violates the WCA competition regulation 2i \cite{wca-regulations} (See also Section \ref{subsec:competition-regulations}).
+\begin{figure}[h]
+    \centering
+    \caption{Internal pieces of a standard speedcube (Gans 356)}
+    \label{fig:356-core}
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \caption{View of the small, solid plastic core}
+        \label{fig:356-core-closed}
+        \includegraphics[width=\linewidth]{Figures/6 PCB Design/356_core_cropped.jpg}
+    \end{subfigure}
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \caption{View of the space inside the centerpiece}
+        \label{fig:356-core-open}
+        \includegraphics[width=\linewidth]{Figures/6 PCB Design/356_core_open_cropped.jpg}
+    \end{subfigure}
+\end{figure}
 
 \subsection{Precision of Tone Generation}
 \label{subsec:precision-of-tone-generation}
