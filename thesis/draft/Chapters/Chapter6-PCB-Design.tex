@@ -7,7 +7,9 @@
 \section{Introduction}
 The transmitter for the sound-based move tracking protocol is in charge of creating the tones representing each centerpiece's current state, and updating those tones each time a centerpiece changes state.
 
-This chapter will detail a prototype PCB design containing only nine discrete components capable of generating all the tones required for encoding one centerpiece's state.
+This chapter will detail a proof-of-concept design for a printed circuit board (PCB) containing only nine discrete components capable of generating all the tones required for encoding one centerpiece's state.
+
+This chapter assumes that the reader has a knowledge of basic circuit components like resistors and capacitors.
 
 \section{Requirements}
 \label{sec:transmitter-requirements}
@@ -52,7 +54,22 @@ The transmitter must create tones loud enough to be easily distinguished from am
 In light of the above requirement for the transmitter to fit within a center cubie (\ref{subsec:prospects-of-miniaturization}), this requirement will also require the transmitter design to consider how to overcome any audio dampening caused by such an enclosure.
 
 
-\section{PCB Design}
+\section{Design}
+\label{sec:transmitter-design}
+Given the above constrains, this section will detail a design for a printed circuit board capable of precisely generating four distinct tones.
+
+\subsection{The 555 Timer}
+\label{sec:the-555-timer}
+The core component in this PCB design is a 555 timer, which is a computer chip that facilitates the generation of many types of voltage frequencies in a circuit.
+
+For this transmitter, the 555 timer will be configured to output a square wave voltage signal with a 50\% duty cycle (i.e. "Astable Operation") \cite{icm7555}.
+This means the voltage on the output pin will alternate between low and high, spending equal amounts of time in each state.
+\footnote{
+    The attentive reader will notice that the square wave signal proposed here differs from the sine wave used to create the synthetic audio in Figure \ref{fig:code-generate-alg-audio}.
+    Valid concerns may even be raised about the fact that a square wave is actually a composite of a fundamental sine wave and infinitely many harmonics \cite{harmonics}.
+    However, since the nearest harmonic in a square wave with a 50\% duty cycle oscillates at a frequency three times as fast as the fundamental \cite{square-waves}, it is not difficult to choose fundamental frequencies whose nearest harmonics are beyond the range of frequencies measurable by a typical smartphone or laptop microphone (see Section \ref{subsec:frequency-response-range}).
+}
+The standard schematic for creating this type of voltage signal is depicted in Figure \ref{fig:555_astable}.
 
 \begin{figure}[h]
     \centering
@@ -60,6 +77,17 @@ In light of the above requirement for the transmitter to fit within a center cub
     \label{fig:555_astable}
     \includegraphics[width=0.75\linewidth]{Figures/6 PCB Design/555_astable.png}
 \end{figure}
+
+The two key components are the resistor \code{R} and the capacitor \code{C} whose respective resistance and capacitance control the output frequency \code{f} using the formula below \cite{icm7555}:
+
+\[f = \frac{1}{1.4 R C}\]
+
+\subsection{Creating Audio}
+For this transmitter design, the 555 timer is used to create the precise frequency voltage changes needed to cause a speaker to play a specific tone.
+
+- make the connection from one resistor to a switch alternating between four
+
+- make the connection of attaching the speaker to the output line of the 555 timer.
 \begin{figure}[h]
     \centering
     \caption{Centerpiece State Transmitter Circuit}
@@ -71,18 +99,31 @@ In light of the above requirement for the transmitter to fit within a center cub
 
  - argue through the logic of the design (how it works to produce the desired tones)
 
+\subsubsection{Choosing the values of \code{R} and \code{C}}
  - show the Excel chart figuring out which resistance/capacitance combos produce useful tones for the transmission.
 
 TODO outline the process of choosing specific hardware to use for this project
 
-\section{Minimizing Sound Obstruction}
-TODO Discuss the "tupperware" tests -> design of various center caps.
-
-
 \section{Prototyping}
 
-TODO detail the process of building a prototype. Include pictures of the board and the generated spectrograms.
+TODO detail the process of building a prototype.
 
+- Include pictures of the board and ...
+
+- ... the generated spectrograms.
+
+\section{Miniaturization}
 - highlight the value of so few components for the physical size requirement, e.g. the prospects of A SMD version of the board
+
+- Give a final part count.
+
+- Talk about sizes for the components of the pcb.
+
+- Discuss SMD versions
+
+- If possible, create a demo in KiCAD...
+
+\section{Minimizing Sound Obstruction}
+TODO Discuss the "tupperware" tests -> design of various center caps.
 
 \section{Summary}
