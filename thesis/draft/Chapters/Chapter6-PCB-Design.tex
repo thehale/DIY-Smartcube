@@ -78,16 +78,16 @@ The standard schematic for creating this type of voltage signal is depicted in F
     \includegraphics[width=0.75\linewidth]{Figures/6 PCB Design/555_astable.png}
 \end{figure}
 
-The two key components are the resistor \code{R} and the capacitor \code{C} whose respective resistance and capacitance control the output frequency \code{f} using the formula below \cite{icm7555}:
-
-\[f = \frac{1}{1.4 R C}\]
+The two key components are the resistor \code{R} and the capacitor \code{C} whose respective resistance and capacitance control the output frequency \code{f}  via the relation shown in Equation \ref{eq:555-freq} \cite{icm7555}:
+\begin{equation}\label{eq:555-freq}
+    f = \frac{1}{1.4 R C}
+\end{equation}
 
 \subsection{Creating Audio}
-For this transmitter design, the 555 timer is used to create the precise frequency voltage changes needed to cause a speaker to play a specific tone.
-
-- make the connection from one resistor to a switch alternating between four
-
-- make the connection of attaching the speaker to the output line of the 555 timer.
+The 555 timer's varying voltage output can be easily converted to audible sound  by attaching a voltage controlled speaker to the output wire coming from pin 3 in Figure \ref{fig:555_astable}.
+However, this will only produce one continuous tone, and each centerpiece will need to be able to switch between four distinct tones.
+As such, the resistor \code{R} will need to be replaced with four separate resistors (labeled \code{R1}, \code{R2}, \code{R3}, \code{R4} in Figure \ref{fig:555_astable_modded}) and a switch.
+The switch will be connected to the cube so that a 90$^\circ$ rotation will change which resistor is in series with the circuit, thus changing the output audio frequency of the speaker.
 \begin{figure}[h]
     \centering
     \caption{Centerpiece State Transmitter Circuit}
@@ -95,12 +95,10 @@ For this transmitter design, the 555 timer is used to create the precise frequen
     \includegraphics[width=\linewidth]{Figures/6 PCB Design/555_astable_modded.png}
 \end{figure}
 
- - show the schematic (explain 555 timers -> connect to speaker -> add supporting components)
-
- - argue through the logic of the design (how it works to produce the desired tones)
-
-\subsubsection{Choosing the values of \code{R} and \code{C}}
+\subsubsection{Choosing the values of \code{R1}, \code{R2}, \code{R3}, \code{R4} and \code{C}}
  - show the Excel chart figuring out which resistance/capacitance combos produce useful tones for the transmission.
+
+ - Talk about Equation \ref{eq:555-freq} and how it generated the Excel table
 
 TODO outline the process of choosing specific hardware to use for this project
 
