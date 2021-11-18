@@ -11,6 +11,8 @@ This chapter will detail a proof-of-concept design for a printed circuit board (
 
 This chapter assumes that the reader has a knowledge of basic circuit components like resistors and capacitors.
 
+TODO add section references (once the rest of the chapter is complete)
+
 \section{Requirements}
 \label{sec:transmitter-requirements}
 This section will detail the constraints within which the transmitter will be required to operate. These constraints include the physical size of the transmitter (Section \ref{subsec:prospects-of-miniaturization}), the precision of tone generation (Section \ref{subsec:precision-of-tone-generation}), the reliability of the transmitter in changing tones to reflect a face turn (Section \ref{subsec:responsiveness-to-face-turns}), and the intensity of output audio that the transmitter can produce (Section \ref{subsec:transmitter-signal-to-noise-ratio}).
@@ -47,6 +49,7 @@ As such, the chosen transmitter design can encode centerpiece states with any fr
 \subsection{Responsiveness to Face Turns}
 \label{subsec:responsiveness-to-face-turns}
 The chosen transmitter design must respond to an applied face turn by changing the currently transmitted audio frequency to the frequency corresponding to the new centerpiece state.
+Since top speedcubers can reach a burst turn speed of 20 TPS (see Section \ref{sec:alternatives}), this means this frequency change must complete within 50ms.
 
 \subsection{Signal-to-Noise Ratio}
 \label{subsec:transmitter-signal-to-noise-ratio}
@@ -97,10 +100,10 @@ The switch will be connected to the cube so that a 90$^\circ$ rotation will chan
 \end{figure}
 
 Alternatively, it is mathematically valid to instead switch between four different capacitors of different capacitance.
-However, for the reasons described in Section \ref{subsubsec:freq_selection}, opting to switch between resistors proved more practical.
+However, for the reasons described in Section \ref{subsubsec:freq-selection}, opting to switch between resistors proved more practical.
 
 \subsubsection{Choosing the values of \code{R} and \code{C}}
-\label{subsubsec:freq_selection}
+\label{subsubsec:freq-selection}
 There are infinitely many combinations of \code{R} and \code{C} that will produce any single desired output frequency \code{f}; however, the set of resistances and capacitances of commonly produced resistors and capacitors is finite.
 While multiple components can be combined to produce more specific resistances and capacitances, doing so would increase the overall component count for a circuit board that is constrained to a small physical size.
 As such, this proof-of-concept design will focus on producing frequencies attainable with a single capacitor and resistor pair.

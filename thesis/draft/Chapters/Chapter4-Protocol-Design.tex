@@ -273,8 +273,8 @@ The second tone would come from one of two separately predefined audio bands, on
 From this, an audio processing model could be designed to process a sequence of these two-tone pairs and reconstruct the sequence of face rotations by recording the rotated face followed by its direction of rotation.
 
 However, while this model minimizes the number of discrete frequencies required to communicate changes in the cube's state, it carries many challenges.
-Consider the example of a speedcuber averaging 5 turns per second (TPS) with bursts up to 10 TPS (common for a speedcuber that averages 12-15 seconds per solution).
-The burst TPS would require the successful transmission of 20 sequential tones within a single second - only 50ms per tone, all in the midst of additional noise from the cube's pieces hitting each other harder at the higher turn speed.
+Consider the example of a speedcuber averaging 5-8 turns per second (TPS) with bursts up to 20 TPS (common for a speedcuber that averages under 15 seconds per solution).
+The burst TPS would require the successful transmission of 40 sequential tones within a single second - only 25ms per tone, all in the midst of additional noise from the cube's pieces hitting each other harder at the higher turn speed.
 Adding to the difficulty, since each tone is only ever transmitted once, the audio detection model must achieve 100\% tone recognition to be able to accurately reconstruct the originating move sequence.
 As a result, this model fails to support any sort of error correction that would make it resistant to the common challenges to data transmission through sound.
 
