@@ -54,6 +54,7 @@ The transmitter must create tones loud enough to be easily distinguished from am
 In light of the above requirement for the transmitter to fit within a center cubie (\ref{subsec:prospects-of-miniaturization}), this requirement will also require the transmitter design to consider how to overcome any audio dampening caused by such an enclosure.
 
 
+\newpage
 \section{Design}
 \label{sec:transmitter-design}
 Given the above constrains, this section will detail a design for a printed circuit board capable of precisely generating four distinct tones.
@@ -64,11 +65,11 @@ The core component in this PCB design is a 555 timer, which is a computer chip t
 
 For this transmitter, the 555 timer will be configured to output a square wave voltage signal with a 50\% duty cycle (i.e. "Astable Operation") \cite{icm7555}.
 This means the voltage on the output pin will alternate between low and high, spending equal amounts of time in each state.
-\footnote{
-    The attentive reader will notice that the square wave signal proposed here differs from the sine wave used to create the synthetic audio in Figure \ref{fig:code-generate-alg-audio}.
-    Valid concerns may even be raised about the fact that a square wave is actually a composite of a fundamental sine wave and infinitely many harmonics \cite{harmonics}.
-    However, since the nearest harmonic in a square wave with a 50\% duty cycle oscillates at a frequency three times as fast as the fundamental \cite{square-waves}, it is not difficult to choose fundamental frequencies whose nearest harmonics are beyond the range of frequencies measurable by a typical smartphone or laptop microphone (see Section \ref{subsec:frequency-response-range}).
-}
+
+The attentive reader will notice that the square wave signal proposed here differs from the sine wave used to create the synthetic audio in Figure \ref{fig:code-generate-alg-audio}.
+Valid concerns may even be raised about the fact that a square wave is actually a composite of a fundamental sine wave and infinitely many harmonics \cite{harmonics}.
+However, since the nearest harmonic in a square wave with a 50\% duty cycle oscillates at a frequency three times as fast as the fundamental \cite{square-waves}, then choosing a fundamental frequency of at least 6.67kHz places the nearest harmonics beyond the range of frequencies measurable by a typical smartphone or laptop microphone (see Section \ref{subsec:frequency-response-range}).
+
 The standard schematic for creating this type of voltage signal is depicted in Figure \ref{fig:555_astable}.
 
 \begin{figure}[h]
@@ -95,12 +96,30 @@ The switch will be connected to the cube so that a 90$^\circ$ rotation will chan
     \includegraphics[width=\linewidth]{Figures/6 PCB Design/555_astable_modded.png}
 \end{figure}
 
-\subsubsection{Choosing the values of \code{R1}, \code{R2}, \code{R3}, \code{R4} and \code{C}}
- - show the Excel chart figuring out which resistance/capacitance combos produce useful tones for the transmission.
+Alternatively, it is mathematically valid to instead switch between four different capacitors of different capacitance.
+However, for the reasons described in Section \ref{subsubsec:freq_selection}, opting to switch between resistors proved more practical.
 
- - Talk about Equation \ref{eq:555-freq} and how it generated the Excel table
+\subsubsection{Choosing the values of \code{R} and \code{C}}
+\label{subsubsec:freq_selection}
+There are infinitely many combinations of \code{R} and \code{C} that will produce any single desired output frequency \code{f}; however, the set of resistances and capacitances of commonly produced resistors and capacitors is finite.
+While multiple components can be combined to produce more specific resistances and capacitances, doing so would increase the overall component count for a circuit board that is constrained to a small physical size.
+As such, this proof-of-concept design will focus on producing frequencies attainable with a single capacitor and resistor pair.
 
-TODO outline the process of choosing specific hardware to use for this project
+Since each centerpiece transmitter needs to produce four distinct frequencies, four separate capacitor-resistor pairs are required. 
+However, since variation in the capacitance \emph{or} resistance produce variation in the output frequency, one of those two options can be held constant to reduce the overall component count.
+
+To chose which one to hold constant, the output frequencies of all possible pairings of commonly produced capacitors and resistors \footnote{@DrHeinrichs, I used the values of the resistor/capacitor kits I could find on Amazon. Should I cite those here? Or find a different list to use?} were calculated using Equation \ref{eq:555-freq}. 
+The resulting table was then color coded to highlight the usable frequencies - those in the range 6.67kHz to 20kHz \footnote{6.67kHz is the lower bound derived in Section \ref{sec:the-555-timer} and 20kHz the upper limit of the typical frequency response range discussed in Section \ref{subsec:frequency-response-range}} - in green while leaving all other unusable frequencies in red. The result is shown in Figure \ref{fig:freq-selection} with the various resistances shown on the vertical axis and the various capacitances along the horizontal axis.
+
+\begin{figure}[h]
+    \centering
+    \caption{Output Frequencies of Common \code{R} and \code{C} Values}
+    \label{fig:freq-selection}
+    \includegraphics[width=\linewidth]{Figures/6 PCB Design/freq_selection.png}
+\end{figure}
+
+A close observation of the resulting sigmoid shape of usable frequencies reveals only one location where there are at least four usable frequencies associated with a fixed resistance (i.e. row of green cells), compared to ten locations where there are at least four usable frequencies associated with a fixed capacitance (i.e. column of green cells).
+As such, the most practical value to hold constant is the capacitance.
 
 \section{Prototyping}
 
