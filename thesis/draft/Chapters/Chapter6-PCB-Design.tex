@@ -111,8 +111,9 @@ As such, this proof-of-concept design will focus on producing frequencies attain
 Since each centerpiece transmitter needs to produce four distinct frequencies, four separate capacitor-resistor pairs are required. 
 However, since variation in the capacitance \emph{or} resistance produce variation in the output frequency, one of those two options can be held constant to reduce the overall component count.
 
-To chose which one to hold constant, the output frequencies of all possible pairings of commonly produced capacitors and resistors \footnote{@DrHeinrichs, I used the values of the resistor/capacitor kits I could find on Amazon. Should I cite those here? Or find a different list to use?} were calculated using Equation \ref{eq:555-freq}. 
-The resulting table was then color coded to highlight the usable frequencies - those in the range 6.67kHz to 20kHz \footnote{6.67kHz is the lower bound derived in Section \ref{sec:the-555-timer} and 20kHz the upper limit of the typical frequency response range discussed in Section \ref{subsec:frequency-response-range}} - in green while leaving all other unusable frequencies in red. The result is shown in Figure \ref{fig:freq-selection} with the various resistances shown on the vertical axis and the various capacitances along the horizontal axis.
+To chose which one to hold constant, the output frequencies of all possible pairings of capacitors and resistors from two cheap Amazon kits \cite{amazon-resistors} \cite{amazon-capacitors} were calculated using Equation \ref{eq:555-freq}. 
+The resulting table was then color coded to highlight the usable frequencies in green (6.67kHz to 20kHz)\footnote{6.67kHz is the lower bound derived in Section \ref{sec:the-555-timer} and 20kHz the upper limit of the typical frequency response range discussed in Section \ref{subsec:frequency-response-range}} while leaving all other unusable frequencies in red.
+The result is shown in Figure \ref{fig:freq-selection} with the various resistances shown on the vertical axis and the various capacitances along the horizontal axis.
 
 \begin{figure}[h]
     \centering
@@ -122,15 +123,34 @@ The resulting table was then color coded to highlight the usable frequencies - t
 \end{figure}
 
 A close observation of the resulting sigmoid shape of usable frequencies reveals only one location where there are at least four usable frequencies associated with a fixed resistance (i.e. row of green cells), compared to ten locations where there are at least four usable frequencies associated with a fixed capacitance (i.e. column of green cells).
-As such, the most practical value to hold constant is the capacitance.
+As such, the most practical value to hold constant here is the capacitance.
 
+One of the locations with a viable fixed capacitance is shown in Figure \ref{fig:freq-selection-r}. This pairing of a 10nF capacitor with four resistors with respective resistances of 4.7k$\Omega$, 5.1k$\Omega$, 5.6k$\Omega$, and 7.5k$\Omega$ will be used in the prototype created in Section \ref{sec:prototype}. 
+
+\begin{figure}[h]
+    \centering
+    \caption{Output Frequencies of Common \code{R} and \code{C} Values}
+    \label{fig:freq-selection-r}
+    \includegraphics[width=0.8\linewidth]{Figures/6 PCB Design/freq_selection_r.png}
+\end{figure}
+
+
+\newpage
 \section{Prototyping}
+\label{sec:prototype}
 
 TODO detail the process of building a prototype.
 
 - Include pictures of the board and ...
 
 - ... the generated spectrograms.
+
+\begin{figure}[h]
+    \centering
+    \caption{Breadboard Prototype}
+    \label{fig:breadboard}
+    \includegraphics[width=\linewidth]{Figures/6 PCB Design/breadboard.jpg}
+\end{figure}
 
 \section{Miniaturization}
 - highlight the value of so few components for the physical size requirement, e.g. the prospects of A SMD version of the board
