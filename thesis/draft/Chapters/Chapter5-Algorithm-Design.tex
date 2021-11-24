@@ -5,37 +5,82 @@
 \label{Chapter5}
 
 \section{Introduction}
-The receiver for the sound-based move tracking protocol is in charge of decoding a sequence of face turns from the transmitted audio.
+
+The receiver for the sound-based move tracking protocol is in charge of
+decoding a sequence of face turns from the transmitted audio.
 
 To do this, the receiver must go through the following steps:
+
 \begin{enumerate}
-    \item Record the transmitted audio.
+    
+    \item Record the transmitted audio.q
+    
     \item Measure the audible frequencies at each time step.
-    \item Convert each time step's audible frequencies to the cube's state at that moment.
-    \item Decode the applied face turns from the sequence of cube states.
+    
+    \item Convert each time step's audible frequencies to the cube's
+    state at that moment.
+    
+    \item Decode the applied face turns from the sequence of cube
+    states.
+
 \end{enumerate}
 
-This chapter will describe the development of a software algorithm in Python that can serve as a receiver for this sound-based move tracking protocol. 
-This development began with the creation of synthetic audio recordings representing the tones that would be emitted by a Rubik's Cube equipped with an ideal transmitter (Section \ref{sec:synthetic-audio-generation}) followed by the implementation of an algorithm capable of decoding that ideal synthetic audio (Section \ref{sec:decoding-synthetic-audio}).
-The algorithm was then made more robust by adding realistic noise to the synthetic audio to better simulate a real speedcubing environment (Section \ref{sec:adding-realistic-noise}) followed by enhancing the previously designed algorithm to continue to decode the applied move sequence in the midst of the added noise (Section: \ref{sec:decoding-realistic-noise}). \footnote{The contents of this chapter have been specially written so that the reader can copy them into a Jupyter Notebook running a Python 3.9 kernel and see the same results for himself/herself.} 
+This chapter will describe the development of a software algorithm in
+Python that can serve as a receiver for this sound-based move tracking
+protocol. This development began with the creation of synthetic audio
+recordings representing the tones that would be emitted by a Rubik's
+Cube equipped with an ideal transmitter (Section
+\ref{sec:synthetic-audio-generation}) followed by the implementation of
+an algorithm capable of decoding that ideal synthetic audio (Section
+\ref{sec:decoding-synthetic-audio}). The algorithm was then made more
+robust by adding realistic noise to the synthetic audio to better
+simulate a real speedcubing environment (Section
+\ref{sec:adding-realistic-noise}) followed by enhancing the previously
+designed algorithm to continue to decode the applied move sequence in
+the midst of the added noise (Section:
+\ref{sec:decoding-realistic-noise}). \footnote{The contents of this
+chapter have been specially written so that the reader can copy them
+into a Jupyter Notebook running a Python 3.9 kernel and see the same
+results for himself/herself.}
 
 
 \section{Creating Synthetic Audio}
 \label{sec:synthetic-audio-generation}
-The first step of designing this receiver is to synthesize an audio signal representative of the output of the ideal transmitter.
 
-This audio synthesis starts with encoding the frequency corresponding to each centerpiece state (Section \ref{subsec:represent-audio-protocol}), then involves creating a virtual Rubik's Cube (Section \ref{subsec:represent-rubiks-cube}), and finally culminates in generating the audio signal from the virtual Rubik's Cube's state (Section \ref{subsec:generate-audible-algorithm}).
+The first step of designing this receiver is to synthesize an audio
+signal representative of the output of the ideal transmitter.
+
+This audio synthesis starts with encoding the frequency corresponding
+to each centerpiece state (Section
+\ref{subsec:represent-audio-protocol}), then involves creating a
+virtual Rubik's Cube (Section \ref{subsec:represent-rubiks-cube}), and
+finally culminates in generating the audio signal from the virtual
+Rubik's Cube's state (Section \ref{subsec:generate-audible-algorithm}).
+
 \newpage
 \subsection{Representing the Audio Protocol}
 \label{subsec:represent-audio-protocol}
-For the synthetic audio generator to produce a realistic signal, it needs to know which frequencies to transmit for each centerpiece state. 
-This is easily accomplished by creating a dictionary to map each possible state of each face to its corresponding frequency.
 
-For this design, the frequency assignments from Table \ref{table:centerpiece-frequencies} are converted to the dictionary shown in Figure \ref{fig:code-freq-mapping-dict} with two small changes.
-First, by assuming no cube rotations, the face color (e.g. "White") can be converted to a layer name (e.g. "U") which simplifies the code for both encoding and decoding a move sequence from audio.
-Second, the 0$^\circ$, 90$^\circ$, 180$^\circ$, and 270$^\circ$ alignments from Figure \ref{fig:rotation-alignment} are divided by 90 to be represented by the simple sequence of consecutive integers 0, 1, 2, and 3 that are easier to manipulate in code.
+For the synthetic audio generator to produce a realistic signal, it
+needs to know which frequencies to transmit for each centerpiece state.
+This is easily accomplished by creating a dictionary to map each
+possible state of each face to its corresponding frequency.
 
-With this dictionary in place, the frequency to transmit for any particular centerpiece's current rotation can be determined by looking up the centerpiece and its rotation in the dictionary as shown in Figure \ref{fig:code-frequency-of}.
+For this design, the frequency assignments from Table
+\ref{table:centerpiece-frequencies} are converted to the dictionary
+shown in Figure \ref{fig:code-freq-mapping-dict} with two small
+changes. First, by assuming no cube rotations, the face color (e.g.
+"White") can be converted to a layer name (e.g. "U") which simplifies
+the code for both encoding and decoding a move sequence from audio.
+Second, the 0$^\circ$, 90$^\circ$, 180$^\circ$, and 270$^\circ$
+alignments from Figure \ref{fig:rotation-alignment} are divided by 90
+to be represented by the simple sequence of consecutive integers 0, 1,
+2, and 3 that are easier to manipulate in code.
+
+With this dictionary in place, the frequency to transmit for any
+particular centerpiece's current rotation can be determined by looking
+up the centerpiece and its rotation in the dictionary as shown in
+Figure \ref{fig:code-frequency-of}.
 
 \begin{figure}[h]
 \caption{Centerpiece State to Frequency Mapping}
@@ -79,10 +124,22 @@ def frequency_of(centerpiece: str, rotation: int) -> float:
 \newpage
 \subsection{Representing the Rubik's Cube}
 \label{subsec:represent-rubiks-cube}
-While there are many implementations of a digital Rubik's Cube that can track every cubie and render an interactive 3D cube, all that's needed for the synthetic audio generator is a representation of a Rubik's Cube on which individual face turns can be virtually applied and the resulting centerpiece state can be read out.
 
-To do this, a \code{RubiksCube} object is created that encapsulates a dictionary containing the same keys for each face as the \code{FREQUENCY\_MAPPINGS} dictionary in Figure \ref{fig:code-freq-mapping-dict} above, each associated with a single integer representing the current rotational state of that face.
-A method called \code{apply\_move} is also defined with a parameter for a valid move like \code{U} or \code{U'} that will update the \code{RubiksCube}'s state to reflect the rotation.
+While there are many implementations of a digital Rubik's Cube that can
+track every cubie and render an interactive 3D cube, all that's needed
+for the synthetic audio generator is a representation of a Rubik's Cube
+on which individual face turns can be virtually applied and the
+
+resulting centerpiece state can be read out. To do this, a
+\code{RubiksCube} object is created that encapsulates a dictionary
+containing the same keys for each face as the
+\code{FREQUENCY\_MAPPINGS} dictionary in Figure
+\ref{fig:code-freq-mapping-dict} above, each associated with a single
+integer representing the current rotational state of that face. A
+method called \code{apply\_move} is also defined with a parameter for a
+valid move like \code{U} or \code{U'} that will update the
+\code{RubiksCube}'s state to reflect the rotation.
+
 \begin{figure}[h]
 \caption{A simple abstraction of a Rubik's Cube}
 \label{fig:rubiks-cube-code}
@@ -113,16 +170,29 @@ class RubiksCube:
 
 \subsection{Creating Synthetic Audio for an Arbitrary Algorithm}
 \label{subsec:generate-audible-algorithm}
-Now the synthetic audio can be generated for any valid algorithm.
-This is done using the \code{tones} library created by Erik Nyquist. \cite{pip-tones}
 
-First, a separate audio track is created to simulate the output of each speaker embedded into each centerpiece on the cube (Figure \ref{fig:code-create-mixer}).
+Now the synthetic audio can be generated for any valid algorithm. This
+is done using the \code{tones} library created by Erik Nyquist.
+\cite{pip-tones}
 
-Second, a new function is written to add the tones corresponding to the virtual cube's current state to the audio mixer using the \code{frequency\_of} function from Figure \ref{fig:code-frequency-of} (Figure \ref{fig:code-render-cube-state}).
-This function includes a \code{tps} parameter that controls the duration of the added tones so that they change to the next tone at the same speed as the turns on a speedcube being solved at that number of turns per second.
+First, a separate audio track is created to simulate the output of each
+speaker embedded into each centerpiece on the cube (Figure
+\ref{fig:code-create-mixer}).
 
-Then, those two functions are tied together by iterating through each move in a Rubik's Cube \code{alg}orithm and saving the audio of the resulting state changes into a .wav file at a given file path (Figure \ref{fig:code-render-audible-alg}).
-Additionally, the \code{tps} parameter is propagated to this function to enable generating audio for an algorithm at different turn speeds.
+Second, a new function is written to add the tones corresponding to the
+virtual cube's current state to the audio mixer using the
+\code{frequency\_of} function from Figure \ref{fig:code-frequency-of}
+(Figure \ref{fig:code-render-cube-state}). This function includes a
+\code{tps} parameter that controls the duration of the added tones so
+that they change to the next tone at the same speed as the turns on a
+speedcube being solved at that number of turns per second.
+
+Then, those two functions are tied together by iterating through each
+move in a Rubik's Cube \code{alg}orithm and saving the audio of the
+resulting state changes into a .wav file at a given file path (Figure
+\ref{fig:code-render-audible-alg}). Additionally, the \code{tps}
+parameter is propagated to this function to enable generating audio for
+an algorithm at different turn speeds.
 
 \begin{figure}[h]
 \caption{Generating audio for any Rubik's Cube algorithm}
@@ -175,8 +245,10 @@ def render_audible_alg(alg: str, wav_path: str=None, tps: float=4):
 \end{subfigure}
 \end{figure}
 
-With these functions in place, synthetic audio can be easily created for any valid Rubik's Cube algorithm.
-For example, generating synthetic audio that sweeps through every possible centerpiece state can be done with the two lines of code in Figure \ref{fig:example-alg-audio}.
+With these functions in place, synthetic audio can be easily created
+for any valid Rubik's Cube algorithm. For example, generating synthetic
+audio that sweeps through every possible centerpiece state can be done
+with the two lines of code in Figure \ref{fig:example-alg-audio}.
 
 \begin{figure}[h]
 \caption{Example Audio Generation for a Rubik's Cube Algorithm}
@@ -190,14 +262,30 @@ render_audible_alg(demo_alg, "demo_all_states.wav")
 
 \section{Decoding the Synthetic Audio}
 \label{sec:decoding-synthetic-audio}
-With synthetic audio now available for any valid Rubik's Cube algorithm, the next step is to create an initial software algorithm that can decode that audio back into the original move sequence.
 
-Accomplishing this will require computing the synthetic audio's spectrogram (Section \ref{subsec:compute-spectrogram}), followed by extracting the dominant frequencies present at each time step (Section \ref{subsec:extract-dominant-freqs}), and converting those dominant frequencies into the corresponding Rubik's Cube centerpiece states (Section \ref{subsec:translating-freqs-to-state}), all before finally recovering the originally applied move sequence (Section \ref{subsec:extract-moves}).
+With synthetic audio now available for any valid Rubik's Cube
+algorithm, the next step is to create an initial software algorithm
+that can decode that audio back into the original move sequence.
+
+Accomplishing this will require computing the synthetic audio's
+spectrogram (Section \ref{subsec:compute-spectrogram}), followed by
+extracting the dominant frequencies present at each time step (Section
+\ref{subsec:extract-dominant-freqs}), and converting those dominant
+frequencies into the corresponding Rubik's Cube centerpiece states
+(Section \ref{subsec:translating-freqs-to-state}), all before finally
+recovering the originally applied move sequence (Section
+\ref{subsec:extract-moves}).
 
 \subsection{Computing the Spectrogram}
 \label{subsec:compute-spectrogram}
-The first step in decoding the synthetic audio is determining its component frequencies at any specific moment in time.
-These component frequencies can be easily visualized using a spectrogram, like the one in Figure \ref{fig:spectrogram} of the synthetic audio created in Section \ref{subsec:generate-audible-algorithm}. \footnote{The source code for Figure \ref{fig:spectrogram} is available in Appendix \ref{sec:code-spectrogram}.}
+
+The first step in decoding the synthetic audio is determining its
+component frequencies at any specific moment in time. These component
+frequencies can be easily visualized using a spectrogram, like the one
+in Figure \ref{fig:spectrogram} of the synthetic audio created in
+Section \ref{subsec:generate-audible-algorithm}. \footnote{The source
+code for Figure \ref{fig:spectrogram} is available in Appendix
+\ref{sec:code-spectrogram}.}
 
 \begin{figure}[h]
     \centering
@@ -206,27 +294,66 @@ These component frequencies can be easily visualized using a spectrogram, like t
     \includegraphics[width=0.8\textwidth]{Figures/5 Algorithm Design/component_frequencies.png}
 \end{figure}
 
-This spectrogram has the same pieces as the ones described in Section \ref{subsubsec:how-to-read-a-spectrogram} with a few minor changes.
-First the order of the graphs has been reversed, so the top graph shows the actual spectrogram and the bottom graph shows the strength of the component frequencies at the specific point in time indicated by the vertical red line on the top graph.
-Additionally, the spectrogram has been rotated 90$^\circ$ so time is now on the x-axis and the component frequencies are shown on the y-axis.
-Finally, the color scheme is slightly different, with the presence of a strong component frequency indicated by a bright yellow color instead of bright purple or pink.
+This spectrogram has the same pieces as the ones described in Section
+\ref{subsubsec:how-to-read-a-spectrogram} with a few minor changes.
+First the order of the graphs has been reversed, so the top graph shows
+the actual spectrogram and the bottom graph shows the strength of the
+component frequencies at the specific point in time indicated by the
+vertical red line on the top graph. Additionally, the spectrogram has
+been rotated 90$^\circ$ so time is now on the x-axis and the component
+frequencies are shown on the y-axis. Finally, the color scheme is
+slightly different, with the presence of a strong component frequency
+indicated by a bright yellow color instead of bright purple or pink.
 
 \subsubsection{The Brief Overview of the Math behind the Spectrogram}
-However, while Matplotlib's \code{specgram} plot \cite{matplotlib} made it easy to create Figure \ref{fig:spectrogram}, it didn't return the underlying data of the spectrogram required to decode the exact values and strengths of the component frequencies at each point in time.
-To compute that data directly, it is helpful to understand the basics of the math behind the spectrogram. Dr. Steve Brunton from the University of Washington created an excellent video series on this topic \cite{fourier-analysis}, of which the following few paragraphs are a short summary.
 
-The foundational mathematical concept behind the spectrogram is the Fourier Transform, which is a technique for approximating any continuous function using only sine and cosine functions.
-In the case of an analog audio signal -which is inherently a composite of many sine functions (one for each component frequency)- applying a Fourier Transform would return data for a graph of all the frequencies present at any point in the entire signal and their overall strength throughout it.
+However, while Matplotlib's \code{specgram} plot \cite{matplotlib} made
+it easy to create Figure \ref{fig:spectrogram}, it didn't return the
+underlying data of the spectrogram required to decode the exact values
+and strengths of the component frequencies at each point in time. To
+compute that data directly, it is helpful to understand the basics of
+the math behind the spectrogram. Dr. Steve Brunton from the University
+of Washington created an excellent video series on this topic
+\cite{fourier-analysis}, of which the following few paragraphs are a
+short summary.
 
-But digital audio signals like .wav files are a series of discrete values, not continuous functions, which means the Fourier Transform cannot directly operate on them.
-Fortunately, there exists a variant of the Fourier Transform called the Discrete Fourier Transform which can operate on a list of discrete data points by assuming they sample a continuous function and then computing the Fourier Transform of that function.
+The foundational mathematical concept behind the spectrogram is the
+Fourier Transform, which is a technique for approximating any
+continuous function using only sine and cosine functions. In the case
+of an analog audio signal -which is inherently a composite of many sine
+functions (one for each component frequency)- applying a Fourier
+Transform would return data for a graph of all the frequencies present
+at any point in the entire signal and their overall strength throughout
+it.
 
-However, when applied to a digital audio signal, the Discrete Fourier Transform still only computes which frequencies were present at \emph{any} time during the duration of the signal, but not \emph{when} they occurred. 
-That data comes from another layer of computation called the Gabor Transform (i.e. the Short-Time Fourier Transform) which computes a Discrete Fourier Transform over a sliding window of the input samples to approximate the changes in the strength of each component frequency over time.
+But digital audio signals like .wav files are a series of discrete
+values, not continuous functions, which means the Fourier Transform
+cannot directly operate on them. Fortunately, there exists a variant of
+the Fourier Transform called the Discrete Fourier Transform which can
+operate on a list of discrete data points by assuming they sample a
+continuous function and then computing the Fourier Transform of that
+function.
 
-This knowledge, combined with the \code{numpy} \cite{numpy} and \code{scipy} \cite{scipy} libraries which can calculate these transforms, enables the creation of a function (Figure \ref{fig:code-compute-spectrogram}) to compute the spectrogram for the audio stored in a given .wav file.
-The return values \code{freq} and \code{time} are, respectively, lists of the .wav file's component frequencies and time steps, while \code{spectrogram} is a 2D array of the strengths of each component frequency at each time step.
-They are related by common indices, such that the strength of the frequency \code{freq[f\_idx]} at the time \code{time[t\_idx]} is found in \code{spectrogram[t\_idx][f\_idx]}.
+However, when applied to a digital audio signal, the Discrete Fourier
+Transform still only computes which frequencies were present at
+\emph{any} time during the duration of the signal, but not \emph{when}
+they occurred. That data comes from another layer of computation called
+the Gabor Transform (i.e. the Short-Time Fourier Transform) which
+computes a Discrete Fourier Transform over a sliding window of the
+input samples to approximate the changes in the strength of each
+component frequency over time.
+
+This knowledge, combined with the \code{numpy} \cite{numpy} and
+\code{scipy} \cite{scipy} libraries which can calculate these
+transforms, enables the creation of a function (Figure
+\ref{fig:code-compute-spectrogram}) to compute the spectrogram for the
+audio stored in a given .wav file. The return values \code{freq} and
+\code{time} are, respectively, lists of the .wav file's component
+frequencies and time steps, while \code{spectrogram} is a 2D array of
+the strengths of each component frequency at each time step. They are
+related by common indices, such that the strength of the frequency
+\code{freq[f\_idx]} at the time \code{time[t\_idx]} is found in
+\code{spectrogram[t\_idx][f\_idx]}.
 
 \begin{figure}[h]
 \caption{Function to compute the spectrogram of a .wav file}
@@ -248,10 +375,21 @@ def compute_spectrogram(wav_path: str):
 
 \subsection{Extracting the Dominant Component Frequencies}
 \label{subsec:extract-dominant-freqs}
-Looking back at the component frequency graph in Figure \ref{fig:spectrogram} it is clear that it has six distinct peaks: these are the transmitted frequencies representing the current state of the virtual Rubik's Cube's six centerpieces at that specific instant of time.
 
-The exact frequencies of these peaks can be extracted by filtering out all frequencies whose strength is not above a specific threshold.
-In this case, a simple threshold of 85\% of the maximum strength of any component frequency (see the green line in Figure \ref{fig:spectrogram-with-naive-threshold}\footnote{The source code for Figure \ref{fig:spectrogram-with-naive-threshold} is available in Appendix \ref{sec:code-spectrogram-with-naive-threshold}.}) isolates the six dominant component frequencies.
+Looking back at the component frequency graph in Figure
+\ref{fig:spectrogram} it is clear that it has six distinct peaks: these
+are the transmitted frequencies representing the current state of the
+virtual Rubik's Cube's six centerpieces at that specific instant of
+time.
+
+The exact frequencies of these peaks can be extracted by filtering out
+all frequencies whose strength is not above a specific threshold. In
+this case, a simple threshold of 85\% of the maximum strength of any
+component frequency (see the green line in Figure
+\ref{fig:spectrogram-with-naive-threshold}\footnote{The source code for
+Figure \ref{fig:spectrogram-with-naive-threshold} is available in
+Appendix \ref{sec:code-spectrogram-with-naive-threshold}.}) isolates
+the six dominant component frequencies.
 
 \begin{figure}[h]
     \centering
@@ -260,9 +398,14 @@ In this case, a simple threshold of 85\% of the maximum strength of any componen
     \includegraphics[width=0.8\textwidth]{Figures/5 Algorithm Design/threshold.png}
 \end{figure}
 
-Using the actual spectrogram data, the exact values of these peaks can be computed.
-First, the threshold computation is broken into its own function (Figure \ref{fig:code-compute-threshold}).
-From there, a second function (Figure \ref{fig:code-extract-important-freqs}) can iterate through all the component frequencies of the computed spectrogram data at a specific time index to compile and return a list of the frequencies whose strength exceeds the threshold at that time step.
+Using the actual spectrogram data, the exact values of these peaks can
+be computed. First, the threshold computation is broken into its own
+function (Figure \ref{fig:code-compute-threshold}). From there, a
+second function (Figure \ref{fig:code-extract-important-freqs}) can
+iterate through all the component frequencies of the computed
+spectrogram data at a specific time index to compile and return a list
+of the frequencies whose strength exceeds the threshold at that time
+step.
 
 \begin{figure}[h]
 \caption{Extracting dominant frequencies from one time step of audio}
@@ -301,7 +444,10 @@ def extract_important_freqs(freq, time, spectrogram, t_idx):
 \end{subfigure}\\
 \end{figure}
 
-With these functions, finding the actual frequencies of the peaks in Figure \ref{fig:spectrogram-with-naive-threshold} can be done in just a few lines of code as shown in Figure \ref{fig:code-extract-important-freqs-demo}.
+With these functions, finding the actual frequencies of the peaks in
+Figure \ref{fig:spectrogram-with-naive-threshold} can be done in just a
+few lines of code as shown in Figure
+\ref{fig:code-extract-important-freqs-demo}.
 
 \begin{figure}[h]
 \caption{Example peak frequency decoding at a specific time step}
@@ -324,10 +470,21 @@ print([f"{x["hz"]:.0f}Hz" for x in important_freqs])
 
 \subsection{Translating Component Frequencies to Centerpiece States}
 \label{subsec:translating-freqs-to-state}
-With the specific frequencies of each detected peak, the original state of the Rubik's Cube at that moment in time can be computed by finding the states whose corresponding frequency is closest to each detected peak frequency.
 
-This is done by first defining a function that will find the closest centerpiece state for one peak frequency by iterating through every centerpiece state in the \code{FREQUENCY\_MAPPINGS} dictionary from Section \ref{subsec:represent-audio-protocol}, comparing the difference between the state's frequency and the given peak frequency, and returning the state with the smallest difference (Figure \ref{fig:code-closest-state}).
-This function can then be called for all the detected peak frequencies to recover the state of the cube at that time step (Figure \ref{fig:code-get-state-from-freqs}).
+With the specific frequencies of each detected peak, the original state
+of the Rubik's Cube at that moment in time can be computed by finding
+the states whose corresponding frequency is closest to each detected
+peak frequency.
+
+This is done by first defining a function that will find the closest
+centerpiece state for one peak frequency by iterating through every
+centerpiece state in the \code{FREQUENCY\_MAPPINGS} dictionary from
+Section \ref{subsec:represent-audio-protocol}, comparing the difference
+between the state's frequency and the given peak frequency, and
+returning the state with the smallest difference (Figure
+\ref{fig:code-closest-state}). This function can then be called for all
+the detected peak frequencies to recover the state of the cube at that
+time step (Figure \ref{fig:code-get-state-from-freqs}).
 
 \begin{figure}[h]
 \caption{Converting peak frequencies to centerpiece states}
@@ -368,7 +525,10 @@ def get_state_from_freqs(important_freqs: list) -> dict:
 \end{subfigure}
 \end{figure}
 
-For example, Figure \ref{fig:code-get-state-from-freqs-demo} shows how using these functions makes it easy to covert the peak frequencies extracted in Figure \ref{fig:code-extract-important-freqs-demo} to their corresponding centerpiece states.
+For example, Figure \ref{fig:code-get-state-from-freqs-demo} shows how
+using these functions makes it easy to covert the peak frequencies
+extracted in Figure \ref{fig:code-extract-important-freqs-demo} to
+their corresponding centerpiece states.
 
 \begin{figure}[h]
 \caption{Example conversion of peak frequencies to states}
@@ -387,8 +547,11 @@ print(detected_state)
 \end{subfigure}
 \end{figure}
 
-As such, obtaining a sequence of the Rubik's Cube's centerpiece states over the course of the recorded audio sequence only requires repeating this process for each time step in the spectrogram data.
-This can also be easily turned into another function as shown in Figure \ref{fig:code-get-state-over-time}.
+As such, obtaining a sequence of the Rubik's Cube's centerpiece states
+over the course of the recorded audio sequence only requires repeating
+this process for each time step in the spectrogram data. This can also
+be easily turned into another function as shown in Figure
+\ref{fig:code-get-state-over-time}.
 
 \begin{figure}[h]
 \caption{Function to list the cube's state at each time step}
@@ -413,7 +576,11 @@ def get_state_over_time(freq, time, spectrogram):
 \end{lstlisting}
 \end{figure}
 
-And, for completeness, Figure \ref{fig:code-get-state-over-time-demo} shows an example of using that function to get the full sequence of states for the synthetic audio generated in Section \ref{sec:synthetic-audio-generation}.
+And, for completeness, Figure \ref{fig:code-get-state-over-time-demo}
+shows an example of using that function to get the full sequence of
+states for the synthetic audio generated in Section
+\ref{sec:synthetic-audio-generation}.
+
 \begin{figure}[h]
 \caption{Example listing of states over time}
 \label{fig:code-get-state-over-time-demo} 
@@ -436,12 +603,23 @@ print(state_over_time)
 \newpage
 \subsection{Extracting Move Sequences from Centerpiece State Sequences}
 \label{subsec:extract-moves}
-The final step to recover the original move sequence is to iterate over the sequence of cube states and register any change to the cube state as a move applied to the cube.
 
-This starts with a function (Figure \ref{fig:code-move-from}) that, given a starting and ending rotational state for a specific face, can calculate which direction a face was turned and return the text notation of the applied face turn.
-A second function (Figure \ref{fig:code-detect-moves}) then iterates through the state sequence extracted in Section \ref{subsec:translating-freqs-to-state} checking each state in the sequence against the previous one to detect when the state changes.
-Upon detecting a change, this second function then calls the first to get the actual move that caused the state change and saves it to a list of \code{detected\_moves} to be returned after iterating through all states.
-This list of \code{detected\_moves} is the final move sequence that was extracted from the synthetic audio.
+The final step to recover the original move sequence is to iterate over
+the sequence of cube states and register any change to the cube state
+as a move applied to the cube.
+
+This starts with a function (Figure \ref{fig:code-move-from}) that,
+given a starting and ending rotational state for a specific face, can
+calculate which direction a face was turned and return the text
+notation of the applied face turn. A second function (Figure
+\ref{fig:code-detect-moves}) then iterates through the state sequence
+extracted in Section \ref{subsec:translating-freqs-to-state} checking
+each state in the sequence against the previous one to detect when the
+state changes. Upon detecting a change, this second function then calls
+the first to get the actual move that caused the state change and saves
+it to a list of \code{detected\_moves} to be returned after iterating
+through all states. This list of \code{detected\_moves} is the final
+move sequence that was extracted from the synthetic audio.
 
 
 \begin{figure}[h]
@@ -494,8 +672,11 @@ def detect_moves(state_over_time):
 \end{figure}
 
 \newpage
-Figure \ref{fig:code-detect-moves-demo} shows an example usage of the \code{detect\_moves} function.
-Additionally, the extracted Rubik's Cube algorithm is compared to the original one used to create the synthetic audio.
+
+Figure \ref{fig:code-detect-moves-demo} shows an example usage of the
+\code{detect\_moves} function. Additionally, the extracted Rubik's Cube
+algorithm is compared to the original one used to create the synthetic
+audio.
 
 \begin{figure}[h]
 \caption{Example move sequence extraction}
@@ -518,11 +699,19 @@ print(f"Matches demo_alg? {demo_alg == pretty_moves}")
 \end{subfigure}
 \end{figure}
 
-Clearly, the detected move sequence matches the demo algorithm used to create the synthetic audio in Section \ref{subsec:generate-audible-algorithm}, which means this algorithm is a functional receiver for an ideal transmitter.
+Clearly, the detected move sequence matches the demo algorithm used to
+create the synthetic audio in Section
+\ref{subsec:generate-audible-algorithm}, which means this algorithm is
+a functional receiver for an ideal transmitter.
 
 \subsection{Full Example: Extracting Moves from Synthetic Audio}
-As a summary of this section on decoding synthetic audio, Figure \ref{fig:code-synthetic-extraction-demo} shows the full process for creating a synthetic audio clip and extracting the encoded move sequence from it.
-For this example, the chosen move sequence to transmit consists of every possible face turn, which will test that this strategy can correctly report back each face turn.
+
+As a summary of this section on decoding synthetic audio, Figure
+\ref{fig:code-synthetic-extraction-demo} shows the full process for
+creating a synthetic audio clip and extracting the encoded move
+sequence from it. For this example, the chosen move sequence to
+transmit consists of every possible face turn, which will test that
+this strategy can correctly report back each face turn.
 
 \begin{figure}[h]
 \caption{Full Example: Audio generation and move extraction}
@@ -554,20 +743,47 @@ print(f"Matches demo2_alg? {demo2_alg == pretty_moves2}")
 \end{subfigure}
 \end{figure}
 
-And again, the extracted move sequence does match the one used to generate the synthetic audio, further validating this strategy for decoding moves from audio.
+And again, the extracted move sequence does match the one used to
+generate the synthetic audio, further validating this strategy for
+decoding moves from audio.
 
 \newpage
 \section{Creating Realistic Audio}
 \label{sec:adding-realistic-noise}
-While the algorithm created in Section \ref{sec:decoding-synthetic-audio} can successfully recover a sequence of moves applied to a virtual Rubik's Cube with 100\% accuracy, the synthetic audio that it operates on is not realistic.
-This is made obvious by a comparison between the spectrograms of the background audio in Figure \ref{fig:signal-to-noise-ratio} and the synthetic audio in Figure \ref{fig:spectrogram}.
-In the latter, the bright yellow indicators of present frequencies are very clear and strong with no other frequencies present in the signal.
-In contrast, the former contains many areas with bright pink indicators of prominent frequencies (the color differences are due to the use of different applications to generate the diagrams).
-A more realistic signal would contain both the strong bands of the transmitted frequency along with the underlying background noise of whatever cube is actively being solved.
 
-Adding this noise could be done in software by overlaying the synthetic audio with a recording of the background noise, but it was just as easy to play the synthetic audio from a laptop speaker and record it using a nearby smartphone while solving various Rubik's Cubes.
-An example of the spectrogram resulting from recording the audio of the demo algorithm from Section \ref{subsec:generate-audible-algorithm} on a Google Pixel smartphone while actively solving a Gans 356 speedcube can be seen in Figure \ref{fig:noisy-spectrogram}.
-\footnote{The astute reader will notice that the audio bands in Figure \ref{fig:noisy-spectrogram} fall on slightly different frequencies than in Figure \ref{fig:spectrogram}. This is because the realistic audio samples used for analysis in Sections \ref{sec:adding-realistic-noise} and \ref{sec:decoding-realistic-noise} were created before finalizing the frequency assignments presented Table \ref{table:centerpiece-frequencies}. Ultimately, this change in frequencies shows that this algorithm works across a variety of encoding frequencies.}
+While the algorithm created in Section
+\ref{sec:decoding-synthetic-audio} can successfully recover a sequence
+of moves applied to a virtual Rubik's Cube with 100\% accuracy, the
+synthetic audio that it operates on is not realistic. This is made
+obvious by a comparison between the spectrograms of the background
+audio in Figure \ref{fig:signal-to-noise-ratio} and the synthetic audio
+in Figure \ref{fig:spectrogram}. In the latter, the bright yellow
+indicators of present frequencies are very clear and strong with no
+other frequencies present in the signal. In contrast, the former
+contains many areas with bright pink indicators of prominent
+frequencies (the color differences are due to the use of different
+applications to generate the diagrams). A more realistic signal would
+contain both the strong bands of the transmitted frequency along with
+the underlying background noise of whatever cube is actively being
+solved.
+
+Adding this noise could be done in software by overlaying the synthetic
+audio with a recording of the background noise, but it was just as easy
+to play the synthetic audio from a laptop speaker and record it using a
+nearby smartphone while solving various Rubik's Cubes. An example of
+the spectrogram resulting from recording the audio of the demo
+algorithm from Section \ref{subsec:generate-audible-algorithm} on a
+Google Pixel smartphone while actively solving a Gans 356 speedcube can
+be seen in Figure \ref{fig:noisy-spectrogram}. \footnote{The astute
+reader will notice that the audio bands in Figure
+\ref{fig:noisy-spectrogram} fall on slightly different frequencies than
+in Figure \ref{fig:spectrogram}. This is because the realistic audio
+samples used for analysis in Sections \ref{sec:adding-realistic-noise}
+and \ref{sec:decoding-realistic-noise} were created before finalizing
+the frequency assignments presented Table
+\ref{table:centerpiece-frequencies}. Ultimately, this change in
+frequencies shows that this algorithm works across a variety of
+encoding frequencies.}
 
 \begin{figure}[h]
     \centering
@@ -576,19 +792,35 @@ An example of the spectrogram resulting from recording the audio of the demo alg
     \includegraphics[width=0.8\linewidth]{Figures/5 Algorithm Design/transmitted-356-5tps.png}
 \end{figure}
 
-Notice how the horizontal bands representing the transmitted signal are dimmer in the realistic audio than in the purely synthetic audio.
-This reflects the loss of volume any tone experiences as it travels through the air.
-Additionally, the transmitted signal is also partially obscured by the additional audible noise of solving the speedcube.
+Notice how the horizontal bands representing the transmitted signal are
+dimmer in the realistic audio than in the purely synthetic audio. This
+reflects the loss of volume any tone experiences as it travels through
+the air. Additionally, the transmitted signal is also partially
+obscured by the additional audible noise of solving the speedcube.
 
 \section{Decoding Realistic Audio}
 \label{sec:decoding-realistic-noise}
-The loss of signal strength alongside the added noise creates several unique challenges that require more sophisticated analysis than that presented in Section \ref{sec:decoding-synthetic-audio}.
-These challenges include added variation in the strength of each peak frequency (Section \ref{subsec:fine-tuning-threshold}), the detection of conflicting centerpiece states (Section \ref{subsec:filtering-similar-peak-frequencies}), and the erroneous reading of background noise as centerpiece states (Section \ref{subsec:ignoring-noise-when-extracting-move-sequences}).
+
+The loss of signal strength alongside the added noise creates several
+unique challenges that require more sophisticated analysis than that
+presented in Section \ref{sec:decoding-synthetic-audio}. These
+challenges include added variation in the strength of each peak
+frequency (Section \ref{subsec:fine-tuning-threshold}), the detection
+of conflicting centerpiece states (Section
+\ref{subsec:filtering-similar-peak-frequencies}), and the erroneous
+reading of background noise as centerpiece states (Section
+\ref{subsec:ignoring-noise-when-extracting-move-sequences}).
 
 \subsection{Fine-Tuning the Threshold}
 \label{subsec:fine-tuning-threshold}
-Because some audio frequencies are dampened more than others as they travel through the air to the recording microphone, a static threshold like the one used in Section \ref{subsec:extract-dominant-freqs} fails to capture all the dominant frequencies that compose the audible signal.
-For example, Figure \ref{fig:threshold-miss} shows how the 85\% threshold from Section \ref{subsec:extract-dominant-freqs} misses five of the six signal peaks in the realistic audio.
+
+Because some audio frequencies are dampened more than others as they
+travel through the air to the recording microphone, a static threshold
+like the one used in Section \ref{subsec:extract-dominant-freqs} fails
+to capture all the dominant frequencies that compose the audible
+signal. For example, Figure \ref{fig:threshold-miss} shows how the 85\%
+threshold from Section \ref{subsec:extract-dominant-freqs} misses five
+of the six signal peaks in the realistic audio.
 
 \begin{figure}[h]
     \centering
@@ -597,9 +829,16 @@ For example, Figure \ref{fig:threshold-miss} shows how the 85\% threshold from S
     \label{fig:threshold-miss}
 \end{figure}
 
-Furthermore, the natural background noise can also cause false positives during the moments between moves while the signal is weaker as a result of changing from one state to the next.
-For example, Figure \ref{fig:threshold-false-positives} shows a moment between face turns when the audio signal is nearly non-existent, and the background noise can falsely register as important peak frequencies for centerpiece state detection.
-In this case, between 1000Hz and 2000Hz alone there are six different points where the background noise reaches the 85\% threshold compared to the three centerpieces who state gets transmitted within that same band.
+Furthermore, the natural background noise can also cause false
+positives during the moments between moves while the signal is weaker
+as a result of changing from one state to the next. For example, Figure
+\ref{fig:threshold-false-positives} shows a moment between face turns
+when the audio signal is nearly non-existent, and the background noise
+can falsely register as important peak frequencies for centerpiece
+state detection. In this case, between 1000Hz and 2000Hz alone there
+are six different points where the background noise reaches the 85\%
+threshold compared to the three centerpieces who state gets transmitted
+within that same band.
 
 \begin{figure}[h]
     \centering
@@ -609,12 +848,24 @@ In this case, between 1000Hz and 2000Hz alone there are six different points whe
 \end{figure}
 
 \newpage
-Resolving these issues starts by noticing that the power of each peak frequency bearing the audio signal is generally much higher than the power of all other component frequencies.
-As such, basing the threshold at a power equal to one standard deviation of the power of the component frequencies of a specific time step generally captures all the peak frequencies while still excluding the underlying noise of the cube/environment.
-Additionally, the use of a hard minimum value for the threshold helps reduce the number of false positives during the gaps in the signal between face turns.
 
-These two changes are encoded in an updated version of the \code{compute\_threshold} function first defined in Section \ref{subsec:extract-dominant-freqs}.
-This new version contains two new parameters: \code{stdv\_pct}, which can be used to adjust the threshold to some multiple of the standard deviation for testing purposes, and \code{min\_thresh} which is the "hard minimum value" discussed in the previous paragraph.
+Resolving these issues starts by noticing that the power of each peak
+frequency bearing the audio signal is generally much higher than the
+power of all other component frequencies. As such, basing the threshold
+at a power equal to one standard deviation of the power of the
+component frequencies of a specific time step generally captures all
+the peak frequencies while still excluding the underlying noise of the
+cube/environment. Additionally, the use of a hard minimum value for the
+threshold helps reduce the number of false positives during the gaps in
+the signal between face turns.
+
+These two changes are encoded in an updated version of the
+\code{compute\_threshold} function first defined in Section
+\ref{subsec:extract-dominant-freqs}. This new version contains two new
+parameters: \code{stdv\_pct}, which can be used to adjust the threshold
+to some multiple of the standard deviation for testing purposes, and
+\code{min\_thresh} which is the "hard minimum value" discussed in the
+previous paragraph.
 
 \begin{figure}[h]
 \caption{Updated version of threshold computation in Figure \ref{fig:code-compute-threshold}}
@@ -625,7 +876,11 @@ def compute_threshold(values: list, stdv_pct: float=1, min_thresh: int=50):
 \end{lstlisting}
 \end{figure}
 
-An example of the thresholds yielded by this new computation is shown in Figure \ref{fig:threshold-refined}, where the green line representing the threshold successfully captures all six peak frequencies of the audio signal while simultaneously staying just out of reach from the frequencies of the background noise.
+An example of the thresholds yielded by this new computation is shown
+in Figure \ref{fig:threshold-refined}, where the green line
+representing the threshold successfully captures all six peak
+frequencies of the audio signal while simultaneously staying just out
+of reach from the frequencies of the background noise.
 
 \begin{figure}[h]
     \centering
@@ -637,12 +892,22 @@ An example of the thresholds yielded by this new computation is shown in Figure 
 \newpage
 \subsection{Filtering through Similar Peak Frequencies}
 \label{subsec:filtering-similar-peak-frequencies}
-While the new threshold calculation does properly capture all the peak frequencies, it also captures more samples than just the six tips of each peak. 
-These extra samples can cause confusion when trying to extract each centerpiece's state if they correspond to different states for the same centerpiece.
-That said, as long as the power of each frequency is also saved, then any disagreements about a specific centerpiece's state can be resolved by accepting the one with the most intense frequency as the actual state.
 
-In code, this is achieved by adding a temporary dictionary to the \code{get\_state\_by\_freqs} method defined in Section \ref{subsec:translating-freqs-to-state} to track the strongest frequency associated with each face.
-Then, while iterating through the captured peak frequencies, only the strongest one for each face is used to determine the active centerpiece state at that time step.
+While the new threshold calculation does properly capture all the peak
+frequencies, it also captures more samples than just the six tips of
+each peak. These extra samples can cause confusion when trying to
+extract each centerpiece's state if they correspond to different states
+for the same centerpiece. That said, as long as the power of each
+frequency is also saved, then any disagreements about a specific
+centerpiece's state can be resolved by accepting the one with the most
+intense frequency as the actual state.
+
+In code, this is achieved by adding a temporary dictionary to the
+\code{get\_state\_by\_freqs} method defined in Section
+\ref{subsec:translating-freqs-to-state} to track the strongest
+frequency associated with each face. Then, while iterating through the
+captured peak frequencies, only the strongest one for each face is used
+to determine the active centerpiece state at that time step.
 
 \begin{figure}[h]
 \caption{Updated version of state extraction in Figure \ref{fig:code-extract-important-freqs}}
@@ -661,8 +926,10 @@ def get_state_from_freqs(important_freqs: list) -> dict:
 \end{lstlisting}
 \end{figure}
 
-Using this new version of \code{get\_state\_by\_freqs} works just like it did in Figure \ref{fig:code-get-state-from-freqs-demo}.
-Here the extracted state is the one encoded by the frequencies depicted in Figure \ref{fig:threshold-refined}.
+Using this new version of \code{get\_state\_by\_freqs} works just like
+it did in Figure \ref{fig:code-get-state-from-freqs-demo}. Here the
+extracted state is the one encoded by the frequencies depicted in
+Figure \ref{fig:threshold-refined}.
 
 \begin{figure}[h]
 \caption{Example: Refined conversion of peak frequencies to states}
@@ -689,19 +956,35 @@ print(detected_state)
 \newpage
 \subsection{Ignoring Noise when Extracting Move Sequences}
 \label{subsec:ignoring-noise-when-extracting-move-sequences}
-However, despite these noise filtering measures, the background noise occasionally causes the detection of an incorrect centerpiece state.
-Since the approach in Section \ref{subsec:extract-moves} registers an applied face turn for \emph{any} detected change in a centerpiece's state, \emph{any} mis-detection would incorrectly register a face turn that never happened.
 
-Fortunately, this issue can be mitigated by requiring that the state change persists over several time steps instead of blindly accepting any detected change in a centerpiece's state as a new face turn.
+However, despite these noise filtering measures, the background noise
+occasionally causes the detection of an incorrect centerpiece state.
+Since the approach in Section \ref{subsec:extract-moves} registers an
+applied face turn for \emph{any} detected change in a centerpiece's
+state, \emph{any} mis-detection would incorrectly register a face turn
+that never happened.
 
-This is implemented by adding a sliding window to the \code{detect\_moves} function first created in Section \ref{subsec:extract-moves}.
-The window implementation starts with a new \code{window\_size} function parameter to control the number of consecutive time steps over which a state change has to persist before it is recorded as a move applied to the cube.
-Within the function, two new dictionaries are created to serve as a "staging area" for state changes: one to stage the new state and the second to record the index of the time step where the state first changed.
-As the function iterates through each time step, it updates these staging dictionaries each time a new state is detected.
-Then, it checks to see if the current index of iteration is \code{window\_size} steps after the last reported state change.
-If so, the current state is updated to the value of the staged state, the change is recorded as a new move, and the window counter gets reset.
-Otherwise, the iteration continues until a new state is detected or the \code{window\_size} is reached.
-The full code for this is shown in Figure \ref{fig:code-detect-moves-new}.
+Fortunately, this issue can be mitigated by requiring that the state
+change persists over several time steps instead of blindly accepting
+any detected change in a centerpiece's state as a new face turn.
+
+This is implemented by adding a sliding window to the
+\code{detect\_moves} function first created in Section
+\ref{subsec:extract-moves}. The window implementation starts with a new
+\code{window\_size} function parameter to control the number of
+consecutive time steps over which a state change has to persist before
+it is recorded as a move applied to the cube. Within the function, two
+new dictionaries are created to serve as a "staging area" for state
+changes: one to stage the new state and the second to record the index
+of the time step where the state first changed. As the function
+iterates through each time step, it updates these staging dictionaries
+each time a new state is detected. Then, it checks to see if the
+current index of iteration is \code{window\_size} steps after the last
+reported state change. If so, the current state is updated to the value
+of the staged state, the change is recorded as a new move, and the
+window counter gets reset. Otherwise, the iteration continues until a
+new state is detected or the \code{window\_size} is reached. The full
+code for this is shown in Figure \ref{fig:code-detect-moves-new}.
 
 
 \begin{figure}[h]
@@ -737,7 +1020,10 @@ def detect_moves(state_over_time, window_size=8):                 # Edit
 \end{lstlisting}
 \end{figure}
 
-And to validate that these changes work as expected, Figure \ref{fig:code-detect-moves-new-demo} runs the realistic audio through this new \code{detect\_moves} function and compares the returned move sequence with the one originally transmitted in the audio.
+And to validate that these changes work as expected, Figure
+\ref{fig:code-detect-moves-new-demo} runs the realistic audio through
+this new \code{detect\_moves} function and compares the returned move
+sequence with the one originally transmitted in the audio.
 
 \begin{figure}[h]
 \caption{Example: Refined move sequence extraction}
@@ -761,16 +1047,39 @@ print(f"Matches demo_alg? {demo_alg == pretty_moves}")
 \end{subfigure}
 \end{figure}
 
-And once again, the detected move sequence perfectly matches the transmitted signal despite both the reduced strength of the synthetic audio after being recorded through the air and the presence of the added noise of solving a speedcube, a result which further validates this approach as a viable proof-of-concept for tracking the moves of a Rubik's Cube using sound.
+And once again, the detected move sequence perfectly matches the
+transmitted signal despite both the reduced strength of the synthetic
+audio after being recorded through the air and the presence of the
+added noise of solving a speedcube, a result which further validates
+this approach as a viable proof-of-concept for tracking the moves of a
+Rubik's Cube using sound.
 
 \subsection{Optimizing Algorithm Parameters}
 \label{subsec:optimizing-params}
-Significant testing went into determining the best default values for each of the three new function parameters \code{stdv\_pct} (Section \ref{subsec:fine-tuning-threshold}), \code{min\_thresh} (Section \ref{subsec:fine-tuning-threshold}), and \code{window\_size} (Section \ref{subsec:ignoring-noise-when-extracting-move-sequences}).
-While each cube responded differently to various combinations of settings, this testing discovered multiple combinations for each cube that would yield a perfect extraction of the original move sequence.
-A detailed exploration of this testing and its findings is discussed in Chapter \ref{Chapter7}.
+
+Significant testing went into determining the best default values for
+each of the three new function parameters \code{stdv\_pct} (Section
+\ref{subsec:fine-tuning-threshold}), \code{min\_thresh} (Section
+\ref{subsec:fine-tuning-threshold}), and \code{window\_size} (Section
+\ref{subsec:ignoring-noise-when-extracting-move-sequences}). While each
+cube responded differently to various combinations of settings, this
+testing discovered multiple combinations for each cube that would yield
+a perfect extraction of the original move sequence. A detailed
+exploration of this testing and its findings is discussed in Chapter
+\ref{Chapter7}.
 
 \section{Summary}
-In summary, this chapter demonstrated a proof of concept for a sound analysis algorithm that could detect the face turns of a speedcube equipped with the proper transmitter (the details of which are explored in Chapter \ref{Chapter6}).
-This proof of concept algorithm works by computing the spectrogram of the transmitted audio, extracting the most intense frequencies from each time step, converting those dominant frequencies to centerpiece states at that time step, then iterating through that list of states over time to detect changes caused by face turns.
-Several noise mitigation measures were employed to help mitigate the impact of loud cubes and other background tones.
-Ultimately, this algorithm design successfully decoded both a purely synthetic audio signal and a realistic audio signal created by re-recording the synthetic audio while solving a speedcube.
+
+In summary, this chapter demonstrated a proof of concept for a sound
+analysis algorithm that could detect the face turns of a speedcube
+equipped with the proper transmitter (the details of which are explored
+in Chapter \ref{Chapter6}). This proof of concept algorithm works by
+computing the spectrogram of the transmitted audio, extracting the most
+intense frequencies from each time step, converting those dominant
+frequencies to centerpiece states at that time step, then iterating
+through that list of states over time to detect changes caused by face
+turns. Several noise mitigation measures were employed to help mitigate
+the impact of loud cubes and other background tones. Ultimately, this
+algorithm design successfully decoded both a purely synthetic audio
+signal and a realistic audio signal created by re-recording the
+synthetic audio while solving a speedcube.

@@ -5,24 +5,47 @@
 
 
 \section{Introduction}
-The transmitter for the sound-based move tracking protocol is in charge of creating the tones representing each centerpiece's current state, and updating those tones each time a centerpiece changes state.
 
-This chapter will detail a proof-of-concept design for a printed circuit board (PCB) containing only nine discrete components capable of generating all the tones required for encoding one centerpiece's state.
+The transmitter for the sound-based move tracking protocol is in charge
+of creating the tones representing each centerpiece's current state,
+and updating those tones each time a centerpiece changes state.
 
-This chapter assumes that the reader has a knowledge of basic circuit components like resistors and capacitors.
+This chapter will detail a proof-of-concept design for a printed
+circuit board (PCB) containing only nine discrete components capable of
+generating all the tones required for encoding one centerpiece's state.
+
+This chapter assumes that the reader has a knowledge of basic circuit
+components like resistors and capacitors.
 
 TODO add section references (once the rest of the chapter is complete)
 
 \section{Requirements}
 \label{sec:transmitter-requirements}
-This section will detail the constraints within which the transmitter will be required to operate. These constraints include the physical size of the transmitter (Section \ref{subsec:prospects-of-miniaturization}), the precision of tone generation (Section \ref{subsec:precision-of-tone-generation}), the reliability of the transmitter in changing tones to reflect a face turn (Section \ref{subsec:responsiveness-to-face-turns}), and the intensity of output audio that the transmitter can produce (Section \ref{subsec:transmitter-signal-to-noise-ratio}).
+
+This section will detail the constraints within which the transmitter
+will be required to operate. These constraints include the physical
+size of the transmitter (Section
+\ref{subsec:prospects-of-miniaturization}), the precision of tone
+generation (Section \ref{subsec:precision-of-tone-generation}), the
+reliability of the transmitter in changing tones to reflect a face turn
+(Section \ref{subsec:responsiveness-to-face-turns}), and the intensity
+of output audio that the transmitter can produce (Section
+\ref{subsec:transmitter-signal-to-noise-ratio}).
 
 \subsection{Prospects of Miniaturization}
 \label{subsec:prospects-of-miniaturization}
-The transmitter must be both removable and small enough to fit in the center cap of each face of a speedcube.
-This requirement stems from two sources.
-First, in contrast to all existing smartcubes, most non-smartcubes have small, solid cores (Figure \ref{fig:356-core-closed}) that provide no extra space for the inclusion of any electronics, but do have a small amount of open space within their center cubies (Figure \ref{fig:356-core-open}).
-Second, the use of a cube with non-removable, embedded electronics violates the WCA competition regulation 2i \cite{wca-regulations} (See also Section \ref{subsec:competition-regulations}).
+
+The transmitter must be both removable and small enough to fit in the
+center cap of each face of a speedcube. This requirement stems from two
+sources. First, in contrast to all existing smartcubes, most
+non-smartcubes have small, solid cores (Figure
+\ref{fig:356-core-closed}) that provide no extra space for the
+inclusion of any electronics, but do have a small amount of open space
+within their center cubies (Figure \ref{fig:356-core-open}). Second,
+the use of a cube with non-removable, embedded electronics violates the
+WCA competition regulation 2i \cite{wca-regulations} (See also Section
+\ref{subsec:competition-regulations}).
+
 \begin{figure}[h]
     \centering
     \caption{Internal pieces of a standard speedcube (Gans 356)}
@@ -43,37 +66,73 @@ Second, the use of a cube with non-removable, embedded electronics violates the 
 
 \subsection{Precision of Tone Generation}
 \label{subsec:precision-of-tone-generation}
-While the receiver specified in Chapter \ref{Chapter5} supports custom state to frequency mappings, it expects that the frequency corresponding to each centerpiece's state stays constant throughout the entire audio recording.
-As such, the chosen transmitter design can encode centerpiece states with any frequency (assuming the chosen frequencies work within the constraints specified in Section \ref{sec:protocol-requirements}), but it must produce its chosen frequencies with high precision.
+
+While the receiver specified in Chapter \ref{Chapter5} supports custom
+state to frequency mappings, it expects that the frequency
+corresponding to each centerpiece's state stays constant throughout the
+entire audio recording. As such, the chosen transmitter design can
+encode centerpiece states with any frequency (assuming the chosen
+frequencies work within the constraints specified in Section
+\ref{sec:protocol-requirements}), but it must produce its chosen
+frequencies with high precision.
 
 \subsection{Responsiveness to Face Turns}
 \label{subsec:responsiveness-to-face-turns}
-The chosen transmitter design must respond to an applied face turn by changing the currently transmitted audio frequency to the frequency corresponding to the new centerpiece state.
-Since top speedcubers can reach a burst turn speed of 20 TPS (see Section \ref{sec:alternatives}), this means this frequency change must complete within 50ms.
+
+The chosen transmitter design must respond to an applied face turn by
+changing the currently transmitted audio frequency to the frequency
+corresponding to the new centerpiece state. Since top speedcubers can
+reach a burst turn speed of 20 TPS (see Section
+\ref{sec:alternatives}), this means this frequency change must complete
+within 50ms.
 
 \subsection{Signal-to-Noise Ratio}
 \label{subsec:transmitter-signal-to-noise-ratio}
-The transmitter must create tones loud enough to be easily distinguished from ambient noise, including the sound of the Rubik's Cube's own turns.
-In light of the above requirement for the transmitter to fit within a center cubie (\ref{subsec:prospects-of-miniaturization}), this requirement will also require the transmitter design to consider how to overcome any audio dampening caused by such an enclosure.
+
+The transmitter must create tones loud enough to be easily
+distinguished from ambient noise, including the sound of the Rubik's
+Cube's own turns. In light of the above requirement for the transmitter
+to fit within a center cubie
+(\ref{subsec:prospects-of-miniaturization}), this requirement will also
+require the transmitter design to consider how to overcome any audio
+dampening caused by such an enclosure.
 
 
 \newpage
 \section{Design}
 \label{sec:transmitter-design}
-Given the above constrains, this section will detail a design for a printed circuit board capable of precisely generating four distinct tones.
+
+Given the above constrains, this section will detail a design for a
+printed circuit board capable of precisely generating four distinct
+tones.
 
 \subsection{The 555 Timer}
 \label{sec:the-555-timer}
-The core component in this PCB design is a 555 timer, which is a computer chip that facilitates the generation of many types of voltage frequencies in a circuit.
 
-For this transmitter, the 555 timer will be configured to output a square wave voltage signal with a 50\% duty cycle (i.e. "Astable Operation") \cite{icm7555}.
-This means the voltage on the output pin will alternate between low and high, spending equal amounts of time in each state.
+The core component in this PCB design is a 555 timer, which is a
+computer chip that facilitates the generation of many types of voltage
+frequencies in a circuit.
 
-The attentive reader will notice that the square wave signal proposed here differs from the sine wave used to create the synthetic audio in Figure \ref{fig:code-generate-alg-audio}.
-Valid concerns may even be raised about the fact that a square wave is actually a composite of a fundamental sine wave and infinitely many harmonics \cite{harmonics}.
-However, since the nearest harmonic in a square wave with a 50\% duty cycle oscillates at a frequency three times as fast as the fundamental \cite{square-waves}, then choosing a fundamental frequency of at least 6.67kHz places the nearest harmonics beyond the range of frequencies measurable by a typical smartphone or laptop microphone (see Section \ref{subsec:frequency-response-range}).
+For this transmitter, the 555 timer will be configured to output a
+square wave voltage signal with a 50\% duty cycle (i.e. "Astable
+Operation") \cite{icm7555}. This means the voltage on the output pin
+will alternate between low and high, spending equal amounts of time in
+each state.
 
-The standard schematic for creating this type of voltage signal is depicted in Figure \ref{fig:555_astable}.
+The attentive reader will notice that the square wave signal proposed
+here differs from the sine wave used to create the synthetic audio in
+Figure \ref{fig:code-generate-alg-audio}. Valid concerns may even be
+raised about the fact that a square wave is actually a composite of a
+fundamental sine wave and infinitely many harmonics \cite{harmonics}.
+However, since the nearest harmonic in a square wave with a 50\% duty
+cycle oscillates at a frequency three times as fast as the fundamental
+\cite{square-waves}, then choosing a fundamental frequency of at least
+6.67kHz places the nearest harmonics beyond the range of frequencies
+measurable by a typical smartphone or laptop microphone (see Section
+\ref{subsec:frequency-response-range}).
+
+The standard schematic for creating this type of voltage signal is
+depicted in Figure \ref{fig:555_astable}.
 
 \begin{figure}[h]
     \centering
@@ -82,16 +141,29 @@ The standard schematic for creating this type of voltage signal is depicted in F
     \includegraphics[width=0.75\linewidth]{Figures/6 PCB Design/555_astable.png}
 \end{figure}
 
-The two key components are the resistor \code{R} and the capacitor \code{C} whose respective resistance and capacitance control the output frequency \code{f}  via the relation shown in Equation \ref{eq:555-freq} \cite{icm7555}:
+The two key components are the resistor \code{R} and the capacitor
+\code{C} whose respective resistance and capacitance control the output
+frequency \code{f} via the relation shown in Equation \ref{eq:555-freq}
+\cite{icm7555}:
+
 \begin{equation}\label{eq:555-freq}
     f = \frac{1}{1.4 R C}
 \end{equation}
 
 \subsection{Creating Audio}
-The 555 timer's varying voltage output can be easily converted to audible sound  by attaching a voltage controlled speaker to the output wire coming from pin 3 in Figure \ref{fig:555_astable}.
-However, this will only produce one continuous tone, and each centerpiece will need to be able to switch between four distinct tones.
-As such, the resistor \code{R} will need to be replaced with four separate resistors (labeled \code{R1}, \code{R2}, \code{R3}, \code{R4} in Figure \ref{fig:555_astable_modded}) and a switch.
-The switch will be connected to the cube so that a 90$^\circ$ rotation will change which resistor is in series with the circuit, thus changing the output audio frequency of the speaker.
+
+The 555 timer's varying voltage output can be easily converted to
+audible sound by attaching a voltage controlled speaker to the output
+wire coming from pin 3 in Figure \ref{fig:555_astable}. However, this
+will only produce one continuous tone, and each centerpiece will need
+to be able to switch between four distinct tones. As such, the resistor
+\code{R} will need to be replaced with four separate resistors (labeled
+\code{R1}, \code{R2}, \code{R3}, \code{R4} in Figure
+\ref{fig:555_astable_modded}) and a switch. The switch will be
+connected to the cube so that a 90$^\circ$ rotation will change which
+resistor is in series with the circuit, thus changing the output audio
+frequency of the speaker.
+
 \begin{figure}[h]
     \centering
     \caption{Centerpiece State Transmitter Circuit}
@@ -99,21 +171,42 @@ The switch will be connected to the cube so that a 90$^\circ$ rotation will chan
     \includegraphics[width=\linewidth]{Figures/6 PCB Design/555_astable_modded.png}
 \end{figure}
 
-Alternatively, it is mathematically valid to instead switch between four different capacitors of different capacitance.
-However, for the reasons described in Section \ref{subsubsec:freq-selection}, opting to switch between resistors proved more practical.
+Alternatively, it is mathematically valid to instead switch between
+four different capacitors of different capacitance. However, for the
+reasons described in Section \ref{subsubsec:freq-selection}, opting to
+switch between resistors proved more practical.
 
 \subsubsection{Choosing the values of \code{R} and \code{C}}
 \label{subsubsec:freq-selection}
-There are infinitely many combinations of \code{R} and \code{C} that will produce any single desired output frequency \code{f}; however, the set of resistances and capacitances of commonly produced resistors and capacitors is finite.
-While multiple components can be combined to produce more specific resistances and capacitances, doing so would increase the overall component count for a circuit board that is constrained to a small physical size.
-As such, this proof-of-concept design will focus on producing frequencies attainable with a single capacitor and resistor pair.
 
-Since each centerpiece transmitter needs to produce four distinct frequencies, four separate capacitor-resistor pairs are required. 
-However, since variation in the capacitance \emph{or} resistance produce variation in the output frequency, one of those two options can be held constant to reduce the overall component count.
+There are infinitely many combinations of \code{R} and \code{C} that
+will produce any single desired output frequency \code{f}; however, the
+set of resistances and capacitances of commonly produced resistors and
+capacitors is finite. While multiple components can be combined to
+produce more specific resistances and capacitances, doing so would
+increase the overall component count for a circuit board that is
+constrained to a small physical size. As such, this proof-of-concept
+design will focus on producing frequencies attainable with a single
+capacitor and resistor pair.
 
-To chose which one to hold constant, the output frequencies of all possible pairings of capacitors and resistors from two cheap Amazon kits \cite{amazon-resistors} \cite{amazon-capacitors} were calculated using Equation \ref{eq:555-freq}. 
-The resulting table was then color coded to highlight the usable frequencies in green (6.67kHz to 20kHz)\footnote{6.67kHz is the lower bound derived in Section \ref{sec:the-555-timer} and 20kHz the upper limit of the typical frequency response range discussed in Section \ref{subsec:frequency-response-range}} while leaving all other unusable frequencies in red.
-The result is shown in Figure \ref{fig:freq-selection} with the various resistances shown on the vertical axis and the various capacitances along the horizontal axis.
+Since each centerpiece transmitter needs to produce four distinct
+frequencies, four separate capacitor-resistor pairs are required.
+However, since variation in the capacitance \emph{or} resistance
+produce variation in the output frequency, one of those two options can
+be held constant to reduce the overall component count.
+
+To chose which one to hold constant, the output frequencies of all
+possible pairings of capacitors and resistors from two cheap Amazon
+kits \cite{amazon-resistors} \cite{amazon-capacitors} were calculated
+using Equation \ref{eq:555-freq}. The resulting table was then color
+coded to highlight the usable frequencies in green (6.67kHz to
+20kHz)\footnote{6.67kHz is the lower bound derived in Section
+\ref{sec:the-555-timer} and 20kHz the upper limit of the typical
+frequency response range discussed in Section
+\ref{subsec:frequency-response-range}} while leaving all other unusable
+frequencies in red. The result is shown in Figure
+\ref{fig:freq-selection} with the various resistances shown on the
+vertical axis and the various capacitances along the horizontal axis.
 
 \begin{figure}[h]
     \centering
@@ -122,10 +215,19 @@ The result is shown in Figure \ref{fig:freq-selection} with the various resistan
     \includegraphics[width=\linewidth]{Figures/6 PCB Design/freq_selection.png}
 \end{figure}
 
-A close observation of the resulting sigmoid shape of usable frequencies reveals only one location where there are at least four usable frequencies associated with a fixed resistance (i.e. row of green cells), compared to ten locations where there are at least four usable frequencies associated with a fixed capacitance (i.e. column of green cells).
-As such, the most practical value to hold constant here is the capacitance.
+A close observation of the resulting sigmoid shape of usable
+frequencies reveals only one location where there are at least four
+usable frequencies associated with a fixed resistance (i.e. row of
+green cells), compared to ten locations where there are at least four
+usable frequencies associated with a fixed capacitance (i.e. column of
+green cells). As such, the most practical value to hold constant here
+is the capacitance.
 
-One of the locations with a viable fixed capacitance is shown in Figure \ref{fig:freq-selection-r}. This pairing of a 10nF capacitor with four resistors with respective resistances of 4.7k$\Omega$, 5.1k$\Omega$, 5.6k$\Omega$, and 7.5k$\Omega$ will be used in the prototype created in Section \ref{sec:prototype}. 
+One of the locations with a viable fixed capacitance is shown in Figure
+\ref{fig:freq-selection-r}. This pairing of a 10nF capacitor with four
+resistors with respective resistances of 4.7k$\Omega$, 5.1k$\Omega$,
+5.6k$\Omega$, and 7.5k$\Omega$ will be used in the prototype created in
+Section \ref{sec:prototype}.
 
 \begin{figure}[h]
     \centering
@@ -138,7 +240,14 @@ One of the locations with a viable fixed capacitance is shown in Figure \ref{fig
 \newpage
 \section{Prototyping}
 \label{sec:prototype}
-With the schematic drawn in Figure \ref{fig:555_astable_modded} and the specific values of \code{C}, \code{R1}, \code{R2}, \code{R3}, and \code{R4} determined in Figure \ref{fig:freq-selection-r}, the next step is to wire everything up on a breadboard to create a physical proof-of-concept. Figure \ref{fig:breadboard} shows one such breadboard with all the components labelled, with the exception of the rotary switch which is represented by the vertical green wire on the right side of the board.
+
+With the schematic drawn in Figure \ref{fig:555_astable_modded} and the
+specific values of \code{C}, \code{R1}, \code{R2}, \code{R3}, and
+\code{R4} determined in Figure \ref{fig:freq-selection-r}, the next
+step is to wire everything up on a breadboard to create a physical
+proof-of-concept. Figure \ref{fig:breadboard} shows one such breadboard
+with all the components labelled, except for the rotary switch which is
+represented by the vertical green wire on the right side of the board.
 
 \begin{figure}[h]
     \centering
@@ -155,7 +264,9 @@ TODO detail the process of building a prototype.
 
 
 \section{Miniaturization}
-- highlight the value of so few components for the physical size requirement, e.g. the prospects of A SMD version of the board
+
+- highlight the value of so few components for the physical size
+requirement, e.g. the prospects of A SMD version of the board
 
 - Give a final part count.
 
@@ -166,6 +277,7 @@ TODO detail the process of building a prototype.
 - If possible, create a demo in KiCAD...
 
 \section{Minimizing Sound Obstruction}
+
 TODO Discuss the "tupperware" tests -> design of various center caps.
 
 \section{Summary}
