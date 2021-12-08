@@ -173,11 +173,18 @@ frequency of the speaker.
 
 Alternatively, it is mathematically valid to instead switch between
 four different capacitors of different capacitance. However, for the
-reasons described in Section \ref{subsubsec:freq-selection}, opting to
+reasons described in Section \ref{subsec:freq-selection}, opting to
 switch between resistors proved more practical.
 
-\subsubsection{Choosing the values of \code{R} and \code{C}}
-\label{subsubsec:freq-selection}
+\subsection{Choosing the values of \code{R} and \code{C}}
+\label{subsec:freq-selection}
+
+\begin{sidewaysfigure}
+    \centering
+    \caption{Output Frequencies of Common \code{R} and \code{C} Values}
+    \label{fig:freq-selection}
+    \includegraphics[width=\linewidth]{Figures/6 PCB Design/freq_selection.png}
+\end{sidewaysfigure}
 
 There are infinitely many combinations of \code{R} and \code{C} that
 will produce any single desired output frequency \code{f}; however, the
@@ -208,13 +215,6 @@ frequencies in red. The result is shown in Figure
 \ref{fig:freq-selection} with the various resistances shown on the
 vertical axis and the various capacitances along the horizontal axis.
 
-\begin{figure}[h]
-    \centering
-    \caption{Output Frequencies of Common \code{R} and \code{C} Values}
-    \label{fig:freq-selection}
-    \includegraphics[width=\linewidth]{Figures/6 PCB Design/freq_selection.png}
-\end{figure}
-
 A close observation of the resulting sigmoid shape of usable
 frequencies reveals only one location where there are at least four
 usable frequencies associated with a fixed resistance (i.e. row of
@@ -237,7 +237,6 @@ Section \ref{sec:prototype}.
 \end{figure}
 
 
-\newpage
 \section{Prototyping}
 \label{sec:prototype}
 
@@ -268,7 +267,7 @@ for this thesis document.
 
 \begin{figure}[h]
     \centering
-    \caption{Breadboard Prototype}
+    \caption{Breadboard Spectrogram}
     \label{fig:breadboard-spectrogram}
     % \includegraphics[width=.8\linewidth]{Figures/6 PCB Design/breadboard.png}
 \end{figure}
@@ -288,6 +287,7 @@ requirement, e.g. the prospects of A SMD version of the board
 - If possible, create a demo in KiCAD...
 
 \section{Minimizing Sound Obstruction}
+Section \ref{subsubsec:key-observations-from-the-spectrogram} talks about the noise levels from various speedcubes. Constrast with the noise levels produced here to show validity.
 
 TODO Discuss the "tupperware" tests -> design of various center caps.
 
