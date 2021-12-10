@@ -204,7 +204,7 @@ be held constant to reduce the overall component count.
 
 To chose which one to hold constant, the output frequencies of all
 possible pairings of capacitors and resistors from two cheap Amazon
-kits \cite{amazon-resistors} \cite{amazon-capacitors} were calculated
+kits \cite{amazon-capacitors} \cite{amazon-resistors} were calculated
 using Equation \ref{eq:555-freq}. The resulting table was then color
 coded to highlight the usable frequencies in green (6.67kHz to
 20kHz)\footnote{6.67kHz is the lower bound derived in Section
@@ -272,11 +272,15 @@ for this thesis document.
     % \includegraphics[width=.8\linewidth]{Figures/6 PCB Design/breadboard.png}
 \end{figure}
 
-
+\newpage
 \section{Miniaturization}
 
 - highlight the value of so few components for the physical size
 requirement, e.g. the prospects of A SMD version of the board
+
+- If possible, create a demo in KiCAD...
+- include a picture showing the dimensions of the gans 356 internal
+core. Compare to the demo board in KiCad.
 
 - Give a final part count.
 
@@ -284,7 +288,30 @@ requirement, e.g. the prospects of A SMD version of the board
 
 - Discuss SMD versions
 
-- If possible, create a demo in KiCAD...
+\begin{figure}[h]
+    \centering
+    \caption{Miniaturized Circuit Inside a Custom Gans 356 Centercap}
+    \label{fig:core-circuit}
+    \includegraphics[width=.8\linewidth]{Figures/6 PCB Design/core_labelled.png}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \caption{Placement of Circuit Centercap on a Gans 356 Speedcube}
+    \label{fig:core-placement}
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \caption{Bird's Eye View}
+        \label{fig:core-placement-birds-eye}
+        \includegraphics[width=\linewidth]{Figures/6 PCB Design/core_placement_birds_eye.jpg}
+    \end{subfigure}
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \caption{Isometric View}
+        \label{fig:core-placement-isometric}
+        \includegraphics[width=\linewidth]{Figures/6 PCB Design/core_placement_isometric.jpg}
+    \end{subfigure}
+\end{figure}
 
 \section{Minimizing Sound Obstruction}
 Section \ref{subsubsec:key-observations-from-the-spectrogram} talks about the noise levels from various speedcubes. Constrast with the noise levels produced here to show validity.
