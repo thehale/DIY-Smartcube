@@ -198,9 +198,9 @@ capacitor and resistor pair.
 
 Since each centerpiece transmitter needs to produce four distinct
 frequencies, four separate capacitor-resistor pairs are required.
-However, since variation in the capacitance \emph{or} resistance
-produce variation in the output frequency, one of those two options can
-be held constant to reduce the overall component count.
+However, since the output frequency can be varied by adjustments to
+\emph{either} the capacitance \emph{or} resistance, one of those two
+options can be held constant to reduce the overall component count.
 
 To chose which one to hold constant, the output frequencies of all
 possible pairings of capacitors and resistors from two cheap Amazon
@@ -240,39 +240,33 @@ Section \ref{sec:prototype}.
 \section{Prototyping}
 \label{sec:prototype}
 
-With the schematic drawn in Figure \ref{fig:555_astable_modded} and the
-specific values of \code{C}, \code{R1}, \code{R2}, \code{R3}, and
-\code{R4} determined in Figure \ref{fig:freq-selection-r}, the next
-step is to wire everything up on a breadboard to create a physical
-proof-of-concept. Figure \ref{fig:breadboard} shows one such breadboard
-with all the components labelled, except for the rotary switch which is
-represented by the vertical green wire on the right side of the board.
+The key step to produce a proof-of-concept is to put everything
+together on a breadboard and turn on the power while recording the
+output audio to make sure four distinct tones are produced.
+
+This step begins by gathering all the components from the schematic in
+Figure \ref{fig:555_astable_modded} with the specific values of
+\code{C}, \code{R1}, \code{R2}, \code{R3}, and \code{R4} shown in
+Figure \ref{fig:freq-selection-r}. These components are then placed
+onto a physical breadboard in accordance with the schematic's defined
+layout. Connecting \code{VDD} and \code{GND} to power then causes the
+speaker to produce a tone. With power still connected, the switch can
+be moved to put any other resistor in series to change the resulting
+tone of the speaker.
+
+The result is shown in Figure \ref{fig:breadboard}. The left section of
+the figure shows a spectrogram of the four distinct tones produced by
+moving the green wire (representing the rotary switch) through each of
+the four resistors on the breadboard in the right section of the figure.
 
 \begin{figure}[h]
     \centering
     \caption{Breadboard Prototype}
     \label{fig:breadboard}
-    \includegraphics[width=.8\linewidth]{Figures/6 PCB Design/breadboard.png}
+    \includegraphics[width=\linewidth]{Figures/6 PCB Design/breadboard_spectrogram.png}
 \end{figure}
 
-Connecting \code{VDD} and \code{GND} to power then causes the speaker
-to produce a tone. With power still connected, the green wire can be
-moved to put any other resistor in series to change the resulting tone
-of the speaker. An example of the resulting spectrogram is shown in
-Figure \ref{fig:breadboard-spectrogram}.
 
-TODO - create new images of the spectrogram resulting from using this
-board. My old ones aren't up to the standard of quality I'd like to use
-for this thesis document.
-
-\begin{figure}[h]
-    \centering
-    \caption{Breadboard Spectrogram}
-    \label{fig:breadboard-spectrogram}
-    % \includegraphics[width=.8\linewidth]{Figures/6 PCB Design/breadboard.png}
-\end{figure}
-
-\newpage
 \section{Miniaturization}
 
 - highlight the value of so few components for the physical size
@@ -290,26 +284,25 @@ core. Compare to the demo board in KiCad.
 
 \begin{figure}[h]
     \centering
-    \caption{Miniaturized Circuit Inside a Custom Gans 356 Centercap}
-    \label{fig:core-circuit}
-    \includegraphics[width=.8\linewidth]{Figures/6 PCB Design/core_labelled.png}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \caption{Placement of Circuit Centercap on a Gans 356 Speedcube}
+    \caption{Transmitter Circuit Inside a Custom Gans 356 Centercap}
     \label{fig:core-placement}
-    \begin{subfigure}{.45\textwidth}
+    \begin{subfigure}{.30\textwidth}
+        \centering
+        \caption{Internal View}
+        \label{fig:core-circuit}
+        \includegraphics[width=\linewidth]{Figures/6 PCB Design/core_labelled.png}
+    \end{subfigure}
+    \begin{subfigure}{.30\textwidth}
         \centering
         \caption{Bird's Eye View}
         \label{fig:core-placement-birds-eye}
-        \includegraphics[width=\linewidth]{Figures/6 PCB Design/core_placement_birds_eye.jpg}
+        \includegraphics[width=\linewidth]{Figures/6 PCB Design/core_placement_birds_eye_square.jpg}
     \end{subfigure}
-    \begin{subfigure}{.45\textwidth}
+    \begin{subfigure}{.30\textwidth}
         \centering
         \caption{Isometric View}
         \label{fig:core-placement-isometric}
-        \includegraphics[width=\linewidth]{Figures/6 PCB Design/core_placement_isometric.jpg}
+        \includegraphics[width=\linewidth]{Figures/6 PCB Design/core_placement_isometric_square.jpg}
     \end{subfigure}
 \end{figure}
 
