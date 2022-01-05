@@ -15,9 +15,15 @@ circuit board (PCB) containing only nine discrete components capable of
 generating all the tones required for encoding one centerpiece's state.
 
 This chapter assumes that the reader has a knowledge of basic circuit
-components like resistors and capacitors.
+components like resistors and capacitors. It begins with a
+discussion of the requirements/constraints for the physical transmitter
+(Section \ref{sec:transmitter-requirements}) and an experiment
+analyzing the effects of various sound obstructions on signal strength
+(Section \ref{sec:minimizing-sound-obstruction}). From there a formal
+design schematic for the transmitter will be presented (Section
+\ref{sec:transmitter-design}) and prototyped (Sections
+\ref{sec:prototype} and \ref{sec:miniaturization})
 
-TODO add section references (once the rest of the chapter is complete)
 
 \section{Requirements}
 \label{sec:transmitter-requirements}
@@ -98,7 +104,25 @@ require the transmitter design to consider how to overcome any audio
 dampening caused by such an enclosure.
 
 
-\newpage
+\section{Minimizing Sound Obstruction}
+\label{sec:minimizing-sound-obstruction}
+
+Section \ref{subsubsec:key-observations-from-the-spectrogram} talks
+about the noise levels from various speedcubes. Constrast with the
+noise levels produced here to show validity.
+
+TODO Discuss the "tupperware" tests -> design of various center caps.
+
+Voluptate labore quis aliqua laboris nulla reprehenderit ea incididunt
+fugiat. Tempor ea ipsum in quis incididunt quis dolor pariatur ad
+cillum irure ad aliquip aliqua. Mollit proident officia id excepteur.
+
+Ut officia sit et consectetur reprehenderit nostrud consectetur. Nulla
+culpa magna consequat elit excepteur. Nisi nisi ipsum reprehenderit
+nisi commodo sit pariatur labore cupidatat cillum ullamco ut mollit.
+Nostrud ipsum anim commodo ipsum sunt id consequat. Ex ut ullamco ea
+exercitation est ad commodo est.
+
 \section{Design}
 \label{sec:transmitter-design}
 
@@ -268,19 +292,20 @@ the four resistors on the breadboard in the right section of the figure.
 
 
 \section{Miniaturization}
+\label{sec:miniaturization}
 
-- highlight the value of so few components for the physical size
-requirement, e.g. the prospects of A SMD version of the board
+To further prove the validity of the proof-of-concept finalized in
+Section \ref{sec:prototype}, this section will demonstrate that all the
+required components can fit within the limited 16mm$^2$ of space inside
+a single center cap of a Gans 356 Speedcube.
 
-- If possible, create a demo in KiCAD...
-- include a picture showing the dimensions of the gans 356 internal
-core. Compare to the demo board in KiCad.
-
-- Give a final part count.
-
-- Talk about sizes for the components of the pcb.
-
-- Discuss SMD versions
+Meeting this size constraint is best achieved by swapping out the large
+through-hole resistors, capacitors, and 555 timer used in the prototype
+for smaller surface mount (SMD) components. Additionally, the large
+black buzzer can be swapped out for a much thinner piezo buzzer that
+can lay on flat on top of a custom-designed replacement centercap.
+Finally, the DC power supply can be changed out for a button-cell
+battery oriented vertically. An example of the final result could look like Figure \ref{fig:core-placement}.
 
 \begin{figure}[h]
     \centering
@@ -306,9 +331,7 @@ core. Compare to the demo board in KiCad.
     \end{subfigure}
 \end{figure}
 
-\section{Minimizing Sound Obstruction}
-Section \ref{subsubsec:key-observations-from-the-spectrogram} talks about the noise levels from various speedcubes. Constrast with the noise levels produced here to show validity.
-
-TODO Discuss the "tupperware" tests -> design of various center caps.
 
 \section{Summary}
+
+TODO Write this summary
