@@ -11,64 +11,34 @@ of creating the tones representing each centerpiece's current state,
 and updating those tones each time a centerpiece changes state.
 
 This chapter will detail a proof-of-concept design for a printed
-circuit board (PCB) containing only nine discrete components capable of
-generating all the tones required for encoding one centerpiece's state.
+circuit board (PCB) capable of generating all the tones required for
+encoding one centerpiece's state.
 
 This chapter assumes that the reader has a knowledge of basic circuit
-components like resistors and capacitors. It begins with a
-discussion of the requirements/constraints for the physical transmitter
-(Section \ref{sec:transmitter-requirements}) and an experiment
-analyzing the effects of various sound obstructions on signal strength
-(Section \ref{sec:minimizing-sound-obstruction}). From there a formal
-design schematic for the transmitter will be presented (Section
+components like resistors and capacitors. It begins with a discussion
+of the requirements/constraints for the physical transmitter (Section
+\ref{sec:transmitter-requirements}). From there a formal design
+schematic for the transmitter will be presented (Section
 \ref{sec:transmitter-design}) and prototyped (Sections
-\ref{sec:prototype} and \ref{sec:miniaturization})
+\ref{sec:prototype}) followed by an analysis of the effects of the
+centercap enclosure on signal strength (Section
+\ref{sec:minimizing-sound-obstruction}). Finally, all the required
+components for the transmitter will be laid out inside a single
+speedcube centercap to demonstrate the viability of the presented
+design (Section \ref{sec:miniaturization}).
 
 
 \section{Requirements}
 \label{sec:transmitter-requirements}
 
 This section will detail the constraints within which the transmitter
-will be required to operate. These constraints include the physical
-size of the transmitter (Section
-\ref{subsec:prospects-of-miniaturization}), the precision of tone
-generation (Section \ref{subsec:precision-of-tone-generation}), the
-reliability of the transmitter in changing tones to reflect a face turn
-(Section \ref{subsec:responsiveness-to-face-turns}), and the intensity
+will be required to operate. These constraints include the precision of
+tone generation (Section \ref{subsec:precision-of-tone-generation}),
+the reliability of the transmitter in changing tones to reflect a face
+turn (Section \ref{subsec:responsiveness-to-face-turns}), the intensity
 of output audio that the transmitter can produce (Section
-\ref{subsec:transmitter-signal-to-noise-ratio}).
-
-\subsection{Prospects of Miniaturization}
-\label{subsec:prospects-of-miniaturization}
-
-The transmitter must be both removable and small enough to fit in the
-center cap of each face of a speedcube. This requirement stems from two
-sources. First, in contrast to all existing smartcubes, most
-non-smartcubes have small, solid cores (Figure
-\ref{fig:356-core-closed}) that provide no extra space for the
-inclusion of any electronics, but do have a small amount of open space
-within their center cubies (Figure \ref{fig:356-core-open}). Second,
-the use of a cube with non-removable, embedded electronics violates the
-WCA competition regulation 2i \cite{wca-regulations} (See also Section
-\ref{subsec:competition-regulations}).
-
-\begin{figure}[h]
-    \centering
-    \caption{Internal pieces of a standard speedcube (Gans 356)}
-    \label{fig:356-core}
-    \begin{subfigure}{.45\textwidth}
-        \centering
-        \caption{View of the small, solid plastic core}
-        \label{fig:356-core-closed}
-        \includegraphics[width=\linewidth]{Figures/6 PCB Design/356_core_cropped.jpg}
-    \end{subfigure}
-    \begin{subfigure}{.45\textwidth}
-        \centering
-        \caption{View of the space inside the centerpiece}
-        \label{fig:356-core-open}
-        \includegraphics[width=\linewidth]{Figures/6 PCB Design/356_core_open_cropped.jpg}
-    \end{subfigure}
-\end{figure}
+\ref{subsec:transmitter-signal-to-noise-ratio}), and the physical size
+of the transmitter (Section \ref{subsec:prospects-of-miniaturization}).
 
 \subsection{Precision of Tone Generation}
 \label{subsec:precision-of-tone-generation}
@@ -103,32 +73,47 @@ to fit within a center cubie
 require the transmitter design to consider how to overcome any audio
 dampening caused by such an enclosure.
 
+\subsection{Prospects of Miniaturization}
+\label{subsec:prospects-of-miniaturization}
 
-\section{Minimizing Sound Obstruction}
-\label{sec:minimizing-sound-obstruction}
+The transmitter must be both removable and small enough to fit in the
+center cap of each face of a speedcube. This requirement stems from two
+sources. First, in contrast to all existing smartcubes, most
+non-smartcubes have small, solid cores (Figure
+\ref{fig:356-core-closed}) that provide no extra space for the
+inclusion of any electronics, but do have a small amount of open space
+within their center cubies (Figure \ref{fig:356-core-open}). Second,
+the use of a cube with non-removable, embedded electronics violates the
+WCA competition regulation 2i \cite{wca-regulations} (See also Section
+\ref{subsec:competition-regulations}).
 
-Section \ref{subsubsec:key-observations-from-the-spectrogram} talks
-about the noise levels from various speedcubes. Constrast with the
-noise levels produced here to show validity.
+\begin{figure}[h]
+    \centering
+    \caption{Internal pieces of a standard speedcube (Gans 356)}
+    \label{fig:356-core}
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \caption{View of the small, solid plastic core}
+        \label{fig:356-core-closed}
+        \includegraphics[width=\linewidth]{Figures/6 PCB Design/356_core_cropped.jpg}
+    \end{subfigure}
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \caption{View of the space inside the centerpiece}
+        \label{fig:356-core-open}
+        \includegraphics[width=\linewidth]{Figures/6 PCB Design/356_core_open_cropped.jpg}
+    \end{subfigure}
+\end{figure}
 
-TODO Discuss the "tupperware" tests -> design of various center caps.
 
-Voluptate labore quis aliqua laboris nulla reprehenderit ea incididunt
-fugiat. Tempor ea ipsum in quis incididunt quis dolor pariatur ad
-cillum irure ad aliquip aliqua. Mollit proident officia id excepteur.
-
-Ut officia sit et consectetur reprehenderit nostrud consectetur. Nulla
-culpa magna consequat elit excepteur. Nisi nisi ipsum reprehenderit
-nisi commodo sit pariatur labore cupidatat cillum ullamco ut mollit.
-Nostrud ipsum anim commodo ipsum sunt id consequat. Ex ut ullamco ea
-exercitation est ad commodo est.
-
+\newpage
 \section{Design}
 \label{sec:transmitter-design}
 
 Given the above constrains, this section will detail a design for a
 printed circuit board capable of precisely generating four distinct
-tones.
+tones (Requirements \ref{subsec:precision-of-tone-generation} and
+\ref{subsec:responsiveness-to-face-turns})
 
 \subsection{The 555 Timer}
 \label{sec:the-555-timer}
@@ -257,16 +242,18 @@ Section \ref{sec:prototype}.
     \centering
     \caption{Output Frequencies of Common \code{R} and \code{C} Values}
     \label{fig:freq-selection-r}
-    \includegraphics[width=0.8\linewidth]{Figures/6 PCB Design/freq_selection_r.png}
+    \includegraphics[width=0.75\linewidth]{Figures/6 PCB Design/freq_selection_r.png}
 \end{figure}
 
 
 \section{Prototyping}
 \label{sec:prototype}
 
-The key step to produce a proof-of-concept is to put everything
-together on a breadboard and turn on the power while recording the
-output audio to make sure four distinct tones are produced.
+The key step to produce a proof-of-concept for Requirements
+\ref{subsec:precision-of-tone-generation} and
+\ref{subsec:responsiveness-to-face-turns} is to put everything together
+on a breadboard and turn on the power while recording the output audio
+to make sure four distinct tones are produced.
 
 This step begins by gathering all the components from the schematic in
 Figure \ref{fig:555_astable_modded} with the specific values of
@@ -283,7 +270,7 @@ the figure shows a spectrogram of the four distinct tones produced by
 moving the green wire (representing the rotary switch) through each of
 the four resistors on the breadboard in the right section of the figure.
 
-\begin{figure}[h]
+\begin{figure}
     \centering
     \caption{Breadboard Prototype}
     \label{fig:breadboard}
@@ -291,13 +278,68 @@ the four resistors on the breadboard in the right section of the figure.
 \end{figure}
 
 
+\section{Minimizing Sound Obstruction}
+\label{sec:minimizing-sound-obstruction}
+
+\begin{figure}
+    \centering
+    \caption{Effects of Various Sound Obstructions on Signal Intensity}
+    \label{fig:obstruction}
+    \includegraphics[width=\linewidth]{Figures/6 PCB Design/obstruction_intensity.png}
+\end{figure}
+
+In preparation for miniaturizing the prototype circuit from Section
+\ref{sec:prototype} to fit inside a speedcube's centercap, an
+experiment was performed to measure the effects of various physical
+barriers on the signal-to-noise ratio of a small speaker against
+background noise created by solving a Gans 356 speedcube (Requirement
+\ref{subsec:transmitter-signal-to-noise-ratio}).
+
+Specifically, three different types of obstructions were placed between
+a speaker similar to the type that would fit inside a speedcube
+centercap and a phone microphone: no obstruction, a piece of masking
+tape over the speaker (representative of a sticker on a speedcube), and
+a full plastic enclosure of the same thickness as a speedcube
+centercap. For each of these obstructions, the source speaker emitted
+eight different tones across the human audible spectrum and the average
+intensity of the signal was measured with the microphone at 10cm
+increments up to a full meter away from the speaker.
+
+Figure \ref{fig:obstruction} shows the resulting signal strength for
+each obstruction type (the top three yellow lines) compared with the
+background noise caused by solving a Gans 356 speedcube (the bottom
+gray line). As expected, the signal strength tapered off for all three
+obstruction types as the microphone moved farther away from the signal,
+and larger obstructions reduced the signal strength more than smaller
+obstructions.
+
+Of most interest are the signal intensities between 10cm and 30cm from
+the microphone since that's the typical distance between a speedcuber's
+cube and his/her smartphone or laptop while practicing at home. By the
+far end of that range, only the completely unobstructed speaker's
+signal stayed above the -30dB limit discussed in Section
+\ref{subsubsec:key-observations-from-the-spectrogram}. As such, it is
+clear that successfully miniaturizing the prototype circuit to fit
+inside of a centercap will also require a custom centercap design with
+space for sound to exit unobstructed.
+
+As a tangential note, the fact that the unobstructed speaker's signal
+strength drops to nearly -40dB at only 100cm away from the speaker
+means that the cube's moves cannot be reliably tracked while the cube
+is at a distance from the receiving microphone. This property may prove
+beneficial for competitive environments as a potential path towards
+allowing automated move tracking during competitive solves without
+incurring the risks of competitors using smart cubes as a way to spy on
+the scrambling process for an unfair advantage.
+
+
 \section{Miniaturization}
 \label{sec:miniaturization}
 
-To further prove the validity of the proof-of-concept finalized in
-Section \ref{sec:prototype}, this section will demonstrate that all the
-required components can fit within the limited 16mm$^2$ of space inside
-a single center cap of a Gans 356 Speedcube.
+Finally, to address Requirement
+\ref{subsec:prospects-of-miniaturization}, this section will
+demonstrate that all the required components can fit within the limited
+16mm$^2$ of space inside a single center cap of a Gans 356 Speedcube.
 
 Meeting this size constraint is best achieved by swapping out the large
 through-hole resistors, capacitors, and 555 timer used in the prototype
@@ -305,7 +347,15 @@ for smaller surface mount (SMD) components. Additionally, the large
 black buzzer can be swapped out for a much thinner piezo buzzer that
 can lay on flat on top of a custom-designed replacement centercap.
 Finally, the DC power supply can be changed out for a button-cell
-battery oriented vertically. An example of the final result could look like Figure \ref{fig:core-placement}.
+battery oriented vertically.
+
+An example of the final result could look like Figure
+\ref{fig:core-placement}. Notice that all required components easily
+fit inside of a custom designed center cap that fits perfectly into a
+Gans 356 speedcube without inhibiting the cube's freedom of rotation.
+Also notice the large hole in the center of the custom centercap
+visible in Figure \ref{fig:core-circuit} that provides an unobstructed
+path for the speaker's signal to exit the center cap.
 
 \begin{figure}[h]
     \centering
@@ -334,4 +384,15 @@ battery oriented vertically. An example of the final result could look like Figu
 
 \section{Summary}
 
-TODO Write this summary
+In summary, this chapter demonstrated a proof of concept for a PCB
+capable of transmitting the current state of a Rubik's Cube via sound
+to the receiver described in Chapter \ref{Chapter5}. This
+proof-of-concept circuit works by using specific capacitors and
+resistors to produce a precise voltage frequency from a 555 timer that
+can be output into the audible spectrum by connecting a speaker. In
+addition to showing a working circuit on a breadboard, this chapter
+also described the results of an experiment showing the need for an
+unobstructed path between the transmitter and the receiver. Finally,
+this chapter showed how all the required components for the transmitter
+could reasonably fit inside a single centercap of a speedcube like the
+Gans 356.
