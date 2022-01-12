@@ -8,19 +8,61 @@ TODO review the core goals outlined in the introduction, and methodically review
 
 TODO a huge portion of this chapter can come from the "Interesting Graphs for my Thesis" document.
 
+\section{Metrics}
+
+This chapter will use four key metrics to measure the
+effectiveness of the design proposed in Chapters \ref{Chapter4},
+\ref{Chapter5}, and \ref{Chapter6}. These metrics are:
+
+\begin{itemize}
+
+    \item \emph{Compatibility with Standard Speedcubes}: How
+    effectively can the design be deployed in a standard, non-smart
+    speedcube without any permanent modifications or reducing the
+    cube's performance? (Section
+    \ref{sec:compatibility-with-standard-speedcubes})
+    
+    \item \emph{Move Tracking Accuracy}: How accurately can the design
+    track the moves performed on the modified speedcube? (Section
+    \ref{sec:move-tracking-accuracy})
+    
+    \item \emph{Move Tracking Granularity}: What other metrics can the
+    each face turn. (Section \ref{sec:move-tracking-granularity})
+    design provide? Of greatest interest is the time spent executing
+    
+    \item \emph{Competition Legality}: To what extent is the design
+    compliant with existing competition regulations? (Section
+    \ref{sec:competition-legality})
+    
+\end{itemize}
+
+Each of these metrics will be discussed and analyzed in detail in the following sections.
 
 \section{Compatibility with Standard Speedcubes}
+\label{sec:compatibility-with-standard-speedcubes}
 
-TODO discuss how well my design meets this requirement from the Introduction
+For the design to be usable it must be able to track the moves of a
+traditional, non-smart speedcube. Since a major goal of this research
+project is to allow speedcubers to practice with the same cube they
+compete with, it is imperative that the proposed design function
+without requiring permanent modifications to the original speedcube.
+For the same reason, the design must also retain the original
+performance of the speedcube as much as possible.
 
-The design must be deployable within a standard (non-smart) speedcube.
-\begin{enumerate} 
-    \item The design must not require permanent modifications to the original speedcube.
-    \item The design must not significantly impact the turn-speed of the original speedcube.
-\end{enumerate}
+As shown in Figure \ref{fig:core-placement}, the proposed PCB
+transmitter can be deployed in a Gans 356 speedcube by simply changing
+out the original centercap for a custom-built one containing the
+transmitter. The modifications to the cube are purely temporary since
+the original cube can be perfectly restored by simply replacing the
+original centercaps.
 
+TODO weigh the new centercap, compare it to the old one, and comment on
+how weight might slow down the turn speed slightly (however note that
+since the weight is located very near the axis of rotation, the moment
+of inertia is relatively small).
 
 \section{Move Tracking Accuracy}
+\label{sec:move-tracking-accuracy}
 
 TODO discuss how well my design meets this requirement from the Introduction
 
@@ -157,15 +199,57 @@ Each cube underwent analysis for 1440 different parameter combinations.
 
 
 \section{Move Tracking Granularity}
+\label{sec:move-tracking-granularity}
 
-TODO discuss how well my design meets this requirement from the Introduction
+While tracking the moves performed on the speedcube constitutes the
+minimum viable functionality for a design, additional features make a
+design a more useful solution to the speedcubing community. Of most
+value is the ability to track the amount of time spent performing each
+face turn; from that single metric many other highly valuable metrics
+can be derived like TPS over time, and time spent completing each stage
+of the solution.
 
-The design must be capable of recording the time spent executing each individual face turn of a Rubik's Cube.
+Though not shown in the pretty printed algorithm from Section
+\ref{subsec:ignoring-noise-when-extracting-move-sequences}, the
+proposed software receiver also records the time stamp at which it
+detected each face turn. By computing the difference between time
+stamps, one can calculate the amount of time spent performing each
+individual face turn. While not implemented in this design, a more
+sophisticated software receiver could provide even more precise
+measurements from the same source data by measuring the amount of time
+between stable signals for each centerpiece state.
+
+TODO consider contrasting with commercial smartcubes that can provide
+additional metrics like cube orientation over time (via a gyroscope)?
+- Or is this a topic for the "Limitations" section in the conclusion?
 
 
 \section{Competition Legality}
+\label{sec:competition-legality}
 
-TODO discuss how well my design meets this requirement from the Introduction
+As discussed in Section \ref{subsec:competition-regulations},
+speedsolving competitors cannot use any electronics or audio equipment
+while solving the cube in competition. Since a major goal of this
+research project is to allow speedcubers to practice with the same cube
+they compete with, a design must either inherently comply with existing
+competition rules against the use of electronics or must result in a
+cube that can be easily modified to regain compliance.
 
-The design must be competition legal, meaning it results in a cube that either does not violate existing competition rules against the use of electronics or can be easily modified to regain compliance.
+While the design proposed in this thesis, certainly does not inherently
+comply with the existing competition regulations since it requires
+embedding electronics into the cube, it does result in a cube that can
+be easily modified to regain compliance. As mentioned in Section
+\ref{sec:compatibility-with-standard-speedcubes}, the only modification
+to the cube is an interchangeable centercap that can be easily removed
+and replaced with the original centercap to produce a perfectly
+competition-legal cube.
+
+However, the sound-based nature of this design opens the door to a
+compromise on the use of smart cubes in competition. As mentioned at
+the end of Section \ref{sec:minimizing-sound-obstruction}, a
+sound-based transmitter only works at a short range and can easily be
+defeated by scrambling cubes several meters away from the competitors
+(especially in a different room), or playing audio at the same
+frequencies as the transmitter. This could provide an avenue in which
+smart cubes could be safely allowed in competitions.
 
