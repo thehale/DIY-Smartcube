@@ -57,10 +57,10 @@ frequencies with high precision.
 
 The chosen transmitter design must respond to an applied face turn by
 changing the currently transmitted audio frequency to the frequency
-corresponding to the new centerpiece state. Since top speedcubers can
-reach a burst turn speed of 20 TPS (see Section
-\ref{sec:alternatives}), this means this frequency change must complete
-within 50ms.
+corresponding to the new centerpiece state. Given top speedcubers'
+burst turn speeds of 20 TPS (see Section \ref{sec:alternatives}) this
+frequency change must complete and stabilize long enough to be
+accurately detected within one twentieth of a second (50ms).
 
 \subsection{Signal-to-Noise Ratio}
 \label{subsec:transmitter-signal-to-noise-ratio}
@@ -320,8 +320,9 @@ far end of that range, only the completely unobstructed speaker's
 signal stayed above the -30dB limit discussed in Section
 \ref{subsubsec:key-observations-from-the-spectrogram}. As such, it is
 clear that successfully miniaturizing the prototype circuit to fit
-inside of a centercap will also require a custom centercap design with
-space for sound to exit unobstructed.
+inside a centercap will require a custom centercap design with space
+for sound to exit unobstructed and/or a speaker significantly louder
+than the ones used in these prototypes.
 
 As a tangential note, the fact that the unobstructed speaker's signal
 strength drops to nearly -40dB at only 100cm away from the speaker
@@ -356,6 +357,13 @@ Gans 356 speedcube without inhibiting the cube's freedom of rotation.
 Also notice the large hole in the center of the custom centercap
 visible in Figure \ref{fig:core-circuit} that provides an unobstructed
 path for the speaker's signal to exit the center cap.
+
+The one required component not shown in Figure \ref{fig:core-placement}
+is the rotary switch required to change the resistor actively in series
+with the circuit. This particular component could be modeled after the
+rotary switches placed on the reverse sides of the PCBs embedded within
+the centercaps of the commerical smartcubes shown in Section
+\ref{sec:commercial-smartcubes}.
 
 \begin{figure}[h]
     \centering
@@ -396,3 +404,12 @@ unobstructed path between the transmitter and the receiver. Finally,
 this chapter showed how all the required components for the transmitter
 could reasonably fit inside a single centercap of a speedcube like the
 Gans 356.
+
+Future researchers could build on the work of this chapter by
+engineering more refined prototypes to more completely validate if this
+proposed design is capable of meeting requirements
+\ref{subsec:responsiveness-to-face-turns},
+\ref{subsec:transmitter-signal-to-noise-ratio}, and
+\ref{subsec:prospects-of-miniaturization}. Such refinements could start
+with a rotary encoder and/or fully miniaturizing the PCB and actuating
+the frequency change with the speedcube's rotation.
