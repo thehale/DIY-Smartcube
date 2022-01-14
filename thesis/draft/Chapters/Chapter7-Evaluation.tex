@@ -4,15 +4,20 @@
 
 \label{Chapter7} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
 
-TODO review the core goals outlined in the introduction, and methodically review how well my final prototypes stack up against those goals. This section serves to prove (with all the data) that the approach I've described in the previous chapters actually works.
+TODO review the core goals outlined in the introduction, and
+methodically review how well my final prototypes stack up against those
+goals. This section serves to prove (with all the data) that the
+approach I've described in the previous chapters actually works.
 
-TODO a huge portion of this chapter can come from the "Interesting Graphs for my Thesis" document.
+TODO a huge portion of this chapter can come from the "Interesting
+Graphs for my Thesis" document.
 
-\section{Metrics}
+\section{Benchmarks}
+\label{sec:evaluation-benchmarks}
 
-This chapter will use four key metrics to measure the
-effectiveness of the design proposed in Chapters \ref{Chapter4},
-\ref{Chapter5}, and \ref{Chapter6}. These metrics are:
+This chapter will use four key benchmarks to assess the effectiveness
+of the design proposed in Chapters \ref{Chapter4}, \ref{Chapter5}, and
+\ref{Chapter6}. These metrics are:
 
 \begin{itemize}
 
@@ -36,7 +41,8 @@ effectiveness of the design proposed in Chapters \ref{Chapter4},
     
 \end{itemize}
 
-Each of these metrics will be discussed and analyzed in detail in the following sections.
+Each of these metrics will be discussed and analyzed in detail in the
+following sections.
 
 \section{Compatibility with Standard Speedcubes}
 \label{sec:compatibility-with-standard-speedcubes}
@@ -56,10 +62,21 @@ transmitter. The modifications to the cube are purely temporary since
 the original cube can be perfectly restored by simply replacing the
 original centercaps.
 
-TODO weigh the new centercap, compare it to the old one, and comment on
-how weight might slow down the turn speed slightly (however note that
-since the weight is located very near the axis of rotation, the moment
-of inertia is relatively small).
+The performance impact of the custom centercaps with the transmitters
+is also small since the little weight they add to the cube is placed
+close to the axes of rotation. On the Gans 356, a stock centercap has a
+mass of 0.6719 grams, while the custom centercap shown in Figure
+\ref{sec:miniaturization} has a mass of 1.6905 grams. Multiplying the
+approximately 1.2 gram difference per centercap by the six centercaps
+on the cube results in a 7.2 gram increase in mass for the entire
+speedcube. Since the stock Gans 356 has a mass of 84.1204 grams, this
+is only an 8.6\% increase in mass, which is within the range of
+variation between different speedcubes. This additional weight does
+increase the moment of interia of each face; however, this increase is
+small because the added weight placed close to the axes of rotation. As
+such, the corresponding performance penalty of the extra weight would
+be small.
+
 
 \section{Move Tracking Accuracy}
 \label{sec:move-tracking-accuracy}
@@ -197,7 +214,6 @@ Each cube underwent analysis for 1440 different parameter combinations.
 \end{figure}
 
 
-
 \section{Move Tracking Granularity}
 \label{sec:move-tracking-granularity}
 
@@ -219,9 +235,11 @@ sophisticated software receiver could provide even more precise
 measurements from the same source data by measuring the amount of time
 between stable signals for each centerpiece state.
 
-TODO consider contrasting with commercial smartcubes that can provide
-additional metrics like cube orientation over time (via a gyroscope)?
-- Or is this a topic for the "Limitations" section in the conclusion?
+However, since this design does not include a gyroscope, it cannot
+provide metrics about cube orientation over time like the highest-end
+commercial smartcubes. As such, this design cannot be used to directly
+report x, y, and z cube rotations, those sophisticated post-processing
+heuristics could predict their locations with decent accuracy.
 
 
 \section{Competition Legality}
@@ -244,12 +262,17 @@ to the cube is an interchangeable centercap that can be easily removed
 and replaced with the original centercap to produce a perfectly
 competition-legal cube.
 
-However, the sound-based nature of this design opens the door to a
-compromise on the use of smart cubes in competition. As mentioned at
-the end of Section \ref{sec:minimizing-sound-obstruction}, a
-sound-based transmitter only works at a short range and can easily be
-defeated by scrambling cubes several meters away from the competitors
-(especially in a different room), or playing audio at the same
-frequencies as the transmitter. This could provide an avenue in which
-smart cubes could be safely allowed in competitions.
+Interestingly, the sound-based nature of this design provides a
+potential compromise on the use of smart cubes in competition. As
+mentioned at the end of Section \ref{sec:minimizing-sound-obstruction},
+a sound-based transmitter only works at a short range and can easily be
+rendered inaccessible to a competitor by scrambling cubes several
+meters away from the competitors (especially in a different room), or
+playing audio at the same frequencies as the transmitter. As such,
+these properties of sound-based turn tracking could provide an avenue
+in which smart cubes could be safely allowed in competitions to aid in
+solve reconstructions without enabling competitors to spy on scrambles.
+
+\section{Summary}
+TODO write the chapter summary
 
