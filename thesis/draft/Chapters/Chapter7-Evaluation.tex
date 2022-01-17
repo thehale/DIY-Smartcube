@@ -47,13 +47,11 @@ following sections.
 \section{Compatibility with Standard Speedcubes}
 \label{sec:compatibility-with-standard-speedcubes}
 
-For the design to be usable it must be able to track the moves of a
-traditional, non-smart speedcube. Since a major goal of this research
-project is to allow speedcubers to practice with the same cube they
-compete with, it is imperative that the proposed design function
-without requiring permanent modifications to the original speedcube.
-For the same reason, the design must also retain the original
-performance of the speedcube as much as possible.
+Since a major goal of this research project is to allow speedcubers to
+practice with the same cube they compete with, it is imperative that
+the proposed design function without requiring permanent modifications
+to the original speedcube. For the same reason, the design must also
+retain the original performance of the speedcube as much as possible.
 
 As shown in Figure \ref{fig:core-placement}, the proposed PCB
 transmitter can be deployed in a Gans 356 speedcube by simply changing
@@ -81,11 +79,65 @@ be small.
 \section{Move Tracking Accuracy}
 \label{sec:move-tracking-accuracy}
 
-TODO discuss how well my design meets this requirement from the Introduction
+For the design to be usable it must be able to track the moves of a
+traditional, non-smart speedcube. Furthermore, since untracked moves
+render the final move sequence invalid unless manually reviewed and
+corrected, it is critical that the design detect moves with high or
+perfect accuracy.
 
-The design must be capable of tracking the face turns of a Rubik's Cube with over 99\% accuracy.
+This particular benchmark was measured by running the receiver detailed
+in Chapter \ref{Chapter5} through a battery of tests. These tests
+consisted of running several noisy synthetic audio sequences (see
+Section \ref{sec:adding-realistic-noise}) through the receiver algorithm
+with a variety of parameters and comparing the detected move sequence
+to the one used to generate the audio.
 
-This is the section for all the graphs from my "Interesting Graphs for Thesis" word document.
+The specific move sequence used for the analysis was the "demo alg"
+shown in Figure \ref{fig:example-alg-audio} because it sweeps through
+every possible centerpiece state. The synthetic audio for this move
+sequence was generated at 2 TPS and 5 TPS, then augmented with the
+background noise of three different speedcubes (the Gans 356, Gans X,
+and QiYi QiMeng) for a total of 6 audio samples. Each of these six
+audio samples was run through the receiver algorithm for each of the
+720 possible combinations of 10 window sizes, 12 standard deviation
+multipliers, and 6 minimum thresholds. The resulting detected move
+sequence from each run was then compared with the original "demo alg"
+to determine a percent similarity as a measure of the accuracy of the
+receiver under each set of parameters.
+
+\newpage
+\subsection{Number of Perfect Detections}
+\begin{figure}
+\begin{subfigure}{\textwidth}
+    \centering
+    \caption{Total number of perfect detections by cube}
+    \label{fig:perfect-detections-by-cube}
+    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/perfect_detections_by_cube.png}
+\end{subfigure}\\
+
+\begin{subfigure}{\textwidth}
+    \centering
+    \caption{Total number of perfect detections by window\_size}
+    \label{fig:perfect-detections-by-window-size}
+    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/perfect_detections_by_window_size.png}
+\end{subfigure}\\
+
+\begin{subfigure}{\textwidth}
+    \centering
+    \caption{Total number of perfect detections by stdv multiplier}
+    \label{fig:perfect-detections-by-stdv}
+    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/perfect_detections_by_stdv.png}
+\end{subfigure}\\
+
+\begin{subfigure}{\textwidth}
+    \centering
+    \caption{Total number of perfect detections by alt\_min}
+    \label{fig:perfect-detections-by-alt-min}
+    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/perfect_detections_by_alt_min.png}
+\end{subfigure}\\
+\end{figure}
+
+\subsection{Influence of Standard Deviation Multiplier}
 
 \begin{figure}[h]
     \centering
@@ -133,6 +185,16 @@ It's interesting that the 356 and the X start out virtually identical.
 Also interesting is that the QiYi achieves the highest overall accuracy
 of all three cubes.
 
+
+\begin{figure}[h]
+    \centering
+    \caption{Best accuracy for each stdv multiplier}
+    \label{fig:max-similarity-by-stdv}
+    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/max_similarity_by_stdv.png}
+\end{figure}
+
+\subsection{Influence of Window Size}
+
 \begin{figure}[h]
     \centering
     \caption{Effect of window size on accuracy of detection by cube}
@@ -150,6 +212,15 @@ basically identical.
 
 \begin{figure}[h]
     \centering
+    \caption{Best accuracy for each window\_size}
+    \label{fig:max-similarity-by-window-size}
+    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/max_similarity_by_window_size.png}
+\end{figure}
+
+\subsection{Influence of Minimum Threshold}
+
+\begin{figure}[h]
+    \centering
     \caption{Effect of alt\_min on accuracy of detection by cube}
     \label{fig:similarity-by-alt-min}
     \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/similarity_by_alt_min.png}
@@ -159,58 +230,11 @@ Like the window\_size, a higher alt\_min tends to correlate with a
 higher accuracy; however, a low alt\_min doesn't hurt nearly as much as
 a low window\_size.
 
-\subsection{It is possible for all cubes to have a perfect accuracy}
-
-\begin{figure}[h]
-    \centering
-    \caption{Best accuracy for each window\_size}
-    \label{fig:max-similarity-by-window-size}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/max_similarity_by_window_size.png}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \caption{Best accuracy for each stdv multiplier}
-    \label{fig:max-similarity-by-stdv}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/max_similarity_by_stdv.png}
-\end{figure}
-
 \begin{figure}[h]
     \centering
     \caption{Best accuracy for each alt\_min}
     \label{fig:max-similarity-by-alt-min}
     \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/max_similarity_by_alt_min.png}
-\end{figure}
-
-\subsection{Consistency of high accuracy}
-Each cube underwent analysis for 1440 different parameter combinations.
-
-\begin{figure}[h]
-    \centering
-    \caption{Total number of perfect detections by cube}
-    \label{fig:perfect-detections-by-cube}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/perfect_detections_by_cube.png}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \caption{Total number of perfect detections by window\_size}
-    \label{fig:perfect-detections-by-window-size}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/perfect_detections_by_window_size.png}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \caption{Total number of perfect detections by stdv multiplier}
-    \label{fig:perfect-detections-by-stdv}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/perfect_detections_by_stdv.png}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \caption{Total number of perfect detections by alt\_min}
-    \label{fig:perfect-detections-by-alt-min}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/perfect_detections_by_alt_min.png}
 \end{figure}
 
 
