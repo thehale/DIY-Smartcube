@@ -105,45 +105,91 @@ sequence from each run was then compared with the original "demo alg"
 to determine a percent similarity as a measure of the accuracy of the
 receiver under each set of parameters.
 
-\newpage
-\subsection{Number of Perfect Detections}
+\subsection{Influence of Cube Noisiness}
+\label{subsec:influence-cube-noisiness}
+
+The three cubes used for this analysis - the Gans 356, Gans XS, and
+QiYi Qimeng - respectively represent quiet, normal, and loud speedcubes
+(see Section \ref{subsec:signal-to-noise-ratio}). The louder speedcubes
+were expected to cause more difficulties for decoding the transmitted
+move sequence since they create more noise that may conflict with the
+audible signal. Since all cubes produced more noise when turned at a
+higher speed and there is less time for detection to complete, the
+simulated turn speeds were also expected to experience inferior
+performance during move sequence detection.
+
 \begin{figure}
+\caption{Perfect Detections by Cube}
+\label{fig:perfect-detections-by-cube}
 \begin{subfigure}{\textwidth}
     \centering
-    \caption{Total number of perfect detections by cube}
-    \label{fig:perfect-detections-by-cube}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/perfect_detections_by_cube.png}
-\end{subfigure}\\
-
+    \caption{Total number of perfect detections}
+    \label{fig:perfect-detections-by-cube-total}
+    \includegraphics[width=\linewidth]{Figures/7 Evaluation/perfect_detections_by_cube.png}
+\end{subfigure}\\\\
 \begin{subfigure}{\textwidth}
     \centering
-    \caption{Total number of perfect detections by window\_size}
-    \label{fig:perfect-detections-by-window-size}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/perfect_detections_by_window_size.png}
-\end{subfigure}\\
-
+    \caption{Total number of perfect detections at 2TPS}
+    \label{fig:perfect-detections-by-cube-2tps}
+    \includegraphics[width=\linewidth]{Figures/7 Evaluation/perfect_detections_by_cube_2tps.png}
+\end{subfigure}\\\\
 \begin{subfigure}{\textwidth}
     \centering
-    \caption{Total number of perfect detections by stdv multiplier}
-    \label{fig:perfect-detections-by-stdv}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/perfect_detections_by_stdv.png}
-\end{subfigure}\\
-
-\begin{subfigure}{\textwidth}
-    \centering
-    \caption{Total number of perfect detections by alt\_min}
-    \label{fig:perfect-detections-by-alt-min}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/perfect_detections_by_alt_min.png}
-\end{subfigure}\\
+    \caption{Total number of perfect detections at 5TPS}
+    \label{fig:perfect-detections-by-cube-5tps}
+    \includegraphics[width=\linewidth]{Figures/7 Evaluation/perfect_detections_by_cube_5tps.png}
+\end{subfigure}\\\\
 \end{figure}
 
-\subsection{Influence of Standard Deviation Multiplier}
+Figure \ref{fig:perfect-detections-by-cube} shows the total number of
+perfect move sequence decodings broken down by cube type and simulated
+turn speed. As expected, there were far fewer perfect detections at the
+higher simulated turn speed compared to the lower simulated turn speed,
+with the loud QiYi even failing to register a single perfect detection
+at the higher turn speed. However, it was the normal noise Gans XS, not
+the quiet Gans 356 that achieved the most perfect detections. This is a
+peculiar result since Figure \ref{fig:signal-to-noise-ratio} shows that
+the Gans XS is louder across a wider frequency spectrum than the Gans
+356.
 
-\begin{figure}[h]
-    \centering
-    \caption{Effect of stdv multiplier on accuracy of detection by cube}
-    \label{fig:similarity-by-cube}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/similarity_by_cube.png}
+\subsection{Influence of the Standard Deviation Threshold}
+\label{subsec:influence-stdv-threshold}
+
+The standard deviation threshold was one piece of the threshold
+calculation used to filter out background noise (see Section
+\ref{fig:threshold-refined}). Since frequency peaks tend to be
+statistical outliers, higher thresholds were expected to filter out
+more background noise, thus providing higher detection accuracy, so
+long as the thresholds were not so high as to exclude the peaks
+themselves.
+
+Figure \ref{fig:influence-stdv-threshold-perfect} shows the total number of
+perfect move sequence decodings broken down by the standard deviation
+threshold. Contrary to the expected results, this figure shows that lower thresholds were more likely to correspond to a perfect detection.
+
+Figure \ref{fig:influence-stdv-threshold} %TODO continue talking about this figure then move onto the next one followed by the next section.
+ 
+\begin{figure}
+    \caption{Influence of Standard Deviation Threshold on Accuracy}
+    \label{fig:influence-stdv-threshold}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \caption{Perfect Detections by Standard Deviation Threshold}
+        \label{fig:influence-stdv-threshold-perfect}
+        \includegraphics[width=\linewidth]{Figures/7 Evaluation/perfect_detections_by_stdv.png}
+    \end{subfigure}\\\\
+    \begin{subfigure}{\textwidth}
+        \centering
+        \caption{Average Accuracy by Standard Deviation Threshold at 2 TPS}
+        \label{fig:influence-stdv-threshold-average-2tps}
+        \includegraphics[width=\linewidth]{Figures/7 Evaluation/similarity_by_cube_2tps.png}
+    \end{subfigure}\\\\
+    \begin{subfigure}{\textwidth}
+        \centering
+        \caption{Average Accuracy by Standard Deviation Threshold at 5 TPS}
+        \label{fig:influence-stdv-threshold-average-5tps}
+        \includegraphics[width=\linewidth]{Figures/7 Evaluation/similarity_by_cube_5tps.png}
+    \end{subfigure}\\\\
 \end{figure}
 
 The 356 is the quietest cube which means its use does not add much
@@ -163,21 +209,11 @@ with the low stdv multipliers. It is impressive that it continually
 performs better with higher multipliers, eventually reaching a higher
 level of accuracy than the 356.
 
-\begin{figure}[h]
-    \centering
-    \caption{Average across 2 TPS}
-    \label{fig:similarity-by-cube-2tps}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/similarity_by_cube_2tps.png}
-\end{figure}
+
 
 Basically the same as the overall average, just higher numbers overall.
 
-\begin{figure}[h]
-    \centering
-    \caption{Average across 5 TPS}
-    \label{fig:similarity-by-cube-5tps}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/similarity_by_cube_5tps.png}
-\end{figure}
+
 
 How is this for volatility? 
 
