@@ -126,19 +126,22 @@ performance during move sequence detection.
     \caption{Total number of perfect detections}
     \label{fig:perfect-detections-by-cube-total}
     \includegraphics[width=\linewidth]{Figures/7 Evaluation/perfect_detections_by_cube.png}
-\end{subfigure}\\\\
+    \vspace*{.1mm}
+\end{subfigure}\\
 \begin{subfigure}{\textwidth}
     \centering
     \caption{Total number of perfect detections at 2TPS}
     \label{fig:perfect-detections-by-cube-2tps}
     \includegraphics[width=\linewidth]{Figures/7 Evaluation/perfect_detections_by_cube_2tps.png}
-\end{subfigure}\\\\
+    \vspace*{.1mm}
+\end{subfigure}\\
 \begin{subfigure}{\textwidth}
     \centering
     \caption{Total number of perfect detections at 5TPS}
     \label{fig:perfect-detections-by-cube-5tps}
     \includegraphics[width=\linewidth]{Figures/7 Evaluation/perfect_detections_by_cube_5tps.png}
-\end{subfigure}\\\\
+    \vspace*{.1mm}
+\end{subfigure}\\
 \end{figure}
 
 Figure \ref{fig:perfect-detections-by-cube} shows the total number of
@@ -157,7 +160,7 @@ the Gans XS is louder across a wider frequency spectrum than the Gans
 
 The standard deviation threshold was one piece of the threshold
 calculation used to filter out background noise (see Section
-\ref{fig:threshold-refined}). Since frequency peaks tend to be
+\ref{subsec:fine-tuning-threshold}). Since frequency peaks tend to be
 statistical outliers, higher thresholds were expected to filter out
 more background noise, thus providing higher detection accuracy, so
 long as the thresholds were not so high as to exclude the peaks
@@ -165,10 +168,18 @@ themselves.
 
 Figure \ref{fig:influence-stdv-threshold-perfect} shows the total number of
 perfect move sequence decodings broken down by the standard deviation
-threshold. Contrary to the expected results, this figure shows that lower thresholds were more likely to correspond to a perfect detection.
+threshold. Contrary to the expectations, the slightly sinusoidal results show that lower thresholds generally corresponded to slightly better chances of achieving a perfect detection than higher thresholds.
 
-Figure \ref{fig:influence-stdv-threshold} %TODO continue talking about this figure then move onto the next one followed by the next section.
- 
+However, Figures \ref{fig:influence-stdv-threshold-average-2tps} and
+\ref{fig:influence-stdv-threshold-average-2tps} suggest that, overall,
+a higher standard deviation threshold typically corresponds to a higher
+average detection accuracy across all variations of the other parameters in
+this experiment. Of particular interest is the continuous improvement
+in detection accuracy experienced by the noisy QiYi Qimeng as the
+standard deviation threshold increased, particularly for the 5TPS audio
+sequences where it achieved a higher average accuracy than either of
+its less noisy counterparts.
+
 \begin{figure}
     \caption{Influence of Standard Deviation Threshold on Accuracy}
     \label{fig:influence-stdv-threshold}
@@ -177,100 +188,145 @@ Figure \ref{fig:influence-stdv-threshold} %TODO continue talking about this figu
         \caption{Perfect Detections by Standard Deviation Threshold}
         \label{fig:influence-stdv-threshold-perfect}
         \includegraphics[width=\linewidth]{Figures/7 Evaluation/perfect_detections_by_stdv.png}
-    \end{subfigure}\\\\
+        \vspace*{.1mm}
+    \end{subfigure}\\
     \begin{subfigure}{\textwidth}
         \centering
         \caption{Average Accuracy by Standard Deviation Threshold at 2 TPS}
         \label{fig:influence-stdv-threshold-average-2tps}
-        \includegraphics[width=\linewidth]{Figures/7 Evaluation/similarity_by_cube_2tps.png}
-    \end{subfigure}\\\\
+        \includegraphics[width=\linewidth]{Figures/7 Evaluation/similarity_by_stdv_2tps.png}
+        \vspace*{.1mm}
+    \end{subfigure}\\
     \begin{subfigure}{\textwidth}
         \centering
         \caption{Average Accuracy by Standard Deviation Threshold at 5 TPS}
         \label{fig:influence-stdv-threshold-average-5tps}
-        \includegraphics[width=\linewidth]{Figures/7 Evaluation/similarity_by_cube_5tps.png}
-    \end{subfigure}\\\\
+        \includegraphics[width=\linewidth]{Figures/7 Evaluation/similarity_by_stdv_5tps.png}
+        \vspace*{.1mm}
+    \end{subfigure}\\
 \end{figure}
 
-The 356 is the quietest cube which means its use does not add much
-noise to the signal. As a result, it is not surprising that it performs
-well with a low stdv multiplier. What is surprising is the degradation
-of accuracy after reaching a multiplier of 2.
+% The 356 is the quietest cube which means its use does not add much
+% noise to the signal. As a result, it is not surprising that it performs
+% well with a low stdv multiplier. What is surprising is the degradation
+% of accuracy after reaching a multiplier of 2.
 
-The QiYi is the noisiest of the three which explains its poor
-performance with low multipliers. It is interesting that its accuracy
-rises consistently with an increase in the stdv multiplier, although we
-can see a slight taper in the rate of increase in the shift from 2.75
-to 3. It would also be interesting to see how the QiYi performs at
-higher multipliers (e.g. 4, 5 or higher).
+% The QiYi is the noisiest of the three which explains its poor
+% performance with low multipliers. It is interesting that its accuracy
+% rises consistently with an increase in the stdv multiplier, although we
+% can see a slight taper in the rate of increase in the shift from 2.75
+% to 3. It would also be interesting to see how the QiYi performs at
+% higher multipliers (e.g. 4, 5 or higher).
 
-The X is also a fairly noisy cube which explains its poor performance
-with the low stdv multipliers. It is impressive that it continually
-performs better with higher multipliers, eventually reaching a higher
-level of accuracy than the 356.
-
-
-
-Basically the same as the overall average, just higher numbers overall.
+% The X is also a fairly noisy cube which explains its poor performance
+% with the low stdv multipliers. It is impressive that it continually
+% performs better with higher multipliers, eventually reaching a higher
+% level of accuracy than the 356.
 
 
+% Basically the same as the overall average, just higher numbers overall.
 
-How is this for volatility? 
+% How is this for volatility? 
 
-It's interesting that the 356 and the X start out virtually identical.
-Also interesting is that the QiYi achieves the highest overall accuracy
-of all three cubes.
+% It's interesting that the 356 and the X start out virtually identical.
+% Also interesting is that the QiYi achieves the highest overall accuracy
+% of all three cubes.
 
-
-\begin{figure}[h]
-    \centering
-    \caption{Best accuracy for each stdv multiplier}
-    \label{fig:max-similarity-by-stdv}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/max_similarity_by_stdv.png}
-\end{figure}
-
-\subsection{Influence of Window Size}
-
-\begin{figure}[h]
-    \centering
-    \caption{Effect of window size on accuracy of detection by cube}
-    \label{fig:similarity-by-window-size}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/similarity_by_cube.png}
-\end{figure}
-
-A higher window size consistently improved the accuracy of detection.
-That said we do start seeing some decreases at a window size of 10, it
-would be interesting to see when the window size starts inhibiting
-accuracy.
-
-I did not include the breakdown by speed because the graphs are
-basically identical.
-
-\begin{figure}[h]
-    \centering
-    \caption{Best accuracy for each window\_size}
-    \label{fig:max-similarity-by-window-size}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/max_similarity_by_window_size.png}
-\end{figure}
 
 \subsection{Influence of Minimum Threshold}
+\label{subsec:influence-alt-min}
 
-\begin{figure}[h]
-    \centering
-    \caption{Effect of alt\_min on accuracy of detection by cube}
-    \label{fig:similarity-by-alt-min}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/similarity_by_alt_min.png}
+The minimum threshold was the second component in the threshold
+calculation discussed in Section \ref{subsec:fine-tuning-threshold},
+used primarily to filter out background noise during the quiet signal
+period between face turns. Similar to the standard deviation threshold,
+higher minimum thresholds were expected to yield higher detection
+accuracies, particularly for noisy cubes.
+
+Interestingly, the minimum threshold performed similarly to the
+standard deviation threshold in regard to its correlation with perfect
+move sequence detections (Figure
+\ref{fig:perfect-detections-by-alt-min-total}). However, in contrast to
+the standard deviation threshold, the minimum threshold corresponded to
+far less variation in the average accuracy, though accuracy did trend
+upwards as the minimum threshold increased.
+
+\begin{figure}
+    \caption{Perfect Detections by Minimum Threshold}
+    \label{fig:influence-alt-min}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \caption{Total number of perfect detections}
+        \label{fig:perfect-detections-by-alt-min-total}
+        \includegraphics[width=\linewidth]{Figures/7 Evaluation/perfect_detections_by_alt_min.png}
+        \vspace*{.1mm}
+    \end{subfigure}\\
+    \begin{subfigure}{\textwidth}
+        \centering
+        \caption{Average Accuracy by Minimum Threshold at 2 TPS}
+        \label{fig:influence-alt-min-average-2tps}
+        \includegraphics[width=\linewidth]{Figures/7 Evaluation/similarity_by_alt_min_2tps.png}
+        \vspace*{.1mm}
+    \end{subfigure}\\
+    \begin{subfigure}{\textwidth}
+        \centering
+        \caption{Average Accuracy by Minimum Threshold at 5 TPS}
+        \label{fig:influence-alt-min-average-5tps}
+        \includegraphics[width=\linewidth]{Figures/7 Evaluation/similarity_by_alt_min_5tps.png}
+        \vspace*{.1mm}
+    \end{subfigure}\\
 \end{figure}
 
-Like the window\_size, a higher alt\_min tends to correlate with a
-higher accuracy; however, a low alt\_min doesn't hurt nearly as much as
-a low window\_size.
 
-\begin{figure}[h]
-    \centering
-    \caption{Best accuracy for each alt\_min}
-    \label{fig:max-similarity-by-alt-min}
-    \includegraphics[width=0.75\linewidth]{Figures/7 Evaluation/max_similarity_by_alt_min.png}
+\subsection{Influence of Window Size}
+\label{subsec:influence-window-size}
+
+The final parameter tested in this experiment was the size of the
+sliding window used to ensure that detected face turns had stabilized
+before accepting them as real face turns. Since erroneous detections
+rarely last for more than a few time steps, a higher window size was
+expected to correspond to a higher detection accuracy.
+
+Figure \ref{fig:influence-window-size} clearly shows that a window size
+of five to ten time steps was consistently correlated with a higher
+accuracy of detection. In fact, at 2 TPS, a window size of five to ten
+corresponded to a nearly perfect \emph{average} detection for all cubes, despite the wide variation in the threshold parameters.
+
+% TODO finish this section. Talk about the high accuracy at 5tps compared to the other metrics and it's consistency across cubes.
+
+% A higher window size consistently improved the accuracy of detection.
+
+% That said we do start seeing some decreases at a window size of 10, it
+% would be interesting to see when the window size starts inhibiting
+% accuracy.
+
+% I did not include the breakdown by speed because the graphs are
+% basically identical.
+
+\begin{figure}
+    \caption{Perfect Detections by Window Size}
+    \label{fig:influence-window-size}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \caption{Total number of perfect detections}
+        \label{fig:perfect-detections-by-window-size-total}
+        \includegraphics[width=\linewidth]{Figures/7 Evaluation/perfect_detections_by_window_size.png}
+        \vspace*{.1mm}
+    \end{subfigure}\\
+    \begin{subfigure}{\textwidth}
+        \centering
+        \caption{Average Accuracy by Window Size at 2 TPS}
+        \label{fig:influence-window-size-average-2tps}
+        \includegraphics[width=\linewidth]{Figures/7 Evaluation/similarity_by_window_size_2tps.png}
+        \vspace*{.1mm}
+    \end{subfigure}\\
+    \begin{subfigure}{\textwidth}
+        \centering
+        \caption{Average Accuracy by Window Size at 5 TPS}
+        \label{fig:influence-window-size-average-5tps}
+        \includegraphics[width=\linewidth]{Figures/7 Evaluation/similarity_by_window_size_5tps.png}
+        \vspace*{.1mm}
+    \end{subfigure}\\
 \end{figure}
 
 
