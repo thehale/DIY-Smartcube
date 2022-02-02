@@ -44,6 +44,7 @@ of the design proposed in Chapters \ref{Chapter4}, \ref{Chapter5}, and
 Each of these metrics will be discussed and analyzed in detail in the
 following sections.
 
+\newpage
 \section{Compatibility with Standard Speedcubes}
 \label{sec:compatibility-with-standard-speedcubes}
 
@@ -69,7 +70,8 @@ approximately 1.2 gram difference per centercap by the six centercaps
 on the cube results in a 7.2 gram increase in mass for the entire
 speedcube. Since the stock Gans 356 has a mass of 84.1204 grams, this
 is only an 8.6\% increase in mass, which is within the range of
-variation between different speedcubes. This additional weight does
+variation between different speedcubes. % TODO Also consider weighing commercial smart cubes to show that (hopefully) mine is (considerably) lighter.
+This additional weight does
 increase the moment of interia of each face; however, this increase is
 small because the added weight placed close to the axes of rotation. As
 such, the corresponding performance penalty of the extra weight would
@@ -85,25 +87,59 @@ render the final move sequence invalid unless manually reviewed and
 corrected, it is critical that the design detect moves with high or
 perfect accuracy.
 
-This particular benchmark was measured by running the receiver detailed
-in Chapter \ref{Chapter5} through a battery of tests. These tests
-consisted of running several noisy synthetic audio sequences (see
-Section \ref{sec:adding-realistic-noise}) through the receiver algorithm
-with a variety of parameters and comparing the detected move sequence
-to the one used to generate the audio.
+While Chapter \ref{Chapter5} demonstrated a perfect detection of a
+transmitted move sequence, this section seeks to explore the limits of
+the software receiver. To do this, the receiver was subjected to a
+battery of tests consisting of running several noisy synthetic audio
+sequences (see Section \ref{sec:adding-realistic-noise}) through the
+receiver algorithm with a variety of parameters and comparing the
+detected move sequence to the one used to generate the audio.
 
-The specific move sequence used for the analysis was the "demo alg"
-shown in Figure \ref{fig:example-alg-audio} because it sweeps through
-every possible centerpiece state. The synthetic audio for this move
-sequence was generated at 2 TPS and 5 TPS, then augmented with the
-background noise of three different speedcubes (the Gans 356, Gans X,
-and QiYi QiMeng) for a total of 6 audio samples. Each of these six
-audio samples was run through the receiver algorithm for each of the
-720 possible combinations of 10 window sizes, 12 standard deviation
-multipliers, and 6 minimum thresholds. The resulting detected move
-sequence from each run was then compared with the original "demo alg"
-to determine a percent similarity as a measure of the accuracy of the
-receiver under each set of parameters.
+The noisy synthetic audio samples used in this testing were engineered
+to represent both the full range of face turns that could be performed
+on the cube and the turn speeds of speedcubers that average 12-30
+seconds per solve. To that end, the "demo alg" from Figure
+\ref{fig:example-alg-audio} which sweeps through every possible
+centerpiece state was rendered at 2 TPS and 5 TPS\footnote{Given a that
+a typical speedsolver averages 60 moves per solve \cite{pochmann-hume}, 2TPS
+corresponds to an average solve time of 30 seconds and 5TPS corresponds
+to an average solve time of 12 seconds.} using the code shown in Figure
+\ref{fig:code-generate-alg-audio}. Then, those two audio samples were
+each augmented with the background noise of a quiet, normal volume, and
+noisy speedcube (respectively the Gans 356, Gans X, and QiYi QiMeng
+described in Section \ref{subsec:signal-to-noise-ratio}) using the
+techniques discussed in Section \ref{sec:adding-realistic-noise} for a
+total of 6 audio samples that serve as a basic cross-section of the
+most common variations in cubes and turn speeds.
+
+With this representative sample set of audio signals in hand, the
+limits of the receiver could be tested. Each test comprised of setting
+the three parameters of the receiver to a specific combination of
+values, running all six audio samples through the receiver, then
+comparing the detected move sequence with the actual move sequence for
+a percent similarity calculation. The standard deviation threshold
+parameter \code{stdv\_pct} (Section \ref{subsec:fine-tuning-threshold})
+varied through from 0.25 to 3 in increments of 0.25 for a total of 12
+values. The minimum threshold parameter \code{min\_thresh} (Section
+\ref{subsec:fine-tuning-threshold}) varied from 50 to 550 in increments
+of 50 for a total of 6 values. The window size parameter
+\code{window\_size} (Section
+\ref{subsec:ignoring-noise-when-extracting-move-sequences}) varied from
+1 to 10 time steps in increments of 1 for a total of 10 values. In
+total, the 12 standard deviation thresholds, 6 minimum thresholds, 10
+window sizes, 2 turn speeds, and 3 cubes yielded 4,320 unique
+combinations with which to test the receiver algorithm.
+
+The insights gained from analyzing the resulting data are discussed in
+the following subsections. Section
+\ref{subsec:influence-cube-noisiness} explores the influence of cube
+noisiness on detection accuracy. Section
+\ref{subsec:influence-stdv-threshold} does the same for the standard
+deviation threshold. Section \ref{subsec:influence-alt-min} covers the
+minimum threshold. And Section \ref{subsec:influence-window-size}
+reviews the window size. The turn speed factor is discussed in all
+subsections as an additional angle for understanding each factor's
+unique influence on detection accuracy.
 
 \subsection{Influence of Cube Noisiness}
 \label{subsec:influence-cube-noisiness}
@@ -123,7 +159,7 @@ performance during move sequence detection.
 \label{fig:perfect-detections-by-cube}
 \begin{subfigure}{\textwidth}
     \centering
-    \caption{Total number of perfect detections}
+    \caption{Total number of perfect detections \\ (Aggregate of Figures \ref{fig:perfect-detections-by-cube-2tps} and \ref{fig:perfect-detections-by-cube-5tps})}
     \label{fig:perfect-detections-by-cube-total}
     \includegraphics[width=\linewidth]{Figures/7 Evaluation/perfect_detections_by_cube.png}
     \vspace*{.1mm}
@@ -171,7 +207,7 @@ perfect move sequence decodings broken down by the standard deviation
 threshold. Contrary to the expectations, the slightly sinusoidal results show that lower thresholds generally corresponded to slightly better chances of achieving a perfect detection than higher thresholds.
 
 However, Figures \ref{fig:influence-stdv-threshold-average-2tps} and
-\ref{fig:influence-stdv-threshold-average-2tps} suggest that, overall,
+\ref{fig:influence-stdv-threshold-average-5tps} suggest that, overall,
 a higher standard deviation threshold typically corresponds to a higher
 average detection accuracy across all variations of the other parameters in
 this experiment. Of particular interest is the continuous improvement
@@ -205,33 +241,6 @@ its less noisy counterparts.
         \vspace*{.1mm}
     \end{subfigure}\\
 \end{figure}
-
-% The 356 is the quietest cube which means its use does not add much
-% noise to the signal. As a result, it is not surprising that it performs
-% well with a low stdv multiplier. What is surprising is the degradation
-% of accuracy after reaching a multiplier of 2.
-
-% The QiYi is the noisiest of the three which explains its poor
-% performance with low multipliers. It is interesting that its accuracy
-% rises consistently with an increase in the stdv multiplier, although we
-% can see a slight taper in the rate of increase in the shift from 2.75
-% to 3. It would also be interesting to see how the QiYi performs at
-% higher multipliers (e.g. 4, 5 or higher).
-
-% The X is also a fairly noisy cube which explains its poor performance
-% with the low stdv multipliers. It is impressive that it continually
-% performs better with higher multipliers, eventually reaching a higher
-% level of accuracy than the 356.
-
-
-% Basically the same as the overall average, just higher numbers overall.
-
-% How is this for volatility? 
-
-% It's interesting that the 356 and the X start out virtually identical.
-% Also interesting is that the QiYi achieves the highest overall accuracy
-% of all three cubes.
-
 
 \subsection{Influence of Minimum Threshold}
 \label{subsec:influence-alt-min}
@@ -290,18 +299,14 @@ expected to correspond to a higher detection accuracy.
 Figure \ref{fig:influence-window-size} clearly shows that a window size
 of five to ten time steps was consistently correlated with a higher
 accuracy of detection. In fact, at 2 TPS, a window size of five to ten
-corresponded to a nearly perfect \emph{average} detection for all cubes, despite the wide variation in the threshold parameters.
+corresponded to a nearly perfect \emph{average} detection for all
+cubes, across the wide variation in the threshold parameters.
 
-% TODO finish this section. Talk about the high accuracy at 5tps compared to the other metrics and it's consistency across cubes.
-
-% A higher window size consistently improved the accuracy of detection.
-
-% That said we do start seeing some decreases at a window size of 10, it
-% would be interesting to see when the window size starts inhibiting
-% accuracy.
-
-% I did not include the breakdown by speed because the graphs are
-% basically identical.
+Furthermore, Figure \ref{fig:influence-window-size-average-5tps} shows
+that a window size between five and eight time steps corresponded to
+>90\% detection accuracy across all variations in the threshold
+parameters, three to ten percentage points higher than the best
+averages achieved by either threshold parameter.
 
 \begin{figure}
     \caption{Perfect Detections by Window Size}
