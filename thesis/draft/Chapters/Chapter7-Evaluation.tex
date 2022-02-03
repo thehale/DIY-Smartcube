@@ -1,25 +1,18 @@
-% Chapter Template
+\chapter{Evaluation}
+\label{Chapter7}
 
-\chapter{Evaluation} % Main chapter title
+This chapter seeks to measure the effectiveness of the design proposed
+in Chapters \ref{Chapter4}, \ref{Chapter5}, and \ref{Chapter6}. To do
+so, this chapter will use four key benchmarks derived directly from the
+research questions outlined in Section \ref{sec:research-questions}.
 
-\label{Chapter7} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
-
-TODO review the core goals outlined in the introduction, and
-methodically review how well my final prototypes stack up against those
-goals. This section serves to prove (with all the data) that the
-approach I've described in the previous chapters actually works.
-
-TODO a huge portion of this chapter can come from the "Interesting
-Graphs for my Thesis" document.
-
-\section{Benchmarks}
-\label{sec:evaluation-benchmarks}
-
-This chapter will use four key benchmarks to assess the effectiveness
-of the design proposed in Chapters \ref{Chapter4}, \ref{Chapter5}, and
-\ref{Chapter6}. These metrics are:
+The benchmarks are as follows:
 
 \begin{itemize}
+
+    \item \emph{Move Tracking Accuracy}: How accurately can the design
+    track the moves performed on the modified speedcube? (Section
+    \ref{sec:move-tracking-accuracy})
 
     \item \emph{Compatibility with Standard Speedcubes}: How
     effectively can the design be deployed in a standard, non-smart
@@ -27,55 +20,14 @@ of the design proposed in Chapters \ref{Chapter4}, \ref{Chapter5}, and
     cube's performance? (Section
     \ref{sec:compatibility-with-standard-speedcubes})
     
-    \item \emph{Move Tracking Accuracy}: How accurately can the design
-    track the moves performed on the modified speedcube? (Section
-    \ref{sec:move-tracking-accuracy})
-    
-    \item \emph{Move Tracking Granularity}: What other metrics can the
-    each face turn. (Section \ref{sec:move-tracking-granularity})
-    design provide? Of greatest interest is the time spent executing
+    \item \emph{Move Tracking Granularity}: What other metrics can each 
+    design provide (Section \ref{sec:move-tracking-granularity})?
     
     \item \emph{Competition Legality}: To what extent is the design
     compliant with existing competition regulations? (Section
     \ref{sec:competition-legality})
     
 \end{itemize}
-
-Each of these metrics will be discussed and analyzed in detail in the
-following sections.
-
-\newpage
-\section{Compatibility with Standard Speedcubes}
-\label{sec:compatibility-with-standard-speedcubes}
-
-Since a major goal of this research project is to allow speedcubers to
-practice with the same cube they compete with, it is imperative that
-the proposed design function without requiring permanent modifications
-to the original speedcube. For the same reason, the design must also
-retain the original performance of the speedcube as much as possible.
-
-As shown in Figure \ref{fig:core-placement}, the proposed PCB
-transmitter can be deployed in a Gans 356 speedcube by simply changing
-out the original centercap for a custom-built one containing the
-transmitter. The modifications to the cube are purely temporary since
-the original cube can be perfectly restored by simply replacing the
-original centercaps.
-
-The performance impact of the custom centercaps with the transmitters
-is also small since the little weight they add to the cube is placed
-close to the axes of rotation. On the Gans 356, a stock centercap has a
-mass of 0.6719 grams, while the custom centercap shown in Figure
-\ref{sec:miniaturization} has a mass of 1.6905 grams. Multiplying the
-approximately 1.2 gram difference per centercap by the six centercaps
-on the cube results in a 7.2 gram increase in mass for the entire
-speedcube. Since the stock Gans 356 has a mass of 84.1204 grams, this
-is only an 8.6\% increase in mass, which is within the range of
-variation between different speedcubes. % TODO Also consider weighing commercial smart cubes to show that (hopefully) mine is (considerably) lighter.
-This additional weight does
-increase the moment of interia of each face; however, this increase is
-small because the added weight placed close to the axes of rotation. As
-such, the corresponding performance penalty of the extra weight would
-be small.
 
 
 \section{Move Tracking Accuracy}
@@ -115,12 +67,13 @@ most common variations in cubes and turn speeds.
 With this representative sample set of audio signals in hand, the
 limits of the receiver could be tested. Each test comprised of setting
 the three parameters of the receiver to a specific combination of
-values, running all six audio samples through the receiver, then
-comparing the detected move sequence with the actual move sequence for
-a percent similarity calculation. The standard deviation threshold
-parameter \code{stdv\_pct} (Section \ref{subsec:fine-tuning-threshold})
-varied through from 0.25 to 3 in increments of 0.25 for a total of 12
-values. The minimum threshold parameter \code{min\_thresh} (Section
+values (each chosen from a range of values determined emprically),
+running all six audio samples through the receiver, then comparing the
+detected move sequence with the actual move sequence for a percent
+similarity calculation. The standard deviation threshold parameter
+\code{stdv\_pct} (Section \ref{subsec:fine-tuning-threshold}) varied
+through from 0.25 to 3 in increments of 0.25 for a total of 12 values.
+The minimum threshold parameter \code{min\_thresh} (Section
 \ref{subsec:fine-tuning-threshold}) varied from 50 to 550 in increments
 of 50 for a total of 6 values. The window size parameter
 \code{window\_size} (Section
@@ -335,6 +288,42 @@ averages achieved by either threshold parameter.
 \end{figure}
 
 
+\section{Compatibility with Standard Speedcubes}
+\label{sec:compatibility-with-standard-speedcubes}
+
+Since a major goal of this research project is to allow speedcubers to
+practice with the same cube they compete with, it is imperative that
+the proposed design function without requiring permanent modifications
+to the original speedcube. For the same reason, the design must also
+retain the original performance of the speedcube as much as possible.
+
+As shown in Figure \ref{fig:core-placement}, the proposed PCB
+transmitter can be deployed in a Gans 356 speedcube by simply changing
+out the original centercap for a custom-built one containing the
+transmitter. The modifications to the cube are purely temporary since
+the original cube can be perfectly restored by simply replacing the
+original centercaps.
+
+The performance impact of the custom centercaps with the transmitters
+is also small since the little weight they add to the cube is placed
+close to the axes of rotation. On the Gans 356, a stock centercap has a
+mass of 0.6719 grams, while the custom centercap shown in Figure
+\ref{sec:miniaturization} has a mass of 1.6905 grams. Multiplying the
+approximately 1.2 gram difference per centercap by the six centercaps
+on the cube results in a 7.2 gram increase in mass for the entire
+speedcube for a total mass of 91.3104 grams. Since the stock Gans 356
+has a mass of 84.1204 grams, this is only an 8.6\% increase in mass,
+which is within the range of variation between different
+speedcubes.\footnote{For example, the acclaimed MoYu WeiLong GTS3 M has
+a mass of 92g \cite{moyu-thecubicle}. More information about the
+variation in masses of different speedcubes can be found at
+\href{https://www.thecubicle.com/collections/3x3-speed-cubes}{TheCubicle.com}.}
+This additional weight does increase the moment of interia of each
+face; however, this increase is small because the added weight placed
+close to the axes of rotation. As such, the corresponding performance
+penalty of the extra weight would be small.
+
+
 \section{Move Tracking Granularity}
 \label{sec:move-tracking-granularity}
 
@@ -395,5 +384,25 @@ in which smart cubes could be safely allowed in competitions to aid in
 solve reconstructions without enabling competitors to spy on scrambles.
 
 \section{Summary}
-TODO write the chapter summary
 
+In summary, this chapter explored the effectiveness of the design
+proposed in Chapters \ref{Chapter4}, \ref{Chapter5}, and \ref{Chapter6}
+against four benchmarks derived from the research questions outlined in
+Section \ref{sec:research-questions}.
+
+The analysis of the receiver algorithm revealed many configurations
+that enabled it to achieve a perfect detection accuracy. Most impactful
+in that detection was the usage of a high \code{window\_size} which
+achieved accuracies of over 90\% across all variations in the other
+parameters. Additionally beneficial is the receiver's ability to detect
+the time between face turns which opens the door to calculating useful
+metrics like TPS over time.
+
+The analysis of the transmitter also found promising results. A rough
+prototype of the PCB was small enough to fit into a single centercap
+without requiring any permanent modifications to the cube. Furthermore,
+since the centercap was interchangeable, the electronic components
+impermissible in competition could easily be removed to return the cube
+to a competition-legal state. In addition, the added mass of the
+electrical components did not significantly increase the weight of the
+puzzle, nearly retaining its original performance.
