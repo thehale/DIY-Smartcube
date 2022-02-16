@@ -77,14 +77,33 @@ modifications to the original cube?}
 
 The key challenges involved in creating a sound-based smartcube
 enhancement for an existing speedcube stem from the size constraints
-imposed by the structure of the cube. For example, as discussed in
-Sections \ref{subsec:prospects-of-miniaturization} and
-\ref{sec:miniaturization}, the particularly spacious Gans 356 only
-offers space for a 16mm$^2$ PCB with rounded corners and a
-\textbf{SIZE} hole in the middle.
+imposed by the structure of the cube. Since all modifications must be
+non-destructive, the required electronics must be embedded into the
+empty spaces within the cubies on the cube. Furthermore, since neither
+the edges nor the corners on the cube have access to the axles on which
+the cube rotates, the best place for these electronics is within the
+centercaps themselves. Unfortunately, these centercaps offer little
+space for add-ins. For example, as discussed in Sections
+\ref{subsec:prospects-of-miniaturization} and
+\ref{sec:miniaturization}, the relatively spacious Gans 356 only offers
+space for a $16mm^2$ PCB with rounded corners and a $6mm$ diameter hole
+in the middle.
 
-Section \ref{sec:miniaturization} lays out a sample prototype indicating ... TODO continue here!
-% TODO Make sure to not answer this with 100% certainty since we didn't build a fully functioning prototype. Also include in *outlook*.
+Despite these stringent size constraints, Chapter \ref{Chapter6}
+specifies a promising transmitter design consisting of less than 10
+discrete electrical components. With this limited component count, a
+PCB consisting of SMD components would be able to fit within a
+custom-printed centercap for a Gans 356 speedcube as shown in Figure
+\ref{fig:core-placement}.\footnote{Note that an actual PCB was not
+constructed nor was a PCB layout attempted for any other cube than the
+Gans 356.}
+
+As discussed in Section
+\ref{sec:compatibility-with-standard-speedcubes}, since the required
+electronics are contained within a replaceable, custom centercap, the
+modifications can be easily reversed by replacing the custom centercaps
+with the originals.
+
 
 \subsection{Move Tracking Granularity}
 \label{subsec:answer-granularity}
