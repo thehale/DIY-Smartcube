@@ -92,7 +92,15 @@ Section \ref{sec:miniaturization} lays out a sample prototype indicating ... TOD
 \emph{How could a sound-based smart cube design record the time spent
 executing each individual face turn of a Rubik's Cube?}
 
-% Talk about things here
+The receiver proposed in Chapter \ref{Chapter5} decodes face turns by
+iterating over a time series of audio data. As a result, when a face
+turn is detected, the receiver also knows the time at which it
+occurred. By computing the difference between the times at which two
+successive turns occurred, the time spent executing an individual face
+turn can be computed. Thus, as long as the receiver can detect the face
+turns applied to the cube with high accuracy, then the time spent
+executing each one can be easily calculated (See also Section
+\ref{sec:move-tracking-granularity}).
 
 
 \subsection{Competition Legality}
