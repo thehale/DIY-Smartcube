@@ -148,19 +148,46 @@ deemed competition legal.
 
 
 \section{Limitations}
+\label{sec:limitations}
 
-TODO detail the limits to which this research can be more broadly
-applied. Be clear about the effects various assumptions/decisions have
-on the reliability of the conclusions of this thesis.
+As stated in Section \ref{sec:research-questions}, the overarching goal
+of this thesis is to present a proof-of-concept for a sound-based smart
+cube design. Like all proofs-of-concept, the design proposed in this
+thesis contains some inherent flaws and underlying assumptions that limit
+its ability to be successfully deployed in existing speedcubes.
 
-- Contradiction of a "silent protocol" with consumer hardware -> higher frequency transmission + high-res mic to plug into device.
-- There were perfect parameters for each scramble, but how do we know which parameters to use for an arbitrary scramble?
+First, while Chapter \ref{Chapter6} demonstrates that its proposed
+transmitter design appropriately considers all relevant requirements, a
+fully functional transmitter was never built and deployed within an
+existing speedcube. As such, the viability of this transmitter design
+cannot be fully verified until a transmitter is fully constructed,
+deployed, and tested.
+
+Second, while great care was taken to extensively test the receiver,
+all tests were conducted with realistic, but synthetic audio samples
+since a physical transmitter was never built (See Section
+\ref{sec:adding-realistic-noise}). As such, it is possible that further
+refinements to the receiver will be required if the signals from a real
+transmitter substantially differ from those synthesized for testing the
+receiver.
+
+Third, though not a functional limitation, since the typical frequency
+response range of consumer hardware is entirely within the human
+auditory range (see Sections \ref{subsec:frequency-response-range} and
+\ref{subsec:human-auditory-range}), all frequencies selected for
+transmitting the state of the cube will be human-audible. If the chosen
+frequencies are higher in pitch (as recommended by Section
+\ref{subsec:freq-selection}), the sounds produced by the transmitter
+may prove irritating to the speedcuber. 
+
+- \textbf{TODO There were perfect parameters for each scramble, but how do we know which parameters to use for an arbitrary scramble?}
 
 
 \section{Outlook}
-
+\label{sec:outlook}
 TODO If I had more time/resources to work on it, what would I do next
 with this project?
 
 - Live algorithm
 - build it small enough to fit in the cube.
+- supersonic frequencies.
