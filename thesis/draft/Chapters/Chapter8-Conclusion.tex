@@ -14,6 +14,24 @@ summary of exactly how effective they were.
 \section{Answering Research Questions}
 \label{sec:answering-research-questions}
 
+Chapter \ref{Chapter3} concluded with a detailed list of research
+questions that would be explored in this thesis (see Section
+\ref{sec:research-questions}). This section provides direct, summarized
+answers to each of those questions.
+
+Section \ref{subsec:answer-feasibility} summarizes the constraints for
+a sound-based move tracking protocol. Section
+\ref{subsec:answer-accuracy} then reports on the accuracy achieved by
+the proof-of-concept proposed earlier in the thesis. Section
+\ref{subsec:answer-compatibility} continues by reviewing the challenges
+associated with building a transmitter small enough to
+non-destructively embed into an existing speedcube. From there, Section
+\ref{subsec:answer-granularity} discusses additional data points that
+can be inferred from the transmitted audio. Finally, Section
+\ref{subsec:answer-competition-legality} addresses the ways in which a
+sound-based smartcube design can comply with competition regulations
+banning the usage of electronics.
+
 \subsection{Feasibility on Consumer Hardware}
 \label{subsec:answer-feasibility}
 
@@ -22,20 +40,26 @@ compatible with consumer-grade microphones like those found in common
 smartphones and laptops?}
 
 As discussed in Chapter \ref{Chapter4}, there are four main factors
-that affect the viability of a sound-based smart cube design: the
-achievable signal-to-noise ratio of the transmitter, the
-distinctiveness of the tones used for the protocol, the frequency
-response range of the consumer hardware used to implement the protocol,
-and the range of tones audible to the human ear.
+that affect the viability of a sound-based smart cube design: 
+
+\begin{enumerate}
+    \item the achievable \textbf{signal-to-noise ratio} of the transmitter
+    \item the \textbf{distinctiveness of the tones} used for the protocol
+    \item the \textbf{frequency response range of consumer hardware} used to implement the protocol
+    \item the \textbf{range of tones audible} to the human ear
+\end{enumerate}
 
 An analysis of these factors found that the tones used in the protocol
-should be spaced at least 100Hz apart and broadcast with an audio
-intensity of -30dB or greater in order to have a sufficiently strong
-signal-to-noise ratio for clear detection. Furthermore, the specific
-tones chosen for the protocol would ideally fit within the "musical
-range" of 500Hz and 4000Hz to simultaneously avoid irritating human
-solvers and leverage the optimizations built into consumer audio
-recording hardware in smartphones and laptops.
+should be (1) broadcast with an audio intensity of -30dB or greater
+(see Section \ref{subsec:signal-to-noise-ratio}) and (2) spaced at
+least 100Hz apart (see Section \ref{subsec:tone-distinctiveness}) in
+order to have a sufficiently strong signal-to-noise ratio for clear
+detection. Furthermore, the specific tones chosen for the protocol
+would ideally fit within the "musical range" of 500Hz and 4000Hz to
+simultaneously (4) avoid irritating human solvers (see Section
+\ref{subsec:human-auditory-range}) and (3) leverage the optimizations
+built into consumer audio recording hardware in smartphones and laptops
+(see Section \ref{subsec:frequency-response-range}).
 
 \subsection{Move Tracking Accuracy}
 \label{subsec:answer-accuracy}
@@ -63,7 +87,7 @@ independent faces on the cube. Second, the current position of each
 face is continuously broadcast, increasing the amount of time available
 for the receiver to detect and decode each position over time (See
 Section \ref{sec:alternatives}). Third, multiple layers of noise
-reductions were applied within the receiver to better focus on the true
+filters were applied within the receiver to better focus on the true
 signal frequencies and boost confidence in the accuracy of the decoded
 face turns (See Section \ref{sec:decoding-realistic-noise}).
 
