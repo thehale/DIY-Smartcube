@@ -1,15 +1,13 @@
-% Chapter Template
+\chapter{Conclusion} 
+\label{Chapter8}
 
-\chapter{Conclusion} % Main chapter title
+The D.I.Y. Smartcube seeks to enable speedcubers to obtain the same
+metrics and data from their main speedcube that are offered by existing
+commercial smartcubes. This chapter summarizes the progress made toward
+that goal (Section \ref{sec:answering-research-questions}), the hurdles
+that remain (Section \ref{sec:limitations}), and the next milestones
+that await future research (Section \ref{sec:outlook}).
 
-\label{Chapter8} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
-
-
-\section{Summary}
-
-TODO summarize the goals from the Introduction and broadly describe
-what techniques were most helpful in reaching them. Also detail a
-summary of exactly how effective they were.
 
 \section{Answering Research Questions}
 \label{sec:answering-research-questions}
@@ -215,9 +213,67 @@ any given cube/environment combination.
 
 \section{Outlook}
 \label{sec:outlook}
-TODO If I had more time/resources to work on it, what would I do next
-with this project?
 
-- Live algorithm
-- build it small enough to fit in the cube.
-- supersonic frequencies.
+The proof-of-concept shown in this thesis demonstrates the potential of
+a sound-based move tracking system for realizing the goal of the D.I.Y.
+Smartcube: to enable speedcubers to obtain the same metrics and data
+from their main speedcube that are offered by existing commercial
+smartcubes.
+
+To address the specific issues discussed in the Limitations section
+above (\ref{sec:limitations}), the following areas could be studied
+more thoroughly:
+
+\begin{enumerate}
+
+    \item \textbf{Transmitter Construction}: Designing, manufacturing,
+    and testing the actual PCB that would be embedded into a Rubik's
+    Cube's centercap. This may include creating variations of the PCB
+    for different types of speedcubes.
+
+    \item \textbf{Pairing the Receiver with a Physical Transmitter}: Once
+    a physical transmitter is constructed, re-run the battery of tests
+    described in Section \ref{sec:move-tracking-accuracy} to assess the
+    receiver's actual accuracy with a physical transmitter.
+
+    \item \textbf{Supersonic Frequencies}: Explore the viability of
+    moving the frequency bands used for face turn transmission into the
+    supersonic range (>20kHz) so that they cannot distract human
+    speedsolvers. At a minimum, this would require connecting a
+    supersonic microphone into a laptop or smartphone to detect the
+    higher frequency tones.
+
+    \item \textbf{Refined Receiver Parameters}: Create a collection of
+    optimal receiver parameters for a variety of combinations of cubes
+    and environments. Additional research could also explore ways to
+    determine these optimal parameters dynamically as a speedcuber
+    gives feedback on the quality of the face turn decoding.
+
+\end{enumerate}
+
+There are also a few areas other of potential research that would
+enhance the experience of using a sound-based smartcube.
+
+\begin{itemize}
+
+    \item \textbf{Live Algorithm}: The current implementation of the
+    receiver records the entire move sequence, then processes it all at
+    once. A more interactive version would be able to continuously
+    listen to the microphone and detect face turns in real time.
+
+    \item \textbf{Support for Cube Rotations}: As mentioned in Section
+    \ref{subsec:represent-audio-protocol}, the set of decoded face
+    turns assumes no cube rotations. Cube rotations are extremely
+    common during speedsolves and pose interesting challenges for move
+    tracking systems since they do not rotate any axles but do change
+    which color centerpiece is associated with each face (see Section
+    \textbf{TODO - Ch. 2}). Potential solutions could involve the
+    addition of a hardware gyroscope and/or a set of software
+    heuristics based on speedcubers' preferences for R U L D moves.
+
+\end{itemize}
+
+Additional support for future research in this area can also be found
+by contacting the author and/or participating in speedsolving
+communities such as
+\href{https://www.speedsolving.com/}{Speedsolving.com}.
