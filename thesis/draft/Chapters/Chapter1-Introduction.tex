@@ -1,26 +1,22 @@
-% Chapter Template
+\chapter{Introduction} 
+\label{Chapter1}
 
-\chapter{Introduction} % Main chapter title
-
-\label{Chapter1} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
-
-% TODO What are we looking at? What will be shown? State general research questions to answer. Start by defining the *problem*. The rest of the thesis will detail my solution.
-
-% I am trying to persuade someone that a sound-based smart cube is viable on consumer grade hardware.
 
 \section{The Advent of Smart Cubes}
 
 Speedsolving, the sport of solving twisty puzzles like the Rubik's Cube
 as fast as possible, has seen a resurgence of popularity since the
-early 2000s. \cite{TODO} Over the past two decades many advances in
-cube technology have produced ever higher performing puzzles.
+early 2000s. \cite{wca-competition-history} Over the past two decades
+many advances in cube technology have produced ever higher performing
+puzzles.
 
 Recently, the speedcubing community has seen the entrance of smart
-cubes, special versions of a Rubik’s Cube built around hardware that
+cubes, special versions of a Rubik's Cube built around hardware that
 can connect to a mobile device over Bluetooth. These smart cubes have
 sparked a wave of excitement with the vast opportunities they offer for
 automatic turn tracking, performance analysis, personalized improvement
 feedback, and networked competition.
+
 
 \section{Obstacles to Adoption}
 
@@ -29,25 +25,27 @@ widespread adoption.
 
 \begin{itemize}
 
-    \item \emph{Cost}: Smart cubes can cost up to eight times as much
-    as a comparable non-smart speedcube. \footnote{For example, one
-    popular budget speedcube, the Moyu Weilong, costs only \$5, while
-    the cheapest smartcube, the Giiker Cube, starts at \$40.
-    \cite{TODO}. On the higher end, a premium speedcube, like the Gans
-    356 XS, retails for just over \$60 while a premium smartcube, like
-    the GoCube, retails for over \$100. \cite{TODO}}
+    \item \emph{Cost}: Smart cubes can cost two to eight times as much
+    as a comparable, non-smart speedcube. \footnote{For example, one
+    popular budget speedcube, the Yuxin Little Magic, costs only \$5
+    \cite{yuxin-thecubicle}, while the cheapest smartcube, the Giiker
+    Cube, starts at \$42 \cite{giiker-thecubicle}. On the higher end, a
+    premium speedcube, like the Gans 356 XS, retails for \$53
+    \cite{gans-xs-thecubicle} while a premium smartcube, like the
+    GoCube, retails just under \$100. \cite{gocube-price}}
     
     \item \emph{Performance}: Existing smart cubes turn slower than
-    comparable non-smart cubes. \cite{TODO}
+    comparable non-smart cubes, making them less reflective of a
+    speedcuber's true skill. \cite{smartcube-regulation-discussion}
     
     \item \emph{Reliability}: Many smart cube owners report inability
     to connect the smart cube to a mobile device and missed/inaccurate
-    turn tracking. \cite{TODO}
+    turn tracking. \cite{smartcube-regulation-discussion}
     
     \item \emph{Regulation}: Current competition rules ban the use of
     electronics during timed solves, thus banning the use of smart
-    cubes. There is no foreseeable change to this rule. \cite{TODO} %
-    WCA Regulations
+    cubes \cite{wca-regulations}. There is no foreseeable change to
+    this rule. \cite{smartcube-regulation-discussion}
     
 \end{itemize}
 
@@ -65,16 +63,28 @@ no existing way to automatically track the moves of a standard,
 \label{sec:thesis-purpose}
 
 The primary goal of this thesis is to create a proof-of-concept for a
-smart cube design that can enable a speedcuber to use his/her personal
-favorite cube, while still having all the benefits of a smart cube.
+smart cube design that can enable speedcubers to obtain the same
+metrics and data that are offered by existing commercial smartcubes
+from their main, non-smart speedcube.
 
-In other words, this thesis seeks to answer the following question:
+In other words, this thesis will explore the following question in depth:
 
 \emph{Is it possible to track the face turns of a standard, "non-smart"
 speedcube in a non-destructive, competition-legal way?}
 
-
-\section{Thesis Overview}
-\label{sec:thesis-overview}
-
-TODO give an overview of the rest of the Thesis document.
+This exploration begins in Chapter \ref{Chapter2} with an introduction
+of several foundational topics about the structure of a Rubik's Cube
+along with an overview of the speedcubing community. Chapter
+\ref{Chapter3} reviews relevant efforts in the field of smartcube
+construction and outline the detailed research questions for this
+thesis. Chapter \ref{Chapter4} then defines and analyzes the various
+factors to consider when building a sound-based smartcube. Chapter
+\ref{Chapter5} begins the proof-of-concept design by proposing a
+software receiver for a sound-based move tracking protocol. Chapter
+\ref{Chapter6} completes the proof-of-concept by proposing a design for
+the complementary physical transmitter to embed into a speedcube.
+Chapter \ref{Chapter7} then evaluates the performance of the receiver
+and transmitter against a variety of key benchmarks. Finally, Chapter
+\ref{Chapter8} synthesizes answers to the specific research questions
+from Chapter \ref{Chapter3} and discusses the outlook for future
+research in the domain of sound-based Rubik's Cube turn tracking.
