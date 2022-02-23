@@ -43,8 +43,8 @@ that affect the viability of a sound-based smart cube design:
 \begin{enumerate}
     \item the achievable \textbf{signal-to-noise ratio} of the transmitter
     \item the \textbf{distinctiveness of the tones} used for the protocol
-    \item the \textbf{frequency response range of consumer hardware} used to implement the protocol
     \item the \textbf{range of tones audible} to the human ear
+    \item the \textbf{frequency response range of consumer hardware} used to implement the protocol
 \end{enumerate}
 
 An analysis of these factors found that the tones used in the protocol
@@ -54,8 +54,8 @@ least 100Hz apart (see Section \ref{subsec:tone-distinctiveness}) in
 order to have a sufficiently strong signal-to-noise ratio for clear
 detection. Furthermore, the specific tones chosen for the protocol
 would ideally fit within the "musical range" of 500Hz and 4000Hz to
-simultaneously (4) avoid irritating human solvers (see Section
-\ref{subsec:human-auditory-range}) and (3) leverage the optimizations
+simultaneously (3) avoid irritating human solvers (see Section
+\ref{subsec:human-auditory-range}) and (4) leverage the optimizations
 built into consumer audio recording hardware in smartphones and laptops
 (see Section \ref{subsec:frequency-response-range}).
 
@@ -68,10 +68,10 @@ a Rubik's Cube with high accuracy?}
 As discussed in Section \ref{sec:move-tracking-accuracy}, the receiver
 from Chapter \ref{Chapter5} and the transmitter from Chapter
 \ref{Chapter6} were able to transmit and decode a sequence of face
-turns with perfect accuracy across a variety of input parameters within
-a controlled environment. \footnote{Specifically, this controlled
-environment consisted of synthetically generated audio representative
-of the output of an ideal transmitter (see Sections
+turns with perfect accuracy across a variety of configuration
+parameters within a controlled environment. \footnote{Specifically,
+this controlled environment consisted of synthetically generated audio
+representative of the output of an ideal transmitter (see Sections
 \ref{sec:synthetic-audio-generation} and
 \ref{sec:adding-realistic-noise}) played from a Google Pixel phone and
 recorded by an HP Spectre laptop in a quiet room (see Section
