@@ -1,11 +1,13 @@
-% Chapter Template
+\chapter{Background}
+\label{Chapter2}
 
-\chapter{Background} % Main chapter title
-
-\label{Chapter2} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
-
-TODO Each chapter starts with a paragraph that briefly outlines the
-purpose of each of the sections.
+This chapter provides important background information about cube that
+will facilitate understanding the topics presented in later chapters.
+Section \ref{sec:rubiks-history} will describe the historical origin of
+the cube. Then, Section \ref{sec:rubiks-anatomy} will detail the
+structure of the cube and the notation used to transcribe move
+sequences. Finally, Section \ref{sec:speedsolving} will outline the
+culture and regulations surrounding competitive speedsolving.
 
 
 \section{A Brief History of the Rubik's Cube}
@@ -21,76 +23,158 @@ realized he had created a new puzzle. He patented his cube in 1975,
 sold \cite{forbes-rubik-merger}, allowing an estimated 1 in 7 humans on
 earth to try their hand at solving it \cite{rubik-population-reached}.
 
-Since then, the cube has been the subject of academic research,
-competition, leisure, and cultural iconography.
-
 
 \section{The Anatomy of a Rubik's Cube}
 \label{sec:rubiks-anatomy}
 
-The Rubik's Cube, like a standard geometric cube, has six faces, all of
-which are squares and positioned at right angles to each other. When
-solved, each of these faces has a single, unique color.
+The Rubik's Cube, like a standard geometric cube, has six square faces
+positioned at right angles to each other. When solved, each of these
+faces has a single, unique color.
 
 The Rubik's Cube is further subdivided into a 3x3x3 arrangement of
 smaller "cubies" such that each face consists of nine individual
-colored stickers/tiles. There are three different types of cubies:
-centers, edges, and corners. Each type of cubie is distinguished by the
-number of unique colors it binds together into a single physical unit.
-
-\begin{table}[h]
-    \centering
-    \caption{The number of each type of Rubik's Cube cubie}
-    \label{table:cubie-count}
-    \begin{minipage}{10cm}
-        \begin{tabular}{ | c | c | c | }
-            \hline
-            Type of Cubie & Number of Colors & Count per Rubik's Cube \\ 
-            \hline \hline
-            Center & 1 & 6\footnote[1]{All six center pieces are attached a single core} \\
-            \hline
-            Edge & 2 & 12 \\  
-            \hline
-            Corner & 3 & 8 \\
-            \hline
-        \end{tabular}
-    \end{minipage}
-\end{table}
+colored stickers/tiles. There are three different types of cubies -
+centers, edges, and corners - each which is distinguished by the number
+of unique colors it binds together into a single physical unit. The six
+center cubies have one color each, the twelve edges have two colors
+each, and the eight corners have three colors each.
 
 Each of the six center cubies are also attached to a common core which
 allows them to rotate freely, but fixes their position relative to each
 other. As such, the single color of each center cubie is also the color
 shared by the corresponding face when the entire cube is solved.
 
-\subsection{Algorithm Notation}
-TODO
+\subsection{Move Sequence Notation}
+\label{subsec:algorithm-notation}
 
-\subsection{The Laws of the Cube}
+Shortly after the cube's invention, David Singmaster, a British
+mathematician, proposed a beginner-friendly, layer-by-layer approach to
+solving the cube. To facilitate communication of his solution, he
+outlined a notation for documenting the face turns required for each
+phase. This notation, now known as the Singmaster Notation, has become
+the standard notation used for documenting move sequences for the cube.
+\cite{singmaster-notation}
 
-TODO Describe the basic concepts of group theory that stipulate what
-positions are and aren't legal. It might also be fun to discuss the
-derivation of the 43 quintillion possible positions on the cube.
+The notation consists of two components: (1) A label for each face of the
+cube and (2) a superscript to indicate a direction of rotation.
+
+The labels for each face are as follows:
+
+\begin{itemize}
+    \item $U$ - "Up": The top face
+    \item $D$ - "Down": The bottom face
+    \item $R$ - "Right": The "Right" side face
+    \item $L$ - "Left": The "Left" side face
+    \item $F$ - "Front": The face directly in "Front" of the solver
+    \item $B$ - "Back": The face on the "Back" side of the cube facing away from the solver
+\end{itemize}
+
+Notice that the labels for each face are assigned based on its relative
+orientation, not the color of its centerpiece. For example, the top
+face is always labelled $U$ whether the top facing centerpiece is
+green, yellow, or another color. This is demonstrated by the
+color-neutral image used to depict these face labels in Figure
+\ref{fig:cube-notation}.
+
+\begin{figure}[h]
+    \centering
+    \caption[Rubik's Cube Notation]{Notational names for each face of the Rubik's Cube \cite{img-cube-notation}}
+    \label{fig:cube-notation}
+    \includegraphics{Figures/2 Background/rubik's_cube_notation_bw.png}
+\end{figure}
+
+\newpage
+The superscripts are as follows:
+
+\begin{itemize}
+    \item $X^1$ : 90$^o$ Clockwise rotation. Generally abbreviated as \code{X}
+    \item $X^{-1}$ : 90$^o$ Counter-clockwise rotation. Generally abbreviated as \code{X'}
+    \item $X^2$ : 180$^o$ Rotation. Generally abbreviated as \code{X2}
+\end{itemize}
+
+For example, the move sequence \code{R U2 R'} denotes turning the Right
+layer 90$^o$ clockwise, followed by a 180$^o$ rotation of the Up face,
+and finalized by a 90$^o$ counter-clockwise rotation of the Right face
+(see Figure \ref{fig:notation-demo})\footnote{Images generated with the
+\href{https://alpha.twizzle.net/edit/?alg=R+U2+R\%27}{Twizzle Editor}}.
+
+% How to do a sub-figure: https://tex.stackexchange.com/a/37597
+\begin{figure}[h]
+    \centering
+    \caption{The move sequence \code{R U2 R'}}
+    \label{fig:notation-demo}
+    \begin{subfigure}{0.25\textwidth}
+        \centering
+        \caption{Starting Cube}
+        \label{fig:notation-demo-start}
+        \includegraphics[width=.90\linewidth]{Figures/2 Background/start.png}
+    \end{subfigure}%
+    \begin{subfigure}{0.25\textwidth}
+        \centering
+        \caption{Apply \code{R}}
+        \label{fig:notation-demo-r}
+        \includegraphics[width=.90\linewidth]{Figures/2 Background/R.png}
+    \end{subfigure}%
+    \begin{subfigure}{0.25\textwidth}
+        \centering
+        \caption{Apply \code{U2}}
+        \label{fig:notation-demo-u2}
+        \includegraphics[width=.90\linewidth]{Figures/2 Background/U2.png}
+    \end{subfigure}%
+    \begin{subfigure}{0.25\textwidth}
+        \centering
+        \caption{Apply \code{R'}}
+        \label{fig:notation-demo-rprime}
+        \includegraphics[width=.90\linewidth]{Figures/2 Background/R'.png}
+    \end{subfigure}%
+\end{figure}
 
 
-\section{Speedsolving}
-\label{sec:speedcolving}
+\section{A Brief History of Speedsolving}
+\label{sec:speedsolving}
 
-TODO
+As more people learned to solve the cube, there began to be increased
+interest in solving the cube as quickly as possible. In 1982, the first
+Rubik's Cube World Championship was held in Budapest with a winning
+solution time of 22.95 seconds by Minh Thai. However, due to falling
+interest, no further competitions were organized in the following two
+decades.
+
+Interest in speedcubing picked back up in the late 1990s as the
+consumer internet facilitated sharing of strategies and techniques. In
+2003, the second competition, the World Rubik's Games Championship
+2003, was held in Toronto, Canada with 89 competitors. Additional
+competitions were organized later that year and into 2004.
+\cite{wca-speedcubing-history}
+
+\subsection{The World Cube Association}
+\label{subsec:the-world-cube-association}
+
+To provide a set of standard regulations for the increasing number of
+speedcubing competitions, the World Cube Association (WCA) was founded
+in August 2004 by Tyson Mao and Ron van Bruchem. Today, the WCA governs
+all official speedcubing competitions by creating and enforcing a
+consistent set of regulations, providing tools for creating fair
+scrambles, and hosting the official platform for sharing competitions
+results. \cite{wca-speedcubing-history}
 
 \subsection{The Rise of Smart Cubes}
-TODO
+\label{subsec:the-rise-of-smart-cubes}
 
-\subsection{Competitions}
-\label{subsec:competitions}
+In September 2018, the Xiaomi released the Giiker Cube, the first cube
+with built-in sensors to track its face turns during use.
+\cite{giiker-thecubicle} For the first time, a solution could be
+analyzed without first requiring the tedious process of transcribing
+each individual move from a video recording! Additional "smartcubes"
+were released by a variety of manufacturers in the following years.
+\cite{gocube-product-launch-video} \cite{gans356i-thecubicle}
+\cite{gocube-rubiksconnected}
 
-\subsubsection{The World Cube Association}
-\label{subsec:world-cube-association}
-TODO
-
-\subsubsection{Competition Regulations}
-\label{subsec:competition-regulations}
-
-According to WCA regulation 2i, "While competing, competitors must not
-use electronics or audio equipment (e.g. cell phones, MP3 players,
-dictaphones, additional lighting) apart from the Stackmat timer or
-stopwatch." \cite{wca-regulations}
+However, despite their usefulness during personal practice, smartcubes
+cannot be used in official competitions. According to WCA regulation
+2i, "While competing, competitors must not use electronics or audio
+equipment (e.g. cell phones, MP3 players, dictaphones, additional
+lighting) apart from the Stackmat timer or stopwatch."
+\cite{wca-regulations} This protects against competitors gaining unfair
+inspection time by previewing the scrambled cube from a connected
+device before it is brought to the competition table.
