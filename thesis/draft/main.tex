@@ -100,7 +100,7 @@ headsepline, % Uncomment to get a line under the header
 %	THESIS INFORMATION
 %----------------------------------------------------------------------------------------
 
-\thesistitle{DIY Supercube} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
+\thesistitle{D.I.Y. Smartcube: \\ Tracking the Face Turns of a Rubik's Cube using Embedded Speakers} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
 \supervisor{Dr. Robert \textsc{Heinrichs}} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
 \examiner{} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
 \degree{Honors Thesis in Software Engineering} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
@@ -156,14 +156,17 @@ headsepline, % Uncomment to get a line under the header
 \end{minipage}
 \begin{minipage}[t]{0.4\textwidth}
 \begin{flushright} \large
-\emph{Supervisor:} \\
-\href{https://isearch.asu.edu/profile/3180015}{\supname} % Supervisor name - remove the \href bracket to remove the link  
+\emph{Thesis Director:} \\
+\href{https://isearch.asu.edu/profile/3180015}{\supname}\\ % Supervisor name - remove the \href bracket to remove the link  
+\vspace{.5cm}
+\emph{Second Reader:}\\
+\href{https://www.linkedin.com/in/baoxin-li-84b471b/}{Baoxin Li} % Supervisor name - remove the \href bracket to remove the link  
 \end{flushright}
 \end{minipage}\\[3cm]
  
 \vfill
 
-\large \textit{A thesis submitted in fulfillment of the requirements\\ for the degree of \degreename}\\[0.3cm] % University requirement text
+\large \textit{A thesis submitted in partial fulfillment of the \\ requirements for an honors distinction}\\[0.3cm] % University requirement text
 \textit{in the}\\[0.4cm]
 \groupname\\\deptname\\[2cm] % Research group name and department name
  
@@ -182,10 +185,10 @@ headsepline, % Uncomment to get a line under the header
 
 \begin{declaration}
 \addchaptertocentry{\authorshipname} % Add the declaration to the table of contents
-\noindent I, \authorname, declare that this thesis titled, \enquote{\ttitle} and the work presented in it are my own. I confirm that:
+\noindent I, \authorname, declare that this thesis titled, \enquote{D.I.Y. Smartcube: Tracking the Face Turns of a Rubik's Cube using Embedded Speakers} and the work presented in it are my own. I confirm that:
 
 \begin{itemize} 
-\item This work was done wholly or mainly while in candidature for a research degree at this University.
+\item This work was done wholly or mainly while in candidature for a degree at this University.
 \item Where any part of this thesis has previously been submitted for a degree or any other qualification at this University or any other institution, this has been clearly stated.
 \item Where I have consulted the published work of others, this is always clearly attributed.
 \item Where I have quoted from the work of others, the source is always given. With the exception of such quotations, this thesis is entirely my own work.
@@ -221,6 +224,7 @@ headsepline, % Uncomment to get a line under the header
 
 \begin{abstract}
 \addchaptertocentry{\abstractname} % Add the abstract to the table of contents
+TODO write abstract
 The Thesis Abstract is written here (and usually kept to just this page). The page is kept centered vertically so can expand into the blank space above the title too\ldots
 \end{abstract}
 
@@ -230,6 +234,8 @@ The Thesis Abstract is written here (and usually kept to just this page). The pa
 
 \begin{acknowledgements}
 \addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
+TODO acknowledgements
+
 The acknowledgments and the people to thank go here, don't forget to include your project advisor\ldots
 \end{acknowledgements}
 
@@ -255,40 +261,12 @@ The acknowledgments and the people to thank go here, don't forget to include you
 
 \end{abbreviations}
 
-%----------------------------------------------------------------------------------------
-%	PHYSICAL CONSTANTS/OTHER DEFINITIONS
-%----------------------------------------------------------------------------------------
-
-\begin{constants}{lr@{${}={}$}l} % The list of physical constants is a three column table
-
-% The \SI{}{} command is provided by the siunitx package, see its documentation for instructions on how to use it
-
-Speed of Light & $c_{0}$ & \SI{2.99792458e8}{\meter\per\second} (exact)\\
-%Constant Name & $Symbol$ & $Constant Value$ with units\\
-
-\end{constants}
-
-%----------------------------------------------------------------------------------------
-%	SYMBOLS
-%----------------------------------------------------------------------------------------
-
-\begin{symbols}{lll} % Include a list of Symbols (a three column table)
-
-$a$ & distance & \si{\meter} \\
-$P$ & power & \si{\watt} (\si{\joule\per\second}) \\
-%Symbol & Name & Unit \\
-
-\addlinespace % Gap to separate the Roman symbols from the Greek
-
-$\omega$ & angular frequency & \si{\radian} \\
-
-\end{symbols}
 
 %----------------------------------------------------------------------------------------
 %	DEDICATION
 %----------------------------------------------------------------------------------------
 
-\dedicatory{For/Dedicated to/To my\ldots} 
+\dedicatory{For the benefit of the general speedcubing community\ldots} 
 
 %----------------------------------------------------------------------------------------
 %	THESIS CONTENT - CHAPTERS
