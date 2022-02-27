@@ -160,7 +160,7 @@ headsepline, % Uncomment to get a line under the header
 \href{https://isearch.asu.edu/profile/3180015}{\supname}\\ % Supervisor name - remove the \href bracket to remove the link  
 \vspace{.5cm}
 \emph{Second Reader:}\\
-\href{https://www.linkedin.com/in/baoxin-li-84b471b/}{Baoxin Li} % Supervisor name - remove the \href bracket to remove the link  
+\href{https://www.linkedin.com/in/baoxin-li-84b471b/}{Dr. Baoxin \textsc{Li}} % Supervisor name - remove the \href bracket to remove the link  
 \end{flushright}
 \end{minipage}\\[3cm]
  
@@ -224,8 +224,28 @@ headsepline, % Uncomment to get a line under the header
 
 \begin{abstract}
 \addchaptertocentry{\abstractname} % Add the abstract to the table of contents
-TODO write abstract
-The Thesis Abstract is written here (and usually kept to just this page). The page is kept centered vertically so can expand into the blank space above the title too\ldots
+
+Speedsolving, the art of solving twisty puzzles like the Rubik's Cube
+as fast as possible, has recently benefitted from the recent arrival of
+smartcubes which have special hardware for tracking the cube's face
+turns and transmitting them via bluetooth. However, due to their
+embedded electronics, existing smartcubes cannot be used in
+competition, reducing their utility in personal speedcubing practice.
+
+This thesis proposes a sound-based design for tracking the face turns
+of a standard, non-smart speedcube consisting of an audio processing
+receiver in software and a small physical speaker configured as a
+transmitter. Special attention has been given to ensuring that
+installing the transmitter requires only a reversible centercap
+replacement on the original cube. This allows the cube to benefit from
+smartcube features during practice, while still maintaining compliance
+with competition regulations.
+
+Within a controlled test environment, the software receiver perfectly
+detected a variety of transmitted move sequences. Furthermore, all
+components required for the physical transmitter were demonstrated to
+fit within the centercap of a Gans 356 speedcube.
+
 \end{abstract}
 
 %----------------------------------------------------------------------------------------
@@ -234,9 +254,22 @@ The Thesis Abstract is written here (and usually kept to just this page). The pa
 
 \begin{acknowledgements}
 \addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
-TODO acknowledgements
 
-The acknowledgments and the people to thank go here, don't forget to include your project advisor\ldots
+The first order of gratitude goes to my wonderful wife. Though this
+project has consumed much of my attention throughout our entire
+friendship, courtship, and marriage, she has been my greatest source of
+encouragement and support.
+
+Additional gratitude goes to my parents, particularly my father-in-law
+who spent hours with me at the workbench guiding me as I pieced
+together transmitter prototypes.
+
+Finally, gratitude goes to Dr. Heinrichs for his patience through
+weekly meetings for a two-year project originally scheduled for only
+one year. His guidance has been instrumental throughout the entire
+project. Dr. Li's infusion of confidence from the start of the project
+was also inspiring.
+
 \end{acknowledgements}
 
 %----------------------------------------------------------------------------------------
