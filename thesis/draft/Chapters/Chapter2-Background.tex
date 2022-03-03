@@ -33,16 +33,55 @@ faces has a single, unique color.
 
 The Rubik's Cube is further subdivided into a 3x3x3 arrangement of
 smaller "cubies" such that each face consists of nine individual
-colored stickers/tiles. There are three different types of cubies -
-centers, edges, and corners - each which is distinguished by the number
-of unique colors it binds together into a single physical unit. The six
-center cubies have one color each, the twelve edges have two colors
-each, and the eight corners have three colors each.
+colored stickers/tiles (see Figure \ref{fig:anatomy-cube}). There are
+three different types of cubies - centers, edges, and corners - each
+which is distinguished by the number of unique colors it binds together
+into a single physical unit. The six center cubies have one color each
+(see Figure \ref{fig:anatomy-centers}), the twelve edges have two
+colors each (see Figure \ref{fig:anatomy-edges}), and the eight corners
+have three colors each (see Figure \ref{fig:anatomy-corners}).
 
 Each of the six center cubies are also attached to a common core which
 allows them to rotate freely, but fixes their position relative to each
 other. As such, the single color of each center cubie is also the color
 shared by the corresponding face when the entire cube is solved.
+
+\newpage
+\null  % Vertical centering: https://www.reddit.com/r/LaTeX/comments/1crepl/center_figure_vertically_on_new_page/
+\vfill
+% How to do a sub-figure: https://tex.stackexchange.com/a/37597
+\begin{figure}[h]
+    \centering
+    \caption{The Anatomy of the Rubik's Cube \cite{iamthecube}}
+    \label{fig:anatomy}
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \caption{Full Cube}
+        \label{fig:anatomy-cube}
+        \includegraphics[width=.90\linewidth]{Figures/2 Background/anatomy-cube.png}
+    \end{subfigure}%
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \caption{Centerpieces}
+        \label{fig:anatomy-centers}
+        \includegraphics[width=.90\linewidth]{Figures/2 Background/anatomy-centers.png}
+    \end{subfigure}\\
+    \vspace{2mm}
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \caption{Edges}
+        \label{fig:anatomy-edges}
+        \includegraphics[width=.90\linewidth]{Figures/2 Background/anatomy-edges.png}
+    \end{subfigure}%
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \caption{Corners}
+        \label{fig:anatomy-corners}
+        \includegraphics[width=.90\linewidth]{Figures/2 Background/anatomy-corners.png}
+    \end{subfigure}\\
+\end{figure}
+\vfill
+\newpage
 
 \subsection{Move Sequence Notation}
 \label{subsec:algorithm-notation}
@@ -143,9 +182,9 @@ decades.
 Interest in speedcubing picked back up in the late 1990s as the
 consumer internet facilitated sharing of strategies and techniques. In
 2003, the second competition, the World Rubik's Games Championship
-2003, was held in Toronto, Canada with 89 competitors. Additional
-competitions were organized later that year and into 2004.
-\cite{wca-speedcubing-history}
+2003, was held in Toronto, Canada with 89 competitors and a winning
+average time of 20.00 seconds. Additional competitions were organized
+later that year and into 2004. \cite{wca-speedcubing-history}
 
 \subsection{The World Cube Association}
 \label{subsec:the-world-cube-association}
