@@ -90,9 +90,19 @@ rotates (Figure ~\ref{fig:giiker-center-brush}).
 
 \subsection{Go Cube}
 
-Announced on Kickstarter in June 2018, Patricula's GoCube was the first smartcube to include a gyroscope that would track a Rubik's Cube's orientation in addition to the face turns applied to it. \cite{gocube-product-launch-video}
-Like the Giiker Cube before it, the GoCube's core contains a small circuit board with the main electronics including a microcontroller, Bluetooth antenna, and the added gyroscope (Figure ~\ref{fig:gocube-core}). 
-Though the teardown pictures from the Go Cube's FCC filing aren't particularly clear, it appears that the cube registers face turns similarly to the Giiker Cube: by producing a voltage drop via changing which one of the four resistors shown across the bottom of the center cap board in Figure ~\ref{fig:gocube-cap-chip} is in series with the circuit.
+Announced on Kickstarter in June 2018, then shipped a year later
+\cite{gocube-kickstarter}, Patricula's GoCube was the first smartcube
+to include a gyroscope that would track a Rubik's Cube's orientation in
+addition to the face turns applied to it.
+\cite{gocube-product-launch-video} Like the Giiker Cube before it, the
+GoCube's core contains a small circuit board with the main electronics
+including a microcontroller, Bluetooth antenna, and the added gyroscope
+(Figure ~\ref{fig:gocube-core}). Though the teardown pictures from the
+Go Cube's FCC filing aren't particularly clear, it appears that the
+cube registers face turns similarly to the Giiker Cube: by producing a
+voltage drop via changing which one of the four resistors shown across
+the bottom of the center cap board in Figure ~\ref{fig:gocube-cap-chip}
+is in series with the circuit.
 
 GoCube also serves as the underlying technology for the Rubik's Connected, the official smartcube from The Rubik's Company. \cite{gocube-rubiksconnected}
 
@@ -247,7 +257,7 @@ Myo Armband) to track the human solver's finger movements while
 manipulating the cube. However, since "the Myo moved a little when
 'cubing'", they ultimately found greater success with a computer vision
 based tracking solution similar to those discussed in
-\ref{subsec:computer-vision}.
+\ref{subsec:computer-vision}. \cite{polfreman-musiccube}
 
 
 \section{Other Relevant Research}
@@ -346,21 +356,21 @@ questions:
 \begin{enumerate}
 
     \item \textbf{Feasibility on Consumer Hardware}: \emph{What are the
-    constraints for a sound-based smart cube design compatible with
+    constraints for a sound-based smartcube design compatible with
     consumer-grade microphones like those found in common smartphones
     and laptops?}
     
     \item \textbf{Move Tracking Accuracy}: \emph{How could such a
-    sound-based smart cube design track the face turns of a Rubik's
+    sound-based smartcube design track the face turns of a Rubik's
     Cube with high accuracy?}
     
     \item \textbf{Compatibility with Standard Speedcubes}: \emph{How
-    could such a sound-based smart cube design be deployed within a
+    could such a sound-based smartcube design be deployed within a
     standard, "non-smart" speedcube without requiring permanent
     modifications to the original cube?}
 
     \item \textbf{Move Tracking Granularity}: \emph{How could such a
-    sound-based smart cube design record the time spent executing each
+    sound-based smartcube design record the time spent executing each
     individual face turn of a Rubik's Cube?}
     
     \item \textbf{Competition Legality}: \emph{How could such a
