@@ -1,7 +1,6 @@
 # Auto-generate project files
 plt/
 audio/
-csv/
 logs/
 demo*.wav
 

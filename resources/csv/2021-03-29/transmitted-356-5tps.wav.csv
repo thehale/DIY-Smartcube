@@ -1,0 +1,649 @@
+window_size,stdv,alt_min,received_alg,similarity
+1,0.25,50, U' U U' U U' U U' U U U D D R U R' U D R R' R D R' R D R' U' U R' R D R R' R R' D' D' R R R U' U R D' D U D' B R L' B' U D R' U' U U' U L D' D U' U' D B' L B D R R' L U' D' U D' U' U' F U F' R F R' U' D U F D U U' U U' D D' U U' D F R D' R' U D' U D U U D' R F R' R D' R' D' R D' U U' R U U' R D' B U D R' U' U U' D R R D' B R D R' U D' U R B U R' U U U' D L D L' B U U' D' D' D' D' B L' F' U' U R R' D' U' D R D U L' D D' U' R L' U R' D,14
+1,0.25,150, U' U U' U D D U U D D D U' D U R R' D' D' R R R U' R U D' D D' U' R L D R' U L D' D U' L D' D R R' L D' U D' F R R' D' F D U' D D' F R R' U' D' U D F D D R' R B R R' D R R B D' B R R' B D' D F' B' R' L',35
+1,0.25,250, U D D U D D D D D' D' R R R R D' D D' D L L D' D L R R' L D' D' F F F D' D F R R B R R' D R B R' D' B B B' R',55
+1,0.25,350, D D U D D D D D D' R R R R D' D L L D' D L R R' L F F F D' D F R R B B B B B',69
+1,0.25,450, D D' D D R R R R L L L L F F F F R R B B B B,87
+1,0.25,550, D D' D D' R R R R L L L L F F F F B B B B,90
+1,0.5,50, U' U U' U U' U U' U U U D D R U R' U D R R' R D R' R D R' U' U R' R D R R' R R' D' D' R R R U' U R D' D U D' B R L' B' U D R' U' U U' U L D' D U' U' D B' L B D R R' L U' D' U D' U' U' F U F' R F R' U' D U F D U U' U U' D D' U U' D F R D' R' U D' U D U U D' R F R' R D' R' D' R D' U U' R U U' R D' B U D R' U' U U' D R R D' B R D R' U D' U R B U R' U U U' D L D L' B U U' D' D' D' D' B L' F' U' U R R' D' U' D R D U L' D D' U' R L' U R' D,14
+1,0.5,150, U' U U' U D D U U D D D U' D U R R' D' D' R R R U' R U D' D D' U' R L D R' U L D' D U' L D' D R R' L D' U D' F R R' D' F D U' D D' F R R' U' D' U D F D D R' R B R R' D R R B D' B R R' B D' D F' B' R' L',35
+1,0.5,250, U D D U D D D D D' D' R R R R D' D D' D L L D' D L R R' L D' D' F F F D' D F R R B R R' D R B R' D' B B B' R',55
+1,0.5,350, D D U D D D D D D' R R R R D' D L L D' D L R R' L F F F D' D F R R B B B B B',69
+1,0.5,450, D D' D D R R R R L L L L F F F F R R B B B B,87
+1,0.5,550, D D' D D' R R R R L L L L F F F F B B B B,90
+1,0.75,50, U' U U' U U' U U' U U U D D R U R' U D R R' R D R' R D R' U' U R' R D R R' R R' D' D' R R R U' U R D' D U D' B R L' B' U D R' U' U U' U L D' D U' U' D B' L B D R R' L U' D' U D' U' U' F U F' R F R' U D U F D U U' U U' D D' U U' D F R D' R' U D' U D U U D' R F R' R D' R' D' R D' R U U' R D' B D U R' U' D R R D' B R D R' D' U U R B U R' U D L D L' B U U' D' D' D' D' B L' F' U' U R R' D' U' D R D U L' D D' U' R L' U R' D,14
+1,0.75,150, U' U U' U D D U U D D D U' D U R R' D' D' R R R U' R U D' D D' U' R L D R' U L D' D U' L D' D R R' L D' U D' F R R' D' F D U' D D' F R R' U' D' U D F D D R' R B R R' D R R B D' B R R' B D' D F' B' R' L',35
+1,0.75,250, U D D U D D D D D' D' R R R R D' D D' D L L D' D L R R' L D' D' F F F D' D F R R B R R' D R B R' D' B B B' R',55
+1,0.75,350, D D U D D D D D D' R R R R D' D L L D' D L R R' L F F F D' D F R R B B B B B',69
+1,0.75,450, D D' D D R R R R L L L L F F F F R R B B B B,87
+1,0.75,550, D D' D D' R R R R L L L L F F F F B B B B,90
+1,1.0,50, U' U U' U U' U U U D D R U R' U D R R' R D R' R D R' U' U D R R' R R' D' D' R R R U' U R D' D U D' B R L' B' U D R' U' U U' U L D' D U' U D B' L B D R R' L U' D' U D' U' U' F U F' R F R' D F D D D' U U' D F R D' R' U' D' U D U U D' R F R' R D' R' D' R D' R U U' R D' B D R' U U' D R R D' B R D R' D' R B R' U U D L D L' B U U' D' D' D' D' B L' F' U' U R R' D' U' D R D U L' D D' U' R L' U R' D,15
+1,1.0,150, U' U U' U D D U U D D D U' D U R R' D' D' R R R U' R U D' D D' U' R L D R' U L D' D U' L D' D R R' L D' U D' F R R' D' F D U' D D' F R R' U' D' U D F D D R' R B R R' D R R B D' B R R' B D' D F' B' R' L',35
+1,1.0,250, U D D U D D D D D' D' R R R R D' D D' D L L D' D L R R' L D' D' F F F D' D F R R B R R' D R B R' D' B B B' R',55
+1,1.0,350, D D U D D D D D D' R R R R D' D L L D' D L R R' L F F F D' D F R R B B B B B',69
+1,1.0,450, D D' D D R R R R L L L L F F F F R R B B B B,87
+1,1.0,550, D D' D D' R R R R L L L L F F F F B B B B,90
+1,1.25,50, U' U U U D D R U R' U D R R' R D R' R D R' U' U D R R' R R' D' D' R R R U' R U D' D U D' B R L' B' D R' U L D' D U' U D B' L B D R R' L U' D' U D' U' U' F U F' R F R' D F D D D' D F R D' R' U' D' U D U U' D' R F R' R R' R D' R U U' R D' B D R' D R R D' B R R' R B R' U' U D L D L' B D' D' D' D' B L' F' U' U R R' D' U' D R D U L' D D' U' R L' U R' D,18
+1,1.25,150, U' U D D U U D D D U' D U R R' D' D' R R R U' R U D' D D' U' R L D R' L D' U D U' L D' D R R' L D' U D' F R R' D' F D U' D D' F R R' U' D' U D F D D R' R B R R' D R R B D' B R R' B D' D F' B' R' L',35
+1,1.25,250, U D D U D D D D D' D' R R R R D' D D' D L L D' D L R R' L D' D' F F F D' D F R R B R R' D R B R' D' B B B' R',55
+1,1.25,350, D D U D D D D D D' R R R R D' D L L D' D L R R' L F F F D' D F R R B B B B B',69
+1,1.25,450, D D' D D R R R R L L L L F F F F R R B B B B,87
+1,1.25,550, D D' D D' R R R R L L L L F F F F B B B B,90
+1,1.5,50, U D D R U R' U D R R' R D R' R D R' U' U D R R' D' D' R R R U' R U D' D U D' B R L' B' D R' L D' D D B' L B D R R' L D' U D' F U F' R F R' D F D D D' D F R D' R' D' D D' R F R' R R' R D R R D' B D R' D R R D' B R R' R B R' D L D L' B D' D' D' D' B L' F' U' U R R' D' D R D L' D D' U' R L' U R' D,17
+1,1.5,150, U D D U U D D D U' D U' D' D' R R R U' R U D' D D' U' R L D R' L D' D L D' D R R' L D' U D' F R R' D' F D D U' D' F R R' D' D F D D R' R B R R' D R R B D' B R R' B D' D F' B' R' L',38
+1,1.5,250, U D D U D D D D D' D' R R R R D' D D' D L L D' D L R R' L D' D' F F F D' D F R R B R R' D R B R' D' B B B' R',55
+1,1.5,350, D D U D D D D D D' R R R R D' D L L D' D L R R' L F F F D' D F R R B B B B B',69
+1,1.5,450, D D' D D R R R R L L L L F F F F R R B B B B,87
+1,1.5,550, D D' D D' R R R R L L L L F F F F B B B B,90
+1,1.75,50, U D D R U R' D R R' R D R' U R D R' U' D R R' U' D' D' R R R U' R D' D D' B R B' L D R' L D' D D B' L B D R R' L D' D' F F' R F R' D F D D D' F R R' D' D D' R F R' R D R R D' B D R' D R R D' B R R' R B R' D L D L' B D' D' D' D' B L' F' U' U R R' D' D R D L' D D' U' R L' U R' D,24
+1,1.75,150, U D D U D D D U U' D U' D' D' R R R U R D' D D' R L D R' L D' D L D' D R R' L D' D' F R R' D' F D D D' F R R' D' D F D D R' R B R R' D R R B D' B R R' B D' D F' B' R' L',39
+1,1.75,250, U D D U D D D D D' D' R R R R D' D D' D L L D' D L R R' L D' D' F F F D' D F R R B R R' D R B R' D' B B B' R',55
+1,1.75,350, D D U D D D D D D' R R R R D' D L L D' D L R R' L F F F D' D F R R B B B B B',69
+1,1.75,450, D D' D D R R R R L L L L F F F F R R B B B B,87
+1,1.75,550, D D' D D' R R R R L L L L F F F F B B B B,90
+1,2.0,50, U D D R U R' D R R' D R D D R' U' D' D' R R R U' R D' D D' B R B' L D R' L D' D D B' L B D R R' L D' D' R F R' D F D D D' F R R' D' D D' R F R' D R R R D' B R' D D R R D' B R R' R B R' D D B D' D' D' D' B L' F' U' U R R' D' R D D' U' R U R' D,17
+1,2.0,150, U D D U D D D D U' D' D' R R R U R D' D D' R L D R' L D' D L D' D R R' L D' D' F R R' D' F D D D' F R R' D' D F D D R' R B R R' D R R B D' B R R' B D' D F' B' R',36
+1,2.0,250, U D D U D D D D D' D' R R R R D' D D' D L L D' D L R R' L D' D' F F F D' D F R R B R R' D R B R' D' B B B' R',55
+1,2.0,350, D D U D D D D D D' R R R R D' D L L D' D L R R' L F F F D' D F R R B B B B B',69
+1,2.0,450, D D' D D R R R R L L L L F F F F R R B B B B,87
+1,2.0,550, D D' D D' R R R R L L L L F F F F B B B B,90
+1,2.25,50, U D D R R' U D R R' D R D D D' D' U R R U' R D' D D' B R B' L D R' L D' D D L D R R' L D' D' R F R' D F D D D' F R R' D' D D' R' F R' D' R R R B R' D R R' D' B R R' R B R' D D B D' D' D' D' B L' F' R R' D' R D D' U' R U R' D,20
+1,2.25,150, U D D U D D D D D' D' R R R R D' D D' R L D R' L D' D L D' D R R' L D' D' F R R' D' F D D D' F R R' D' D F R' R B R R' D R B R' D' B R R' B D' D F' B' R',39
+1,2.25,250, U' D D U D D D D D' D' R R R R D' D D' D L L D' D L R R' L D' D' F F F D' D F R R B R R' D R B R' D' B B B' R',54
+1,2.25,350, D D U D D D D D D' R R R R D' D L L D' D L R R' L F F F D' D F R R B B B B B',69
+1,2.25,450, D D' D D R R R R L L L L F F F F R R B B B B,87
+1,2.25,550, D D' D D' R R R R L L L L F F F F B B B B,90
+1,2.5,50, U D D R R' U D R R' D R D D D' D' U R R U' R D' D D' B R B' L D R' L D' D D L D R R' L R F R' D F D D D' F R R' D' D D' R' F R' D' R R R B R' D R R' D' B R R' R B R' D D B D' D' D' D' B F R R' R D' D D' U' R L' U R' D,20
+1,2.5,150, U' D D U D D D D D' D' R R R R D' D D' R L D R' L D' D L D' D R R' L F R R' D' F D D D' F R R' D' D F R' R B R R' D R B R' D' B R R' B D' D B' R' F',43
+1,2.5,250, U' D D U D D D D D' D' R R R R D' D D' D L L D' D L R R' L F F F D' D F R R B R R' D R B R' D' B B B' R',57
+1,2.5,350, D D U D D D D D D' R R R R D' D L L D' D L R R' L F F F D' D F R R B B B B B',69
+1,2.5,450, D D' D D R R R R L L L L F F F F R R B B B B,87
+1,2.5,550, D D' D D' R R R R L L L L F F F F B B B B,90
+1,2.75,50, U D D R R' U R D D D D D' D' U R R U' R D' D D' R L D R' L D' D D L D' R R' L R F R' D F D F R R' D' D D' F D' R R R B R' D R R' B R R' D' R B R' D D B D' D' D' D' B F R R' R D' D D' U' R U R' D,27
+1,2.75,150, D D U D D D D D' D' R R R R D' D D' R L D R' L D' D L R R' L F R R' D' F D F R R' D' D F R' R B R R' D R B R' D' B R R' B D' D B' R' F',45
+1,2.75,250, D D U D D D D D' D' R R R R D' D D' D L L D' D L R R' L F F F D' D F R R B R R' D R B R' D' B B B' R',56
+1,2.75,350, D D U D D D D D D' R R R R D' D L L D' D L R R' L F F F D' D F R R B B B B B',69
+1,2.75,450, D D' D D R R R R L L L L F F F F R R B B B B,87
+1,2.75,550, D D' D D' R R R R L L L L F F F F B B B B,90
+1,3.0,50, U D D U R D D D D D' D' R R R D' D D' R L R' D L D' D D L D' R R' L R F R' D' F D F R R' D' D D' F D' R R R B R' D B R R' D' R B R' D D B D' D' D' D' B F R R' D' R' D D' U' R U R' D,33
+1,3.0,150, D D U D D D D D' D' R R R R D' D D' R L R' D L D' D L R R' L F R R' D' F D F R R' D' D F R' R B R R' D B D' B R R' B D' D B',48
+1,3.0,250, D D U D D D D D' D' R R R R D' D D' L D L D' D L R R' L F F F D' D F R R B R R' D B D' B B B',58
+1,3.0,350, D D U D D D D D D' R R R R D' D L L D' D L R R' L F F F D' D F R R B B B B B',69
+1,3.0,450, D D' D D R R R R L L L L F F F F R R B B B B,87
+1,3.0,550, D D' D D' R R R R L L L L F F F F B B B B,90
+2,0.25,50, U' U U' U U U D D' U U D R R' R D R' R D R' U' U R' D R R R R U' U R U' D' R L U D R' U' U U' U L D' D U' U L R R' L U' U R F R' D F U' D U U' U U' D D' U U' F U D' U D U U' D' F D' R R' U R B R' U' D R D' R' B U U' R B U R' U' B U U' B F' L' U' R' U D' U' R U,27
+2,0.25,150, U' U U' U D D' U U D D D U' D U R R R R D' R L D R' L D' D U' L R R' L F F D D' F D' D F R' R' B D R B R' D' B B F' B',53
+2,0.25,250, U D D' U D D D D R R R R D' D L L D' D L R R' L F F F D' D F R R' B D B D' B B,63
+2,0.25,350, D D' U D D D D R R R R L L D' D L L F F F D' D F B B B B,85
+2,0.25,450, D D' D D' R R R R L L L L F F F F B B B B,90
+2,0.25,550, D D' R R R R L L L L F F F F B B B B,86
+2,0.5,50, U' U U' U U U D D' U U D R R' R D R' R D R' U' U R' D R R R R U' U R U' D' R L U D R' U' U U' U L D' D U' U L R R' L U' U R F R' D F U' D U U' U U' D D' U U' F U D' U D U U' D' F D' R R' U R B R' U' D R D' R' B U U' R B U R' U' B U U' B F' L' U' R' U D' U' R U,27
+2,0.5,150, U' U U' U D D' U U D D D U' D U R R R R D' R L D R' L D' D U' L R R' L F F D D' F D' D F R' R' B D R B R' D' B B F' B',53
+2,0.5,250, U D D' U D D D D R R R R D' D L L D' D L R R' L F F F D' D F R R' B D B D' B B,63
+2,0.5,350, D D' U D D D D R R R R L L D' D L L F F F D' D F B B B B,85
+2,0.5,450, D D' D D' R R R R L L L L F F F F B B B B,90
+2,0.5,550, D D' R R R R L L L L F F F F B B B B,86
+2,0.75,50, U' U U' U U U D D' U U D R R' R D R' R D R' U' U R' D R R R R U' U R U' D' R L U D R' U' U U' U L D' D U' U L R R' L U' U R F R' D F U' D U U' U U' D D' U U' F U D' U D U U' D' F D' R R' U R B R' U' D R D' R' B U U' R B U R' U B U U' B F' L' U' R' U D' U' R U,27
+2,0.75,150, U' U U' U D D' U U D D D U' D U R R R R D' R L D R' L D' D U' L R R' L F F D D' F D' D F R' R' B D R B R' D' B B F' B',53
+2,0.75,250, U D D' U D D D D R R R R D' D L L D' D L R R' L F F F D' D F R R' B D B D' B B,63
+2,0.75,350, D D' U D D D D R R R R L L D' D L L F F F D' D F B B B B,85
+2,0.75,450, D D' D D' R R R R L L L L F F F F B B B B,90
+2,0.75,550, D D' R R R R L L L L F F F F B B B B,86
+2,1.0,50, U' U U' U U U D D' U U D R R' R D R' R D R' U' U D R R R U' U R U' D' R L U D R' U' U U' U L D' D U' U L R R' L U' U R F R' D F U D D D' U U' F U' D' U D U U' D' F R D' R' U R B R' U' D R D' R' B R B R' U U B U U' B F' L' U' R' U D' U' R U,31
+2,1.0,150, U' U U' U D D' U U D D D U' D U R R R R D' R L D R' L D' D U' L R R' L F F D D' F D' D F R' R' B D R B R' D' B B F' B',53
+2,1.0,250, U D D' U D D D D R R R R D' D L L D' D L R R' L F F F D' D F R R' B D B D' B B,63
+2,1.0,350, D D' U D D D D R R R R L L D' D L L F F F D' D F B B B B,85
+2,1.0,450, D D' D D' R R R R L L L L F F F F B B B B,90
+2,1.0,550, D D' R R R R L L L L F F F F B B B B,86
+2,1.25,50, U' U D D' U U D R R' D R D R' U' U D R R R U' R U U' D' R L D R' L D' U D L R R' L R F R' D F D U D D' F D' D D' F R D' R' R B R' D R D' R' B R B R' U' U B B F' L' U' R' U D' U' R U,36
+2,1.25,150, U' U D D' U U D D D U' D U R R R R D' R L D R' L D' D L R R' L F F D D' F D' U' D F R' R' B D R B R' D' B B F' B',53
+2,1.25,250, U D D' U D D D D R R R R D' D L L D' D L R R' L F F F D' D F R R' B D B D' B B,63
+2,1.25,350, D D' U D D D D R R R R L L D' D L L F F F D' D F B B B B,85
+2,1.25,450, D D' D D' R R R R L L L L F F F F B B B B,90
+2,1.25,550, D D' R R R R L L L L F F F F B B B B,86
+2,1.5,50, U D D' U U D R R' D R D R' U' D U' R R R U' R U U' D' R L D R' L D' D L R R' L U R F R' D F D U' D D' F D' D D' F R D' R' R B R' D R D' R' B R B R' B B F' L' R' D' U' R U,38
+2,1.5,150, U D D' U U D D D U' D U' R R R R D' R L D R' L D' D L R R' L F F D D' F D' U' D F R' R' B D R B R' D' B B F' B',54
+2,1.5,250, U D D' U D D D D R R R R D' D L L D' D L R R' L F F F D' D F R R' B D B D' B B,63
+2,1.5,350, D D' U D D D D R R R R L L D' D L L F F F D' D F B B B B,85
+2,1.5,450, D D' D D' R R R R L L L L F F F F B B B B,90
+2,1.5,550, D D' R R R R L L L L F F F F B B B B,86
+2,1.75,50, U D D' U D R R' D R D U R' U' D U' R R R U' R D' R L D R' L D' D L R R' L R F R' D F D D D' F D' D D' F R' D' R' R B R' D R D' R' B R B R' B B F' L' R' D' U' R U,36
+2,1.75,150, U D D' U D D D U U' D U' R R R R D' R L D R' L D' D L R R' L F F D D' F D' U D F R' R' B D R B R' D' B B F' B',53
+2,1.75,250, U D D' U D D D D R R R R D' D L L D' D L R R' L F F F D' D F R R' B D B D' B B,63
+2,1.75,350, D D' U D D D D R R R R L L D' D L L F F F D' D F B B B B,85
+2,1.75,450, D D' D D' R R R R L L L L F F F F B B B B,90
+2,1.75,550, D D' R R R R L L L L F F F F B B B B,86
+2,2.0,50, U D D' U D R R' D R D D R' U R R R U' R D' R L D R' L D' D L R R' L R F R' D F D D D' F D' D F R' R' R B R' D R R' B D' R B R' B B F' R' D' U' R U,39
+2,2.0,150, U D D' U D D D D R R R R D' R L D R' L D' D L R R' L F F D D' F D' D F R' R' B D R B R' D' B B F' B',57
+2,2.0,250, U D D' U D D D D R R R R D' D L L D' D L R R' L F F F D' D F R R' B D B D' B B,63
+2,2.0,350, D D' U D D D D R R R R L L D' D L L F F F D' D F B B B B,85
+2,2.0,450, D D' D D' R R R R L L L L F F F F B B B B,90
+2,2.0,550, D D' R R R R L L L L F F F F B B B B,86
+2,2.25,50, U D D' U D D D D U R R R U' R D' R L D R' L D' D L R R' L R F R' D F D D D' F D' D F R' R' R B R' D R R' B D' R B R' B B F' R' D' U' R U,41
+2,2.25,150, U' D D' U D D D D R R R R D' R L D R' L D' D L R R' L F F D D' F D' D F R' R' B D R B R' D' B B F' B',56
+2,2.25,250, U' D D' U D D D D R R R R D' D L L D' D L R R' L F F F D' D F R R' B D B D' B B,63
+2,2.25,350, D D' U D D D D R R R R L L D' D L L F F F D' D F B B B B,85
+2,2.25,450, D D' D D' R R R R L L L L F F F F B B B B,90
+2,2.25,550, D D' R R R R L L L L F F F F B B B B,86
+2,2.5,50, D D' U D D D D R R R R D' R L D R' L D' D L R R' L R F R' D F D F D' D F R' R' R B R' D R R' B D' R B R' B B F' R' D' U' R U,44
+2,2.5,150, D D' U D D D D R R R R D' R L D R' L D' D L R R' L F F F D' D F R' R' B D R B R' D' B B B',59
+2,2.5,250, D D' U D D D D R R R R D' D L L D' D L R R' L F F F D' D F R R' B D B D' B B,63
+2,2.5,350, D D' U D D D D R R R R L L D' D L L F F F D' D F B B B B,85
+2,2.5,450, D D' D D' R R R R L L L L F F F F B B B B,90
+2,2.5,550, D D' R R R R L L L L F F F F B B B B,86
+2,2.75,50, D D' U D D D D R R R R D' R L D R' L D' D L R R' L R F R' D F D F D' D F R' R' R B R' D B D' R B R' B B F' D' U' U,47
+2,2.75,150, D D' U D D D D R R R R D' R L D R' L D' D L R R' L F F F D' D F R' R' B D B D' B B B',62
+2,2.75,250, D D' U D D D D R R R R D' D L L D' D L R R' L F F F D' D F R R' B D B D' B B,63
+2,2.75,350, D D' D D D D R R R R L L D' D L L F F F D' D F B B B B,82
+2,2.75,450, D D' D D' R R R R L L L L F F F F B B B B,90
+2,2.75,550, D D' R R R R L L L L F F F F B B B B,86
+2,3.0,50, D D' U D D D D R R R R D' R L R' D L D' D L R R' L R F R' D' F D F F R' R' R B R' D B D' R B R' B B D' U' U,49
+2,3.0,150, D D' U D D D D R R R R D' R L R' D L D' D L R R' L F F F F R' R' B D B D' B B B',67
+2,3.0,250, D D' U D D D D R R R R D' L D L D' D L R R' L F F F F R R' B D B D' B B,69
+2,3.0,350, D D' D D D D R R R R L L D' D L L F F F F B B B B,87
+2,3.0,450, D D' D D' R R R R L L L L F F F F B B B B,90
+2,3.0,550, D D' R R R R L L L L F F F F B B B B,86
+3,0.25,50, U' U U U D D D D R R R U' U R U' D' L U D L L L U' U F F U' U U' U U' F U U' F R' R' U R B R' U' D B U D' U' B U U' B U U' B F' D',48
+3,0.25,150, U' U U U D D D D R R R R D' L D L L L U' F F F F B D B D' B B,86
+3,0.25,250, U U D D D D R R R R L L L L F F F F B B B B,97
+3,0.25,350, U D D D D R R R R L L L L F F F F B B B B,94
+3,0.25,450, D D' R R R R L L L L F F F F B B B B,86
+3,0.25,550, D D' R R R R L L L L F F F F B B B B,86
+3,0.5,50, U' U U U D D D D R R R U' U R U' D' L U D L L L U' U F F U' U U' U U' F U U' F R' R' U R B R' U' D B U D' U' B U U' B U U' B F' D',48
+3,0.5,150, U' U U U D D D D R R R R D' L D L L L U' F F F F B D B D' B B,86
+3,0.5,250, U U D D D D R R R R L L L L F F F F B B B B,97
+3,0.5,350, U D D D D R R R R L L L L F F F F B B B B,94
+3,0.5,450, D D' R R R R L L L L F F F F B B B B,86
+3,0.5,550, D D' R R R R L L L L F F F F B B B B,86
+3,0.75,50, U' U U U D D D D R R R U' U R U' D' L U D L L L U' U F F U' U U' U U' F U U' F R' R' U R B R' U' D B D' U U' B U U' B U U' B F' D',48
+3,0.75,150, U' U U U D D D D R R R R D' L D L L L U' F F F F B D B D' B B,86
+3,0.75,250, U U D D D D R R R R L L L L F F F F B B B B,97
+3,0.75,350, U D D D D R R R R L L L L F F F F B B B B,94
+3,0.75,450, D D' R R R R L L L L F F F F B B B B,86
+3,0.75,550, D D' R R R R L L L L F F F F B B B B,86
+3,1.0,50, U' U U U D D D D R R R U' U R U' D' L U D L L L U' U F F U' F U U' F R' R' U R B R' U' D B D' B B B F' D',58
+3,1.0,150, U' U U U D D D D R R R R D' L D L L L U' F F F F B D B D' B B,86
+3,1.0,250, U U D D D D R R R R L L L L F F F F B B B B,97
+3,1.0,350, U D D D D R R R R L L L L F F F F B B B B,94
+3,1.0,450, D D' R R R R L L L L F F F F B B B B,86
+3,1.0,550, D D' R R R R L L L L F F F F B B B B,86
+3,1.25,50, U U U D D D D R R R U' R U U' D' L D L U L L F F F U' F R' R' R B R' D B D' B B B F' D',67
+3,1.25,150, U U U D D D D R R R R D' L D L L L F F F F B D B D' B B,89
+3,1.25,250, U U D D D D R R R R L L L L F F F F B B B B,97
+3,1.25,350, U D D D D R R R R L L L L F F F F B B B B,94
+3,1.25,450, D D' R R R R L L L L F F F F B B B B,86
+3,1.25,550, D D' R R R R L L L L F F F F B B B B,86
+3,1.5,50, U U D D D U D R R R R U' D' L D L L L U F F F U' F R' R' R B R' D B D' B B B F' D',66
+3,1.5,150, U U D D D D R U R R R D' L D L L L F F F F B D B D' B B,85
+3,1.5,250, U U D D D D R R R R L L L L F F F F B B B B,97
+3,1.5,350, U D D D D R R R R L L L L F F F F B B B B,94
+3,1.5,450, D D' R R R R L L L L F F F F B B B B,86
+3,1.5,550, D D' R R R R L L L L F F F F B B B B,86
+3,1.75,50, U U D D D D U R R R R U' D' L D L L L F F F F R' R' R B R' D B D' B B B F' D',70
+3,1.75,150, U U D D D D R R R R D' L D L L L F F F F B D B D' B B,87
+3,1.75,250, U U D D D D R R R R L L L L F F F F B B B B,97
+3,1.75,350, U D D D D R R R R L L L L F F F F B B B B,94
+3,1.75,450, D D' R R R R L L L L F F F F B B B B,86
+3,1.75,550, D D' R R R R L L L L F F F F B B B B,86
+3,2.0,50, U U D D D D U R R R R U' D' L D L L L F F F F R B R' D B D' B B B F' D',74
+3,2.0,150, U U D D D D R R R R D' L D L L L F F F F B D B D' B B,87
+3,2.0,250, U U D D D D R R R R L L L L F F F F B B B B,97
+3,2.0,350, U D D D D R R R R L L L L F F F F B B B B,94
+3,2.0,450, D D' R R R R L L L L F F F F B B B B,86
+3,2.0,550, D D' R R R R L L L L F F F F B B B B,86
+3,2.25,50, U U D D D D R R R R D' L D L L L F F F F R B R' D B D' B B B F' D',77
+3,2.25,150, U D D D D R R R R D' L D L L L F F F F B D B D' B B,85
+3,2.25,250, U D D D D R R R R L L L L F F F F B B B B,94
+3,2.25,350, U D D D D R R R R L L L L F F F F B B B B,94
+3,2.25,450, D D' R R R R L L L L F F F F B B B B,86
+3,2.25,550, D D' R R R R L L L L F F F F B B B B,86
+3,2.5,50, U D D D D R R R R D' L D L L L F F F F R B R' D B D' B B B D',77
+3,2.5,150, U D D D D R R R R D' L D L L L F F F F B D B D' B B,85
+3,2.5,250, U D D D D R R R R L L L L F F F F B B B B,94
+3,2.5,350, U D D D D R R R R L L L L F F F F B B B B,94
+3,2.5,450, D D' R R R R L L L L F F F F B B B B,86
+3,2.5,550, D D' R R R R L L L L F F F F B B B B,86
+3,2.75,50, U D D D D R R R R D' L D L L L F F F F R B R' D B D' B B B D',77
+3,2.75,150, U D D D D R R R R D' L D L L L F F F F B D B D' B B,85
+3,2.75,250, U D D D D R R R R L L L L F F F F B B B B,94
+3,2.75,350, D D D D R R R R L L L L F F F F B B B B,92
+3,2.75,450, D D' R R R R L L L L F F F F B B B B,86
+3,2.75,550, D D' R R R R L L L L F F F F B B B B,86
+3,3.0,50, U D D D D R R R R D' L D L L L F F F F R B R' D B D' B B B D',77
+3,3.0,150, U D D D D R R R R D' L D L L L F F F F B D B D' B B,85
+3,3.0,250, U D D D D R R R R L L L L F F F F B B B B,94
+3,3.0,350, D D D D R R R R L L L L F F F F B B B B,92
+3,3.0,450, D D' R R R R L L L L F F F F B B B B,86
+3,3.0,550, D D' R R R R L L L L F F F F B B B B,86
+4,0.25,50, U' U U U D D D D R R R R L L L L F F F U' F R R' U B U' D B U D' B U' B U U' B F' D',70
+4,0.25,150, U' U U D U D D D R R R R L L L L F F F F B D B D' B B,91
+4,0.25,250, U U D D D D R R R R L L L L F F F F B B B B,97
+4,0.25,350, D D D D R R R R L L L L F F F F B B B B,92
+4,0.25,450, D D' R R R R L L L L F F F F B B B B,86
+4,0.25,550, D R R R R L D' L L L F F F F B B B B,81
+4,0.5,50, U' U U U D D D D R R R R L L L L F F F U' F R R' U B U' D B U D' B U' B U U' B F' D',70
+4,0.5,150, U' U U D U D D D R R R R L L L L F F F F B D B D' B B,91
+4,0.5,250, U U D D D D R R R R L L L L F F F F B B B B,97
+4,0.5,350, D D D D R R R R L L L L F F F F B B B B,92
+4,0.5,450, D D' R R R R L L L L F F F F B B B B,86
+4,0.5,550, D R R R R L D' L L L F F F F B B B B,81
+4,0.75,50, U' U U U D D D D R R R R L L L L F F F U' F R R' U B U' D B D' U B U' B U U' B F' D',70
+4,0.75,150, U' U U D U D D D R R R R L L L L F F F F B D B D' B B,91
+4,0.75,250, U U D D D D R R R R L L L L F F F F B B B B,97
+4,0.75,350, D D D D R R R R L L L L F F F F B B B B,92
+4,0.75,450, D D' R R R R L L L L F F F F B B B B,86
+4,0.75,550, D R R R R L D' L L L F F F F B B B B,81
+4,1.0,50, U' U U U D D D D R R R R L L L L F F F U' F R R' U B U' D B D' B B B F' D',75
+4,1.0,150, U' U U D U D D D R R R R L L L L F F F F B D B D' B B,91
+4,1.0,250, U U D D D D R R R R L L L L F F F F B B B B,97
+4,1.0,350, D D D D R R R R L L L L F F F F B B B B,92
+4,1.0,450, D D' R R R R L L L L F F F F B B B B,86
+4,1.0,550, D R R R R L D' L L L F F F F B B B B,81
+4,1.25,50, U U U D D D D R R R R L L L L F F F U' F R R' B D B D' B B B F' D',79
+4,1.25,150, U U D D D D R R R U R L L L L F F F F B D B D' B B,90
+4,1.25,250, U U D D D D R R R R L L L L F F F F B B B B,97
+4,1.25,350, D D D D R R R R L L L L F F F F B B B B,92
+4,1.25,450, D D' R R R R L L L L F F F F B B B B,86
+4,1.25,550, D R R R R L D' L L L F F F F B B B B,81
+4,1.5,50, U U D D D U D R R R R L L L L F F F U' F B D B D' B B B F' D',79
+4,1.5,150, U U D D D D R R R R L L L L F F F F B D B D' B B,92
+4,1.5,250, U U D D D D R R R R L L L L F F F F B B B B,97
+4,1.5,350, D D D D R R R R L L L L F F F F B B B B,92
+4,1.5,450, D D' R R R R L L L L F F F F B B B B,86
+4,1.5,550, D R R R R L D' L L L F F F F B B B B,81
+4,1.75,50, U U D D D D U R R R R L L L L F F F U' F B D B D' B B B F' D',79
+4,1.75,150, U U D D D D R R R R L L L L F F F F B D B D' B B,92
+4,1.75,250, U U D D D D R R R R L L L L F F F F B B B B,97
+4,1.75,350, D D D D R R R R L L L L F F F F B B B B,92
+4,1.75,450, D D' R R R R L L L L F F F F B B B B,86
+4,1.75,550, D R R R R L D' L L L F F F F B B B B,81
+4,2.0,50, U U D D D D R R R R L L L L F F F F B D B D' B B B F' D',85
+4,2.0,150, U U D D D D R R R R L L L L F F F F B D B D' B B,92
+4,2.0,250, U U D D D D R R R R L L L L F F F F B B B B,97
+4,2.0,350, D D D D R R R R L L L L F F F F B B B B,92
+4,2.0,450, D D' R R R R L L L L F F F F B B B B,86
+4,2.0,550, D R R R R L D' L L L F F F F B B B B,81
+4,2.25,50, U U D D D D R R R R L L L L F F F F B D B D' B B B D',87
+4,2.25,150, U D D D D R R R R L L L L F F F F B D B D' B B,89
+4,2.25,250, U D D D D R R R R L L L L F F F F B B B B,94
+4,2.25,350, D D D D R R R R L L L L F F F F B B B B,92
+4,2.25,450, D D' R R R R L L L L F F F F B B B B,86
+4,2.25,550, D R R R R L D' L L L F F F F B B B B,81
+4,2.5,50, U D D D D R R R R L L L L F F F F B B B B B D',89
+4,2.5,150, U D D D D R R R R L L L L F F F F B B B B,94
+4,2.5,250, U D D D D R R R R L L L L F F F F B B B B,94
+4,2.5,350, D D D D R R R R L L L L F F F F B B B B,92
+4,2.5,450, D D' R R R R L L L L F F F F B B B B,86
+4,2.5,550, D R R R R L D' L L L F F F F B B B B,81
+4,2.75,50, U D D D D R R R R L L L L F F F F B B B B D',91
+4,2.75,150, U D D D D R R R R L L L L F F F F B B B B,94
+4,2.75,250, U D D D D R R R R L L L L F F F F B B B B,94
+4,2.75,350, D D D D R R R R L L L L F F F F B B B B,92
+4,2.75,450, D D' R R R R L L L L F F F F B B B B,86
+4,2.75,550, D R R R R L D' L L L F F F F B B B B,81
+4,3.0,50, D D D D R R R R L L L L F F F F B B B B D',89
+4,3.0,150, D D D D R R R R L L L L F F F F B B B B,92
+4,3.0,250, D D D D R R R R L L L L F F F F B B B B,92
+4,3.0,350, D D D D R R R R L L L L F F F F B B B B,92
+4,3.0,450, D D' R R R R L L L L F F F F B B B B,86
+4,3.0,550, D R R R R L D' L L L F F F F B B B B,81
+5,0.25,50, U U U U D D D D R R R R L L L L F F F U' F U B U' B U B B D',81
+5,0.25,150, U U U D U D D D R R R R L L L L F F F F B B B B,97
+5,0.25,250, U U D D D D R R R R L L L L F F F F B B B B,97
+5,0.25,350, D D D D R R R R L L L L F F F F B B B B,92
+5,0.25,450, D D' R R R R L L L L F F F F B B B B,86
+5,0.25,550, D R R R R L L L L F F F F B B B B,84
+5,0.5,50, U U U U D D D D R R R R L L L L F F F U' F U B U' B U B B D',81
+5,0.5,150, U U U D U D D D R R R R L L L L F F F F B B B B,97
+5,0.5,250, U U D D D D R R R R L L L L F F F F B B B B,97
+5,0.5,350, D D D D R R R R L L L L F F F F B B B B,92
+5,0.5,450, D D' R R R R L L L L F F F F B B B B,86
+5,0.5,550, D R R R R L L L L F F F F B B B B,84
+5,0.75,50, U U U U D D D D R R R R L L L L F F F U' F U B U' B U B B D',81
+5,0.75,150, U U U D U D D D R R R R L L L L F F F F B B B B,97
+5,0.75,250, U U D D D D R R R R L L L L F F F F B B B B,97
+5,0.75,350, D D D D R R R R L L L L F F F F B B B B,92
+5,0.75,450, D D' R R R R L L L L F F F F B B B B,86
+5,0.75,550, D R R R R L L L L F F F F B B B B,84
+5,1.0,50, U U U U D D D D R R R R L L L L F F F U' F B B B B D',93
+5,1.0,150, U U D U D D D R R R R L L L L F F F F B B B B,95
+5,1.0,250, U U D D D D R R R R L L L L F F F F B B B B,97
+5,1.0,350, D D D D R R R R L L L L F F F F B B B B,92
+5,1.0,450, D D' R R R R L L L L F F F F B B B B,86
+5,1.0,550, D R R R R L L L L F F F F B B B B,84
+5,1.25,50, U U D U D D D R R R R L L L L F F F U' F B B B B D',89
+5,1.25,150, U U D D D D R R R U R L L L L F F F F B B B B,95
+5,1.25,250, U U D D D D R R R R L L L L F F F F B B B B,97
+5,1.25,350, D D D D R R R R L L L L F F F F B B B B,92
+5,1.25,450, D D' R R R R L L L L F F F F B B B B,86
+5,1.25,550, D R R R R L L L L F F F F B B B B,84
+5,1.5,50, U U D D D U D R R R R L L L L F F F U' F B B B B D',89
+5,1.5,150, U U D D D D R R R R L L L L F F F F B B B B,97
+5,1.5,250, U U D D D D R R R R L L L L F F F F B B B B,97
+5,1.5,350, D D D D R R R R L L L L F F F F B B B B,92
+5,1.5,450, D D' R R R R L L L L F F F F B B B B,86
+5,1.5,550, D R R R R L L L L F F F F B B B B,84
+5,1.75,50, U U D D D D U R R R R L L L L F F F F B B B B D',92
+5,1.75,150, U U D D D D R R R R L L L L F F F F B B B B,97
+5,1.75,250, U U D D D D R R R R L L L L F F F F B B B B,97
+5,1.75,350, D D D D R R R R L L L L F F F F B B B B,92
+5,1.75,450, D D' R R R R L L L L F F F F B B B B,86
+5,1.75,550, D R R R R L L L L F F F F B B B B,84
+5,2.0,50, U U D D D D R R R R L L L L F F F F B B B B D',94
+5,2.0,150, U U D D D D R R R R L L L L F F F F B B B B,97
+5,2.0,250, U U D D D D R R R R L L L L F F F F B B B B,97
+5,2.0,350, D D D D R R R R L L L L F F F F B B B B,92
+5,2.0,450, D D' R R R R L L L L F F F F B B B B,86
+5,2.0,550, D R R R R L L L L F F F F B B B B,84
+5,2.25,50, U U D D D D R R R R L L L L F F F F B B B B D',94
+5,2.25,150, U D D D D R R R R L L L L F F F F B B B B,94
+5,2.25,250, U D D D D R R R R L L L L F F F F B B B B,94
+5,2.25,350, D D D D R R R R L L L L F F F F B B B B,92
+5,2.25,450, D D' R R R R L L L L F F F F B B B B,86
+5,2.25,550, D R R R R L L L L F F F F B B B B,84
+5,2.5,50, U D D D D R R R R L L L L F F F F B B B B D',91
+5,2.5,150, U D D D D R R R R L L L L F F F F B B B B,94
+5,2.5,250, U D D D D R R R R L L L L F F F F B B B B,94
+5,2.5,350, D D D D R R R R L L L L F F F F B B B B,92
+5,2.5,450, D D' R R R R L L L L F F F F B B B B,86
+5,2.5,550, D R R R R L L L L F F F F B B B B,84
+5,2.75,50, U D D D D R R R R L L L L F F F F B B B B D',91
+5,2.75,150, U D D D D R R R R L L L L F F F F B B B B,94
+5,2.75,250, U D D D D R R R R L L L L F F F F B B B B,94
+5,2.75,350, D D D D R R R R L L L L F F F F B B B B,92
+5,2.75,450, D D' R R R R L L L L F F F F B B B B,86
+5,2.75,550, D R R R R L L L L F F F F B B B B,84
+5,3.0,50, D D D D R R R R L L L L F F F F B B B B D',89
+5,3.0,150, D D D D R R R R L L L L F F F F B B B B,92
+5,3.0,250, D D D D R R R R L L L L F F F F B B B B,92
+5,3.0,350, D D D D R R R R L L L L F F F F B B B B,92
+5,3.0,450, D D' R R R R L L L L F F F F B B B B,86
+5,3.0,550, D R R R R L L L L F F F F B B B B,84
+6,0.25,50, U U U U D D D D R R R R L L L L F F F F B U' B U B B,94
+6,0.25,150, U U D U D D D R R R R L L L L F F F F B B B B,95
+6,0.25,250, U U D D D D R R R R L L L L F F F F B B B B,97
+6,0.25,350, D D R R R R L L L L F F F F B B B B,87
+6,0.25,450, D D' R R R R L L L L F F F F B B B B,86
+6,0.25,550, D R R R R L L L L F F F F B B B B,84
+6,0.5,50, U U U U D D D D R R R R L L L L F F F F B U' B U B B,94
+6,0.5,150, U U D U D D D R R R R L L L L F F F F B B B B,95
+6,0.5,250, U U D D D D R R R R L L L L F F F F B B B B,97
+6,0.5,350, D D R R R R L L L L F F F F B B B B,87
+6,0.5,450, D D' R R R R L L L L F F F F B B B B,86
+6,0.5,550, D R R R R L L L L F F F F B B B B,84
+6,0.75,50, U U U U D D D D R R R R L L L L F F F F B U' B U B B,94
+6,0.75,150, U U D U D D D R R R R L L L L F F F F B B B B,95
+6,0.75,250, U U D D D D R R R R L L L L F F F F B B B B,97
+6,0.75,350, D D R R R R L L L L F F F F B B B B,87
+6,0.75,450, D D' R R R R L L L L F F F F B B B B,86
+6,0.75,550, D R R R R L L L L F F F F B B B B,84
+6,1.0,50, U U U U D D D D R R R R L L L L F F F F B U' B B B,96
+6,1.0,150, U U D U D D D R R R R L L L L F F F F B B B B,95
+6,1.0,250, U U D D D D R R R R L L L L F F F F B B B B,97
+6,1.0,350, D D R R R R L L L L F F F F B B B B,87
+6,1.0,450, D D' R R R R L L L L F F F F B B B B,86
+6,1.0,550, D R R R R L L L L F F F F B B B B,84
+6,1.25,50, U U D U D D D R R R R L L L L F F F F B U' B B B,92
+6,1.25,150, U U D D D D R R R R L L L L F F F F B B B B,97
+6,1.25,250, U U D D D D R R R R L L L L F F F F B B B B,97
+6,1.25,350, D D R R R R L L L L F F F F B B B B,87
+6,1.25,450, D D' R R R R L L L L F F F F B B B B,86
+6,1.25,550, D R R R R L L L L F F F F B B B B,84
+6,1.5,50, U U D D D U D R R R R L L L L F F F F B B B B,95
+6,1.5,150, U U D D D D R R R R L L L L F F F F B B B B,97
+6,1.5,250, U U D D D D R R R R L L L L F F F F B B B B,97
+6,1.5,350, D D R R R R L L L L F F F F B B B B,87
+6,1.5,450, D D' R R R R L L L L F F F F B B B B,86
+6,1.5,550, D R R R R L L L L F F F F B B B B,84
+6,1.75,50, U U D D D D R R R R L L L L F F F F B B B B,97
+6,1.75,150, U U D D D D R R R R L L L L F F F F B B B B,97
+6,1.75,250, U U D D D D R R R R L L L L F F F F B B B B,97
+6,1.75,350, D D R R R R L L L L F F F F B B B B,87
+6,1.75,450, D D' R R R R L L L L F F F F B B B B,86
+6,1.75,550, D R R R R L L L L F F F F B B B B,84
+6,2.0,50, U U D D D D R R R R L L L L F F F F B B B B,97
+6,2.0,150, U U D D D D R R R R L L L L F F F F B B B B,97
+6,2.0,250, U U D D D D R R R R L L L L F F F F B B B B,97
+6,2.0,350, D D R R R R L L L L F F F F B B B B,87
+6,2.0,450, D D' R R R R L L L L F F F F B B B B,86
+6,2.0,550, D R R R R L L L L F F F F B B B B,84
+6,2.25,50, U D D D D R R R R L L L L F F F F B B B B,94
+6,2.25,150, U D D D D R R R R L L L L F F F F B B B B,94
+6,2.25,250, U D D D D R R R R L L L L F F F F B B B B,94
+6,2.25,350, D D R R R R L L L L F F F F B B B B,87
+6,2.25,450, D D' R R R R L L L L F F F F B B B B,86
+6,2.25,550, D R R R R L L L L F F F F B B B B,84
+6,2.5,50, U D D D D R R R R L L L L F F F F B B B B,94
+6,2.5,150, U D D D D R R R R L L L L F F F F B B B B,94
+6,2.5,250, U D D D D R R R R L L L L F F F F B B B B,94
+6,2.5,350, D D R R R R L L L L F F F F B B B B,87
+6,2.5,450, D D' R R R R L L L L F F F F B B B B,86
+6,2.5,550, D R R R R L L L L F F F F B B B B,84
+6,2.75,50, D D D D R R R R L L L L F F F F B B B B,92
+6,2.75,150, D D D D R R R R L L L L F F F F B B B B,92
+6,2.75,250, D D D D R R R R L L L L F F F F B B B B,92
+6,2.75,350, D D R R R R L L L L F F F F B B B B,87
+6,2.75,450, D D' R R R R L L L L F F F F B B B B,86
+6,2.75,550, D R R R R L L L L F F F F B B B B,84
+6,3.0,50, D D D D R R R R L L L L F F F F B B B B,92
+6,3.0,150, D D D D R R R R L L L L F F F F B B B B,92
+6,3.0,250, D D D D R R R R L L L L F F F F B B B B,92
+6,3.0,350, D D R R R R L L L L F F F F B B B B,87
+6,3.0,450, D D' R R R R L L L L F F F F B B B B,86
+6,3.0,550, D R R R R L L L L F F F F B B B B,84
+7,0.25,50, U U U U D D D D R R R R L L L L F F F F B U' B U B B,94
+7,0.25,150, U U D D D D R R R U R L L L L F F F F B B B B,95
+7,0.25,250, U U D D D D R R R R L L L L F F F F B B B B,97
+7,0.25,350, D D R R R R L L L L F F F F B B B B,87
+7,0.25,450, D D' R R R R L L L L F F F F B B B B,86
+7,0.25,550, R R R R L L L L F F F F B B B B,81
+7,0.5,50, U U U U D D D D R R R R L L L L F F F F B U' B U B B,94
+7,0.5,150, U U D D D D R R R U R L L L L F F F F B B B B,95
+7,0.5,250, U U D D D D R R R R L L L L F F F F B B B B,97
+7,0.5,350, D D R R R R L L L L F F F F B B B B,87
+7,0.5,450, D D' R R R R L L L L F F F F B B B B,86
+7,0.5,550, R R R R L L L L F F F F B B B B,81
+7,0.75,50, U U U U D D D D R R R R L L L L F F F F B U' B U B B,94
+7,0.75,150, U U D D D D R R R U R L L L L F F F F B B B B,95
+7,0.75,250, U U D D D D R R R R L L L L F F F F B B B B,97
+7,0.75,350, D D R R R R L L L L F F F F B B B B,87
+7,0.75,450, D D' R R R R L L L L F F F F B B B B,86
+7,0.75,550, R R R R L L L L F F F F B B B B,81
+7,1.0,50, U U U U D D D D R R R R L L L L F F F F B U' B B B,96
+7,1.0,150, U U D D D D R R R U R L L L L F F F F B B B B,95
+7,1.0,250, U U D D D D R R R R L L L L F F F F B B B B,97
+7,1.0,350, D D R R R R L L L L F F F F B B B B,87
+7,1.0,450, D D' R R R R L L L L F F F F B B B B,86
+7,1.0,550, R R R R L L L L F F F F B B B B,81
+7,1.25,50, U U D U D D D R R R R L L L L F F F F B B B B,95
+7,1.25,150, U U D D D D R R R R L L L L F F F F B B B B,97
+7,1.25,250, U U D D D D R R R R L L L L F F F F B B B B,97
+7,1.25,350, D D R R R R L L L L F F F F B B B B,87
+7,1.25,450, D D' R R R R L L L L F F F F B B B B,86
+7,1.25,550, R R R R L L L L F F F F B B B B,81
+7,1.5,50, U U D D D U D R R R R L L L L F F F F B B B B,95
+7,1.5,150, U U D D D D R R R R L L L L F F F F B B B B,97
+7,1.5,250, U U D D D D R R R R L L L L F F F F B B B B,97
+7,1.5,350, D D R R R R L L L L F F F F B B B B,87
+7,1.5,450, D D' R R R R L L L L F F F F B B B B,86
+7,1.5,550, R R R R L L L L F F F F B B B B,81
+7,1.75,50, U U D D D D R R R R L L L L F F F F B B B B,97
+7,1.75,150, U U D D D D R R R R L L L L F F F F B B B B,97
+7,1.75,250, U U D D D D R R R R L L L L F F F F B B B B,97
+7,1.75,350, D D R R R R L L L L F F F F B B B B,87
+7,1.75,450, D D' R R R R L L L L F F F F B B B B,86
+7,1.75,550, R R R R L L L L F F F F B B B B,81
+7,2.0,50, U U D D D D R R R R L L L L F F F F B B B B,97
+7,2.0,150, U U D D D D R R R R L L L L F F F F B B B B,97
+7,2.0,250, U U D D D D R R R R L L L L F F F F B B B B,97
+7,2.0,350, D D R R R R L L L L F F F F B B B B,87
+7,2.0,450, D D' R R R R L L L L F F F F B B B B,86
+7,2.0,550, R R R R L L L L F F F F B B B B,81
+7,2.25,50, U D D D D R R R R L L L L F F F F B B B B,94
+7,2.25,150, U D D D D R R R R L L L L F F F F B B B B,94
+7,2.25,250, U D D D D R R R R L L L L F F F F B B B B,94
+7,2.25,350, D D R R R R L L L L F F F F B B B B,87
+7,2.25,450, D D' R R R R L L L L F F F F B B B B,86
+7,2.25,550, R R R R L L L L F F F F B B B B,81
+7,2.5,50, U D D D D R R R R L L L L F F F F B B B B,94
+7,2.5,150, U D D D D R R R R L L L L F F F F B B B B,94
+7,2.5,250, U D D D D R R R R L L L L F F F F B B B B,94
+7,2.5,350, D D R R R R L L L L F F F F B B B B,87
+7,2.5,450, D D' R R R R L L L L F F F F B B B B,86
+7,2.5,550, R R R R L L L L F F F F B B B B,81
+7,2.75,50, D D D D R R R R L L L L F F F F B B B B,92
+7,2.75,150, D D D D R R R R L L L L F F F F B B B B,92
+7,2.75,250, D D D D R R R R L L L L F F F F B B B B,92
+7,2.75,350, D D R R R R L L L L F F F F B B B B,87
+7,2.75,450, D D' R R R R L L L L F F F F B B B B,86
+7,2.75,550, R R R R L L L L F F F F B B B B,81
+7,3.0,50, D D D D R R R R L L L L F F F F B B B B,92
+7,3.0,150, D D D D R R R R L L L L F F F F B B B B,92
+7,3.0,250, D D D D R R R R L L L L F F F F B B B B,92
+7,3.0,350, D D R R R R L L L L F F F F B B B B,87
+7,3.0,450, D D' R R R R L L L L F F F F B B B B,86
+7,3.0,550, R R R R L L L L F F F F B B B B,81
+8,0.25,50, U U U U D D D D R R R R L L L L F F F F B B B B,99
+8,0.25,150, U U D D D D R R R U R L L L L F F F F B B B B,95
+8,0.25,250, U U D D D D R R R R L L L L F F F F B B B B,97
+8,0.25,350, D D R R R R L L L L F F F F B B B B,87
+8,0.25,450, D D' R R R R L L L L F F F F B B B B,86
+8,0.25,550, R R R R L L L L F F F F B B B B,81
+8,0.5,50, U U U U D D D D R R R R L L L L F F F F B B B B,99
+8,0.5,150, U U D D D D R R R U R L L L L F F F F B B B B,95
+8,0.5,250, U U D D D D R R R R L L L L F F F F B B B B,97
+8,0.5,350, D D R R R R L L L L F F F F B B B B,87
+8,0.5,450, D D' R R R R L L L L F F F F B B B B,86
+8,0.5,550, R R R R L L L L F F F F B B B B,81
+8,0.75,50, U U U U D D D D R R R R L L L L F F F F B B B B,99
+8,0.75,150, U U D D D D R R R U R L L L L F F F F B B B B,95
+8,0.75,250, U U D D D D R R R R L L L L F F F F B B B B,97
+8,0.75,350, D D R R R R L L L L F F F F B B B B,87
+8,0.75,450, D D' R R R R L L L L F F F F B B B B,86
+8,0.75,550, R R R R L L L L F F F F B B B B,81
+8,1.0,50, U U U U D D D D R R R R L L L L F F F F B B B B,99
+8,1.0,150, U U D D D D R R R U R L L L L F F F F B B B B,95
+8,1.0,250, U U D D D D R R R R L L L L F F F F B B B B,97
+8,1.0,350, D D R R R R L L L L F F F F B B B B,87
+8,1.0,450, D D' R R R R L L L L F F F F B B B B,86
+8,1.0,550, R R R R L L L L F F F F B B B B,81
+8,1.25,50, U U D D U D D R R R R L L L L F F F F B B B B,95
+8,1.25,150, U U D D D D R R R R L L L L F F F F B B B B,97
+8,1.25,250, U U D D D D R R R R L L L L F F F F B B B B,97
+8,1.25,350, D D R R R R L L L L F F F F B B B B,87
+8,1.25,450, D D' R R R R L L L L F F F F B B B B,86
+8,1.25,550, R R R R L L L L F F F F B B B B,81
+8,1.5,50, U U D D D U D R R R R L L L L F F F F B B B B,95
+8,1.5,150, U U D D D D R R R R L L L L F F F F B B B B,97
+8,1.5,250, U U D D D D R R R R L L L L F F F F B B B B,97
+8,1.5,350, D D R R R R L L L L F F F F B B B B,87
+8,1.5,450, D D' R R R R L L L L F F F F B B B B,86
+8,1.5,550, R R R R L L L L F F F F B B B B,81
+8,1.75,50, U U D D D D R R R R L L L L F F F F B B B B,97
+8,1.75,150, U U D D D D R R R R L L L L F F F F B B B B,97
+8,1.75,250, U U D D D D R R R R L L L L F F F F B B B B,97
+8,1.75,350, D D R R R R L L L L F F F F B B B B,87
+8,1.75,450, D D' R R R R L L L L F F F F B B B B,86
+8,1.75,550, R R R R L L L L F F F F B B B B,81
+8,2.0,50, U U D D D D R R R R L L L L F F F F B B B B,97
+8,2.0,150, U U D D D D R R R R L L L L F F F F B B B B,97
+8,2.0,250, U U D D D D R R R R L L L L F F F F B B B B,97
+8,2.0,350, D D R R R R L L L L F F F F B B B B,87
+8,2.0,450, D D' R R R R L L L L F F F F B B B B,86
+8,2.0,550, R R R R L L L L F F F F B B B B,81
+8,2.25,50, U D D D D R R R R L L L L F F F F B B B B,94
+8,2.25,150, U D D D D R R R R L L L L F F F F B B B B,94
+8,2.25,250, U D D D D R R R R L L L L F F F F B B B B,94
+8,2.25,350, D D R R R R L L L L F F F F B B B B,87
+8,2.25,450, D D' R R R R L L L L F F F F B B B B,86
+8,2.25,550, R R R R L L L L F F F F B B B B,81
+8,2.5,50, U D D D D R R R R L L L L F F F F B B B B,94
+8,2.5,150, U D D D D R R R R L L L L F F F F B B B B,94
+8,2.5,250, U D D D D R R R R L L L L F F F F B B B B,94
+8,2.5,350, D D R R R R L L L L F F F F B B B B,87
+8,2.5,450, D D' R R R R L L L L F F F F B B B B,86
+8,2.5,550, R R R R L L L L F F F F B B B B,81
+8,2.75,50, D D D D R R R R L L L L F F F F B B B B,92
+8,2.75,150, D D D D R R R R L L L L F F F F B B B B,92
+8,2.75,250, D D D D R R R R L L L L F F F F B B B B,92
+8,2.75,350, D D R R R R L L L L F F F F B B B B,87
+8,2.75,450, D D' R R R R L L L L F F F F B B B B,86
+8,2.75,550, R R R R L L L L F F F F B B B B,81
+8,3.0,50, D D D D R R R R L L L L F F F F B B B B,92
+8,3.0,150, D D D D R R R R L L L L F F F F B B B B,92
+8,3.0,250, D D D D R R R R L L L L F F F F B B B B,92
+8,3.0,350, D D' R R R R L L L L F F F F B B B B,86
+8,3.0,450, D D' R R R R L L L L F F F F B B B B,86
+8,3.0,550, R R R R L L L L F F F F B B B B,81
+9,0.25,50, U U U U D D D D R R R R L L L L F F F F B B B B,99
+9,0.25,150, U U D D D D R R R R L L L L F F F F B B B B,97
+9,0.25,250, U U D D D D R R R R L L L L F F F F B B B B,97
+9,0.25,350, D D' R R R R L L L L F F F F B B B B,86
+9,0.25,450, D D' R R R R L L L L F F F F B B B B,86
+9,0.25,550, R R R R L L L L F F F F B B B B,81
+9,0.5,50, U U U U D D D D R R R R L L L L F F F F B B B B,99
+9,0.5,150, U U D D D D R R R R L L L L F F F F B B B B,97
+9,0.5,250, U U D D D D R R R R L L L L F F F F B B B B,97
+9,0.5,350, D D' R R R R L L L L F F F F B B B B,86
+9,0.5,450, D D' R R R R L L L L F F F F B B B B,86
+9,0.5,550, R R R R L L L L F F F F B B B B,81
+9,0.75,50, U U U U D D D D R R R R L L L L F F F F B B B B,99
+9,0.75,150, U U D D D D R R R R L L L L F F F F B B B B,97
+9,0.75,250, U U D D D D R R R R L L L L F F F F B B B B,97
+9,0.75,350, D D' R R R R L L L L F F F F B B B B,86
+9,0.75,450, D D' R R R R L L L L F F F F B B B B,86
+9,0.75,550, R R R R L L L L F F F F B B B B,81
+9,1.0,50, U U U U D D D D R R R R L L L L F F F F B B B B,99
+9,1.0,150, U U D D D D R R R R L L L L F F F F B B B B,97
+9,1.0,250, U U D D D D R R R R L L L L F F F F B B B B,97
+9,1.0,350, D D' R R R R L L L L F F F F B B B B,86
+9,1.0,450, D D' R R R R L L L L F F F F B B B B,86
+9,1.0,550, R R R R L L L L F F F F B B B B,81
+9,1.25,50, U U D D U D D R R R R L L L L F F F F B B B B,95
+9,1.25,150, U U D D D D R R R R L L L L F F F F B B B B,97
+9,1.25,250, U U D D D D R R R R L L L L F F F F B B B B,97
+9,1.25,350, D D' R R R R L L L L F F F F B B B B,86
+9,1.25,450, D D' R R R R L L L L F F F F B B B B,86
+9,1.25,550, R R R R L L L L F F F F B B B B,81
+9,1.5,50, U U D D D U D R R R R L L L L F F F F B B B B,95
+9,1.5,150, U U D D D D R R R R L L L L F F F F B B B B,97
+9,1.5,250, U U D D D D R R R R L L L L F F F F B B B B,97
+9,1.5,350, D D' R R R R L L L L F F F F B B B B,86
+9,1.5,450, D D' R R R R L L L L F F F F B B B B,86
+9,1.5,550, R R R R L L L L F F F F B B B B,81
+9,1.75,50, U U D D D D R R R R L L L L F F F F B B B B,97
+9,1.75,150, U U D D D D R R R R L L L L F F F F B B B B,97
+9,1.75,250, U U D D D D R R R R L L L L F F F F B B B B,97
+9,1.75,350, D D' R R R R L L L L F F F F B B B B,86
+9,1.75,450, D D' R R R R L L L L F F F F B B B B,86
+9,1.75,550, R R R R L L L L F F F F B B B B,81
+9,2.0,50, U U D D D D R R R R L L L L F F F F B B B B,97
+9,2.0,150, U U D D D D R R R R L L L L F F F F B B B B,97
+9,2.0,250, U U D D D D R R R R L L L L F F F F B B B B,97
+9,2.0,350, D D' R R R R L L L L F F F F B B B B,86
+9,2.0,450, D D' R R R R L L L L F F F F B B B B,86
+9,2.0,550, R R R R L L L L F F F F B B B B,81
+9,2.25,50, U D D D D R R R R L L L L F F F F B B B B,94
+9,2.25,150, U D D D D R R R R L L L L F F F F B B B B,94
+9,2.25,250, U D D D D R R R R L L L L F F F F B B B B,94
+9,2.25,350, D D' R R R R L L L L F F F F B B B B,86
+9,2.25,450, D D' R R R R L L L L F F F F B B B B,86
+9,2.25,550, R R R R L L L L F F F F B B B B,81
+9,2.5,50, U D D D D R R R R L L L L F F F F B B B B,94
+9,2.5,150, U D D D D R R R R L L L L F F F F B B B B,94
+9,2.5,250, U D D D D R R R R L L L L F F F F B B B B,94
+9,2.5,350, D D' R R R R L L L L F F F F B B B B,86
+9,2.5,450, D D' R R R R L L L L F F F F B B B B,86
+9,2.5,550, R R R R L L L L F F F F B B B B,81
+9,2.75,50, D D D D R R R R L L L L F F F F B B B B,92
+9,2.75,150, D D D D R R R R L L L L F F F F B B B B,92
+9,2.75,250, D D D D R R R R L L L L F F F F B B B B,92
+9,2.75,350, D D' R R R R L L L L F F F F B B B B,86
+9,2.75,450, D D' R R R R L L L L F F F F B B B B,86
+9,2.75,550, R R R R L L L L F F F F B B B B,81
+9,3.0,50, D D R R R R L L L L F F F F B B B B,87
+9,3.0,150, D D R R R R L L L L F F F F B B B B,87
+9,3.0,250, D D R R R R L L L L F F F F B B B B,87
+9,3.0,350, D D' R R R R L L L L F F F F B B B B,86
+9,3.0,450, D D' R R R R L L L L F F F F B B B B,86
+9,3.0,550, R R R R L L L L F F F F B B B B,81
