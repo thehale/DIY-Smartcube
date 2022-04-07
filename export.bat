@@ -1,1 +1,0 @@
-jupyter nbconvert --to %2 %1

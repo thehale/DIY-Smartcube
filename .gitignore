@@ -31,4 +31,4 @@ __pycache__/
 *.run.xml
 *.synctex.gz
 *.toc
-thesis/draft/main-blx.bib
+thesis/main-blx.bib
