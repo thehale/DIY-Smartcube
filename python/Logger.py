@@ -1,3 +1,7 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
 class Logger:
     def __init__(self, file_name: str):
         self.file_name = f"./logs/{file_name}_log.txt"
