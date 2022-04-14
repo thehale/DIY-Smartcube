@@ -32,6 +32,14 @@ detected a variety of transmitted move sequences. Furthermore, all
 components required for the physical transmitter were demonstrated to
 fit within the centercap of a Gans 356 speedcube.
 
+## How to Use this Repository
+
+This repository has a LOT of information at varying levels of complexity. I recommend reading the contents of this repository in the following order:
+
+1. The [Summary Posterboard](./posterboard/posterboard.pdf) (1 page) used to explain the core concepts of the D.I.Y. Smartcube at an academic poster session.
+2. The [Defense Presentation](./presentation/defense_presentation.pdf) (30 slides + commentary) used to provide a detailed overview of the proposal in my Honors Thesis Defense.
+3. The [Thesis Document](./thesis/DIY-Smartcube_Hale_Spring_2022.pdf) (98 pages) containing the full proposal including requirements, designs, specifications, and examples.
+
 ## The Legal Stuff
 
 ```
