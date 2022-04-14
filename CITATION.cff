@@ -1,0 +1,39 @@
+# The CFF Specification is available here: https://github.com/citation-file-format/citation-file-format/blob/1.2.0/schema-guide.md
+cff-version: 1.2.0
+title: |
+  D.I.Y. Smartcube: Tracking the Face Turns of a
+  Rubik's Cube using Embedded Speakers
+message: If you use this software, please cite it using these metadata.
+authors:
+  - family-names: Hale
+    given-names: Joseph
+repository-code: "https://github.com/jhale1805/DIY-Smartcube"
+license: MPL-2.0
+keywords:
+  - audio processing
+  - sound processing
+  - software engineering
+  - Rubik's Cube
+  - pcb design
+date-released: "2022-04-07"
+abstract: |
+  Speedsolving, the art of solving twisty puzzles like the Rubik's Cube
+  as fast as possible, has recently benefitted from the arrival of
+  smartcubes which have special hardware for tracking the cube's face
+  turns and transmitting them via Bluetooth. However, due to their
+  embedded electronics, existing smartcubes cannot be used in
+  competition, reducing their utility in personal speedcubing practice.
+
+  This thesis proposes a sound-based design for tracking the face turns
+  of a standard, non-smart speedcube consisting of an audio processing
+  receiver in software and a small physical speaker configured as a
+  transmitter. Special attention has been given to ensuring that
+  installing the transmitter requires only a reversible centercap
+  replacement on the original cube. This allows the cube to benefit from
+  smartcube features during practice, while still maintaining compliance
+  with competition regulations.
+
+  Within a controlled test environment, the software receiver perfectly
+  detected a variety of transmitted move sequences. Furthermore, all
+  components required for the physical transmitter were demonstrated to
+  fit within the centercap of a Gans 356 speedcube.
