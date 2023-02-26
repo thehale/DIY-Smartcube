@@ -47,7 +47,7 @@ This repository has a LOT of information at varying levels of complexity. I reco
 Public License, v 2.0, which are available at https://mozilla.org/MPL/2.0/.
 
 You can download the source code for `DIY Smartcube` for free from
-https://github.com/jhale1805/DIY-Smartcube.
+https://github.com/thehale/DIY-Smartcube.
 ```
 
 ### TL;DR
