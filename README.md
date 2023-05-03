@@ -3,6 +3,11 @@
 A proof-of-concept proposal for turning standard Rubik's Cubes into
 smartcubes by embedding speakers into the cube's centercaps.
 
+<!-- BADGES -->
+[![](https://badgen.net/github/license/thehale/DIY-Smartcube)](https://github.com/thehale/DIY-Smartcube/blob/master/LICENSE)
+[![](https://badgen.net/badge/icon/Sponsor/pink?icon=github&label)](https://github.com/sponsors/thehale)
+[![](https://badgen.net/badge/icon/Follow%20@jhaledev/1DA1F2?icon=twitter&label)](https://twitter.com/intent/user?screen_name=jhaledev)
+
 ---
 
 *D.I.Y. Smartcube was created as part of Joseph Hale's undergraduate
