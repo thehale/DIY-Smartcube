@@ -19,7 +19,7 @@ at Arizona State University from Spring 2020 through Spring 2022.*
 
 ![](./aaas/Hale,%20Joseph%20-%20Technology,%20Engineering%20&%20Math.svg)
 
-./aaas/Hale,%20Joseph%20-%20Technology,%20Engineering%20&%20Math.mp4
+<video controls src="https://github.com/thehale/DIY-Smartcube/raw/refs/heads/main/aaas/Hale,%20Joseph%20-%20Technology,%20Engineering%20&%20Math.mp4" title="D.I.Y. Smartcube: A Sound of New Life for the Rubik's Cube as a Pedagogical Tool"></video>
 
 ## Abstract
 
