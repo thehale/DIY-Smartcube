@@ -17,6 +17,10 @@ at Arizona State University from Spring 2020 through Spring 2022.*
 
 ![](./posterboard/posterboard.svg)
 
+![](./aaas/Hale,%20Joseph%20-%20Technology,%20Engineering%20&%20Math.svg)
+
+./aaas/Hale,%20Joseph%20-%20Technology,%20Engineering%20&%20Math.mp4
+
 ## Abstract
 
 Speedsolving, the art of solving twisty puzzles like the Rubik's Cube
