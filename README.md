@@ -15,11 +15,17 @@ smartcubes by embedding speakers into the cube's centercaps.
 honors thesis in Software Engineering for Barrett, The Honors College
 at Arizona State University from Spring 2020 through Spring 2022.*
 
+## Introductory Poster
+
 ![](./posterboard/posterboard.svg)
+
+## Detailed Poster
 
 ![](./aaas/Hale,%20Joseph%20-%20Technology,%20Engineering%20&%20Math.svg)
 
-<video controls src="https://github.com/thehale/DIY-Smartcube/raw/refs/heads/main/aaas/Hale,%20Joseph%20-%20Technology,%20Engineering%20&%20Math.mp4" title="D.I.Y. Smartcube: A Sound of New Life for the Rubik's Cube as a Pedagogical Tool"></video>
+## Video Explanation
+
+https://github.com/thehale/DIY-Smartcube/raw/refs/heads/main/aaas/Hale,%20Joseph%20-%20Technology,%20Engineering%20&%20Math.mp4
 
 ## Abstract
 
