@@ -25,7 +25,8 @@ at Arizona State University from Spring 2020 through Spring 2022.*
 
 ## Video Explanation
 
-https://github.com/thehale/DIY-Smartcube/raw/refs/heads/main/aaas/Hale,%20Joseph%20-%20Technology,%20Engineering%20&%20Math.mp4
+[![Watch the video](https://img.youtube.com/vi/fckqMlKTW2Q/maxresdefault.jpg)](https://youtu.be/fckqMlKTW2Q)
+https://youtu.be/fckqMlKTW2Q
 
 ## Abstract
 
